@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.happs.ximand.ringcontrol.viewmodel.item.EditItemViewModel" />
+    </data>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        errorText="@{viewModel.error}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@{viewModel.hint}"
+        app:errorEnabled="true">
+
+        <com.google.android.material.textfield.TextInputEditText
+            textWatcher="@{viewModel.maskWatcher}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="text"
+            android:text="@={viewModel.input}" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+</layout>

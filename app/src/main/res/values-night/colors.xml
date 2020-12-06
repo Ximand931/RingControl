@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3EB5FF</color>
+    <color name="colorBackground">@android:color/background_dark</color>
+    <color name="colorAccent">#3EB5FF</color>
+
+    <color name="colorSnackbarActionText">#E3B8FF</color>
+
+    <color name="colorPrimaryIcon">@android:color/white</color>
+
+    <color name="colorProgressBar">@android:color/black</color>
+
+    <color name="colorHeadline">#FFFFFF</color>
+    <color name="colorCaption">#99FFFFFF</color>
+
+    <color name="colorIconToolbar">#CCFFFFFF</color> <!-- TODO -->
+    <color name="colorIcon">#CCFFFFFF</color> <!-- TODO -->
+    <color name="colorIconSnackbar">@android:color/black</color>
+
+    <color name="colorDivider">#1C1C1C</color>
+</resources>

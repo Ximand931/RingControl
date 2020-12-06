@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.happs.ximand.ringcontrol.viewmodel.fragment.TimetableInfoViewModel" />
+    </data>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/timetable_info_recycler_view"
+        adapter="@{viewModel.adapter}"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</layout>

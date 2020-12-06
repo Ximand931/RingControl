@@ -1,0 +1,21 @@
+<resources>
+
+    <style name="BaseAppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorBackground</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme" parent="BaseAppTheme">
+
+    </style>
+
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/bg_splash</item>
+    </style>
+
+    <style name="DebugMaterialButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">@color/debug_button_color</item>
+    </style>
+
+</resources>
