@@ -34,6 +34,7 @@ public abstract class BaseFragment<VM extends BaseFragmentViewModel, B extends V
     private VM viewModel;
 
     private final int layoutId;
+    @Deprecated
     private final String tag;
 
     public BaseFragment(int layoutId, String tag) {
@@ -56,6 +57,7 @@ public abstract class BaseFragment<VM extends BaseFragmentViewModel, B extends V
         );
     }
 
+    @Deprecated
     String getDefaultFragmentTag() {
         return tag;
     }
@@ -102,49 +104,8 @@ public abstract class BaseFragment<VM extends BaseFragmentViewModel, B extends V
 
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        assert viewModel != null;
-        viewModel.getReplaceFragmentLiveEvent().observe(
-                getViewLifecycleOwner(), this::replaceFragment
-        );
-        viewModel.getPressBackEvent().observe(
-                getViewLifecycleOwner(), this::onPressBack
-        );
-    }
-
-    @SuppressWarnings("rawtypes")
-    @Deprecated
-    private void replaceFragment(BaseFragment fragment) {
-        FragmentManager manager = getFragmentManager();
-        if (manager != null) {
-            FragmentTransactionsHelper.replaceFragment(manager, fragment);
-        }
-    }
-
-    @Deprecated
-    private void onPressBack(Void aVoid) {
-        Activity activity = getActivity();
-        if (activity != null) {
-            activity.onBackPressed();
-        }
-    }
-
     public void onExternalEvent(int eventId) {
 
-    }
-
-    /**
-     * @deprecated use FragmentNavigation.notifyFragmentAboutEvent(int eventId) instead
-     */
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    @Deprecated
-    protected <T extends BaseFragment> T findFragmentByTag(String tag) {
-        FragmentManager manager = getFragmentManager();
-        if (manager != null) {
-            return (T) manager.findFragmentByTag(tag);
-        }
-        return null;
     }
 
     @Override
@@ -152,6 +113,7 @@ public abstract class BaseFragment<VM extends BaseFragmentViewModel, B extends V
         return getViewModel().onOptionsItemSelected(item.getItemId());
     }
 
+    @Deprecated
     protected void initRecyclerViewLayoutManager(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
@@ -190,18 +152,6 @@ public abstract class BaseFragment<VM extends BaseFragmentViewModel, B extends V
                 ((ParameterizedType) Objects.requireNonNull(
                         getClass().getGenericSuperclass())
                 ).getActualTypeArguments()[0];
-    }
-
-    @Deprecated
-    protected void updateDataInAllTimetablesFragment() {
-        FragmentManager manager = getFragmentManager();
-        if (manager != null) {
-            AllTimetablesFragment fragment = (AllTimetablesFragment)
-                    manager.findFragmentByTag(AllTimetablesFragment.FRAGMENT_TAG);
-            if (fragment != null) {
-                fragment.onExternalEvent(AllTimetablesFragment.EVENT_TIMETABLE_LIST_UPDATED);
-            }
-        }
     }
 
     @Override

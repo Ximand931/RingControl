@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.happs.ximand.ringcontrol.BR;
 import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
+import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
 import com.happs.ximand.ringcontrol.model.mapper.impl.TimetableToTimeListMapper;
 import com.happs.ximand.ringcontrol.model.object.Lesson;
 import com.happs.ximand.ringcontrol.model.object.Timetable;
@@ -63,7 +64,7 @@ public class AllTimetablesViewModel extends BaseFragmentViewModel {
     }
 
     public void applyUpdatedCurrentTimetable() {
-        int appliedTimetableId = loadAppliedTimetableIdFromProperties();
+        int appliedTimetableId = SharedPreferencesDao.getInstance().getAppliedTimetableId();
         List<Timetable> allTimetables = allTimetablesLiveData.getValue();
         if (allTimetables != null) {
             applyTimetable(allTimetables.get(appliedTimetableId));
@@ -84,7 +85,7 @@ public class AllTimetablesViewModel extends BaseFragmentViewModel {
     public void applyTimetable(Timetable timetable) {
         List<String> timeList =
                 new TimetableToTimeListMapper().map(timetable);
-        updateAppliedTimetableId(timetable.getId());
+        SharedPreferencesDao.getInstance().updateAppliedTimetableId(timetable.getId());
         //QueueWriter.getInstance().write(timeList);
     }
 
@@ -105,8 +106,9 @@ public class AllTimetablesViewModel extends BaseFragmentViewModel {
         return false;
     }
 
+    //TODO: ineffective
     public boolean isLastAppliedTimetable(Timetable timetable) {
-        return timetable.getId() == loadAppliedTimetableIdFromProperties();
+        return timetable.getId() == SharedPreferencesDao.getInstance().getAppliedTimetableId();
     }
 
     private void moveToAddTimetableFragment() {

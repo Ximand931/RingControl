@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
+import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
 import com.happs.ximand.ringcontrol.model.object.exception.IncorrectInputException;
 import com.happs.ximand.ringcontrol.model.object.Lesson;
 import com.happs.ximand.ringcontrol.model.object.Timetable;
@@ -38,10 +39,6 @@ public class EditTimetableViewModel extends BaseEditTimetableViewModel {
     }
 
     public void initEditTimetableRecyclerViewAdapter() {
-        EditLessonItemViewModelFactory factory = new EditLessonItemViewModelFactory();
-        List<EditItemViewModel> viewModels =
-                factory.createViewModelsByItemList(editingTimetable.getLessons());
-        setAdapter(new EditTimetableRecyclerViewAdapter(viewModels));
     }
 
 
@@ -52,7 +49,7 @@ public class EditTimetableViewModel extends BaseEditTimetableViewModel {
                 saveChanges();
                 return true;
             case R.id.toolbar_cancel:
-                getPressBackEvent().call();
+                FragmentNavigation.getInstance().navigateToPreviousFragment();
                 return true;
         }
         return false;
@@ -65,15 +62,14 @@ public class EditTimetableViewModel extends BaseEditTimetableViewModel {
             if (isAppliedTimetable()) {
                 notifyAppliedTimetableUpdated();
             }
-            getPressBackEvent().call();
+            FragmentNavigation.getInstance().navigateToPreviousFragment();
         } catch (IncorrectInputException e) {
             updateEditStatus();
         }
     }
 
     private void updateEditingTimetable() throws IncorrectInputException {
-        List<Lesson> lessons = getLessonsFromRecyclerViewAdapter();
-        editingTimetable.setLessons(lessons);
+        //TODO
     }
 
     private void updateRepository() {
@@ -82,7 +78,7 @@ public class EditTimetableViewModel extends BaseEditTimetableViewModel {
     }
 
     private boolean isAppliedTimetable() {
-        return editingTimetable.getId() == loadAppliedTimetableIdFromProperties();
+        return editingTimetable.getId() == SharedPreferencesDao.getInstance().getAppliedTimetableId();
     }
 
     private void notifyAppliedTimetableUpdated() {
@@ -97,20 +93,5 @@ public class EditTimetableViewModel extends BaseEditTimetableViewModel {
         editStatus.setValue(
                 getApplication().getString(R.string.timetable_was_not_updated)
         );
-    }
-
-    private class EditLessonItemViewModelFactory
-            extends ItemViewModelFactory<EditItemViewModel, Lesson> {
-
-        @Override
-        public EditItemViewModel createViewModelByItem(Lesson lesson) {
-            return new EditItemViewModel(
-                    getHint(lesson.getNumber()), lesson.getStartTimeDep(), lesson.getEndTimeDep()
-            );
-        }
-
-        private String getHint(int numOfLesson) {
-            return getApplication().getString(R.string.lesson) + " " + numOfLesson;
-        }
     }
 }

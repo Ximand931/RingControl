@@ -55,7 +55,8 @@ public class TimetableInfoViewModel extends BaseFragmentViewModel {
                 removeTimetable();
                 return true;
             case R.id.toolbar_edit:
-                replaceFragment(EditTimetableFragment.newInstance(timetable));
+                FragmentNavigation.getInstance()
+                        .navigateToFragment(EditTimetableFragment.newInstance(timetable));
                 return true;
         }
         return false;

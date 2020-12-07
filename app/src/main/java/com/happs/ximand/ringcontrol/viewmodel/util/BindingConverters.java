@@ -4,9 +4,9 @@ import com.happs.ximand.ringcontrol.model.object.Lesson;
 
 import java.util.List;
 
-public final class BindingConverter {
+public final class BindingConverters {
 
-    private BindingConverter() {
+    private BindingConverters() {
 
     }
 

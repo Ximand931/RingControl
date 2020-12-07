@@ -5,27 +5,33 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="com.happs.ximand.ringcontrol.viewmodel.item.EditItemViewModel" />
+            name="error"
+            type="androidx.databinding.ObservableBoolean" />
+        <variable
+            name="number"
+            type="int" />
+        <variable
+            name="input"
+            type="androidx.databinding.ObservableField&lt;String>" />
     </data>
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        errorText="@{viewModel.error}"
+        app:errorText="@{error ? @string/incorrect_input_time : null}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:hint="@{viewModel.hint}"
+        android:hint="@{String.format(@string/lesson, number)}"
         app:errorEnabled="true">
 
+        <!-- DEPRECATED: textWatcher="@{viewModel.maskWatcher}" -->
         <com.google.android.material.textfield.TextInputEditText
-            textWatcher="@{viewModel.maskWatcher}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="text"
-            android:text="@={viewModel.input}" />
+            android:text="@={input}" />
 
     </com.google.android.material.textfield.TextInputLayout>
 </layout>

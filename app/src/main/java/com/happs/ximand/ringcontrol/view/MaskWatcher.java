@@ -1,9 +1,8 @@
-package com.happs.ximand.ringcontrol.viewmodel.item;
+package com.happs.ximand.ringcontrol.view;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 
-@Deprecated
 public class MaskWatcher implements TextWatcher {
 
     private static final char INPUT_CHAR = 's';

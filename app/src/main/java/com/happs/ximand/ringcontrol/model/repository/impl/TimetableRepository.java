@@ -1,10 +1,12 @@
 package com.happs.ximand.ringcontrol.model.repository.impl;
 
+import android.app.Application;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.happs.ximand.ringcontrol.BuildConfig;
 import com.happs.ximand.ringcontrol.model.database.TimetableDatabaseHelper;
 import com.happs.ximand.ringcontrol.model.mapper.Mapper;
 import com.happs.ximand.ringcontrol.model.mapper.impl.CursorToTimetableMapper;
@@ -19,13 +21,26 @@ import java.util.List;
 
 public class TimetableRepository implements Repository<Timetable> {
 
+    private static TimetableRepository instance;
+
+    public static void initialize(Application application) {
+        instance = new TimetableRepository(application);
+    }
+
+    public static TimetableRepository getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("TimetableRepository was not initialized");
+        }
+        return instance;
+    }
+
     private final SQLiteOpenHelper sqLiteHelper;
 
     private final Mapper<Cursor, Timetable> cursorToTimetableMapper;
     private final Mapper<Timetable, ContentValues> timetableToContentValuesMapper;
 
-    public TimetableRepository(SQLiteOpenHelper sqLiteHelper) {
-        this.sqLiteHelper = sqLiteHelper;
+    private TimetableRepository(Application application) {
+        this.sqLiteHelper = new TimetableDatabaseHelper(application, BuildConfig.VERSION_CODE);
         this.cursorToTimetableMapper = new CursorToTimetableMapper();
         this.timetableToContentValuesMapper = new TimetableToContentValuesMapper();
     }

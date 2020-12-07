@@ -22,7 +22,7 @@
             type="android.view.View.OnClickListener" />
 
         <import type="android.view.View" />
-        <import type="com.happs.ximand.ringcontrol.viewmodel.util.BindingConverter" />
+        <import type="com.happs.ximand.ringcontrol.viewmodel.util.BindingConverters" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

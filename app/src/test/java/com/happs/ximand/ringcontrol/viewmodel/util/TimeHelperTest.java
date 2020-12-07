@@ -1,4 +1,4 @@
-package com.happs.ximand.ringcontrol;
+package com.happs.ximand.ringcontrol.viewmodel.util;
 
 import com.happs.ximand.ringcontrol.viewmodel.util.TimeHelper;
 

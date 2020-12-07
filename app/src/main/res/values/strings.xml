@@ -41,7 +41,7 @@
     <string name="connecting_to_device">Подключение к устройству…</string>
     <string name="connected">Успешно подключено</string>
 
-    <string name="lesson">Урок</string>
+    <string name="lesson">Урок %d</string>
     <string name="lessons">уроки</string>
     <string name="retry">Повторить попытку</string>
     <string name="last_applied">Последнее примененное расписание</string>

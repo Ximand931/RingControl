@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:checked="true"
-            android:onClick="@{() -> viewModel.onDetailEditingClick()}"
+            android:onClick="@{() -> viewModel.changeDetailEditMode()}"
             app:layout_constraintBottom_toBottomOf="@+id/textView5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView4" />
@@ -73,7 +73,7 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/add_lesson"
             android:src="@drawable/ic_add"
-            android:onClick="@{() -> viewModel.onAddLessonClick()}"
+            android:onClick="@{() -> viewModel.addEmptyLesson()}"
             app:layout_constraintBottom_toBottomOf="@+id/textView6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView6" />
@@ -105,7 +105,7 @@
             android:layout_marginEnd="16dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/add_lesson"
-            android:onClick="@{() -> viewModel.onRemoveLastLessonClick()}"
+            android:onClick="@{() -> viewModel.removeLastLesson()}"
             android:src="@drawable/ic_remove"
             app:layout_constraintBottom_toBottomOf="@+id/textView7"
             app:layout_constraintEnd_toEndOf="parent"
@@ -123,7 +123,6 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lessons_recycler_view"
-            adapter="@{viewModel.adapter}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

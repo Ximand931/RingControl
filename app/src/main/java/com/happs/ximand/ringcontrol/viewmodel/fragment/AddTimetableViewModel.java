@@ -4,24 +4,23 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.Bindable;
+import androidx.lifecycle.MutableLiveData;
 
 import com.happs.ximand.ringcontrol.BR;
+import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.SingleLiveEvent;
-import com.happs.ximand.ringcontrol.model.object.exception.IncorrectInputException;
-import com.happs.ximand.ringcontrol.model.object.Lesson;
-import com.happs.ximand.ringcontrol.model.object.Timetable;
-import com.happs.ximand.ringcontrol.model.repository.impl.FakeTimetableRepository;
-import com.happs.ximand.ringcontrol.view.adapter.EditTimetableRecyclerViewAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AddTimetableViewModel extends BaseEditTimetableViewModel {
 
     private final SingleLiveEvent<Void> updateDataInAllTimetablesFragmentLiveEvent;
 
+    private final MutableLiveData<String> titleLiveData = new MutableLiveData<>();
+    private final MutableLiveData<String> titleErrorLiveData = new MutableLiveData<>();
+
+    @Deprecated
     private String title;
+    @Deprecated
     private String titleError;
 
     public AddTimetableViewModel(@NonNull Application application) {
@@ -55,7 +54,7 @@ public class AddTimetableViewModel extends BaseEditTimetableViewModel {
     }
 
     public void initEditTimetableRecyclerViewAdapter() {
-        setAdapter(new EditTimetableRecyclerViewAdapter(new ArrayList<>()));
+        //TODO
     }
 
     @Override
@@ -74,20 +73,8 @@ public class AddTimetableViewModel extends BaseEditTimetableViewModel {
     public void onAddTimetableClick() {
         if (title == null || title.isEmpty()) {
             showIncorrectTitleMessage();
-            return;
         }
-        try {
-            List<Lesson> lessons = getLessonsFromRecyclerViewAdapter();
-            if (lessons != null && !lessons.isEmpty()) {
-                Timetable timetable = new Timetable(title, lessons);
-                FakeTimetableRepository.getInstance().add(timetable);
-                getUpdateDataInAllTimetablesFragmentLiveEvent().call();
-                getPressBackEvent().call();
-            } else {
-                //todo
-            }
-        } catch (IncorrectInputException ignored) {
-        }
+        //TODO;
     }
 
     private void showIncorrectTitleMessage() {
@@ -97,6 +84,6 @@ public class AddTimetableViewModel extends BaseEditTimetableViewModel {
     }
 
     public void onCancelClick() {
-        getPressBackEvent().call();
+        FragmentNavigation.getInstance().navigateToPreviousFragment();
     }
 }

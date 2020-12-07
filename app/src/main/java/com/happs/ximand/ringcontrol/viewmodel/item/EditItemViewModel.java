@@ -1,9 +1,9 @@
 package com.happs.ximand.ringcontrol.viewmodel.item;
 
-import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
 import com.happs.ximand.ringcontrol.BR;
+import com.happs.ximand.ringcontrol.view.MaskWatcher;
 
 @Deprecated
 public class EditItemViewModel extends BaseItemViewModel {
@@ -40,10 +40,12 @@ public class EditItemViewModel extends BaseItemViewModel {
 
     private MaskWatcher createRequiredMaskWatcher() {
         if (detailEditing) {
-            return new MaskWatcher(DETAILED_TIME_MASK);
+            //return new MaskWatcher(DETAILED_TIME_MASK);
         } else {
-            return new MaskWatcher(SIMPLE_TIME_MASK);
+            //return new MaskWatcher(SIMPLE_TIME_MASK);
         }
+        return null;
+        //TODO
     }
 
     private boolean isDetailedTime(String time) {
@@ -121,7 +123,7 @@ public class EditItemViewModel extends BaseItemViewModel {
         if (!detailEditing && isInputCorrect()) {
             setInput(getDetailedStartTime() + " – " + getDetailedEndTime());
         }
-        maskWatcher.setMask(DETAILED_TIME_MASK);
+        //maskWatcher.setMask(DETAILED_TIME_MASK);
     }
 
     private void updateInputFromDetailedToSimple() {
@@ -131,7 +133,7 @@ public class EditItemViewModel extends BaseItemViewModel {
             setInput(startTime.substring(0, startTime.lastIndexOf(":"))
                     + " – " + endTime.substring(0, endTime.lastIndexOf(":")));
         }
-        maskWatcher.setMask(SIMPLE_TIME_MASK);
+        //maskWatcher.setMask(SIMPLE_TIME_MASK);
     }
 
     public boolean isInputCorrect() {

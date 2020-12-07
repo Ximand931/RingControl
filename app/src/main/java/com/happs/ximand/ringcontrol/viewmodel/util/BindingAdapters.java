@@ -7,14 +7,9 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.BindingAdapter;
-import androidx.databinding.BindingConversion;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.happs.ximand.ringcontrol.model.object.Lesson;
-
-import java.util.List;
 
 public final class BindingAdapters {
 
@@ -24,7 +19,7 @@ public final class BindingAdapters {
 
     @BindingAdapter("adapter")
     public static void setRecyclerViewAdapter(@NonNull RecyclerView recyclerView,
-                                              @Nullable RecyclerView.Adapter adapter) {
+                                              @Nullable RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
         if (adapter != null) {
             recyclerView.setAdapter(adapter);
         }
@@ -40,10 +35,12 @@ public final class BindingAdapters {
 
     @BindingAdapter("errorText")
     public static void setErrorText(@NonNull TextInputLayout layout, @Nullable String error) {
+        if (layout.getError() == null && error == null) {
+            return;
+        }
         layout.setError(error);
         new Handler().postDelayed(() -> layout.setError(""), 5000);
     }
-
 
 
 }

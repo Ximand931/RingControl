@@ -16,7 +16,7 @@ class BindingConverterTest {
         List<Lesson> lessons = new ArrayList<>();
         lessons.add(new Lesson(1, "12:00:00", "13:00:00"));
 
-        String details = BindingConverter.convertListToLessonsDetails(lessons);
+        String details = BindingConverters.convertListToLessonsDetails(lessons);
         String expected = "12:00 - 13:00";
         assertEquals(expected, details);
     }
