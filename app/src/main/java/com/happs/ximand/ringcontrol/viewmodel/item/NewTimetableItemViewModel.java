@@ -1,15 +1,12 @@
 package com.happs.ximand.ringcontrol.viewmodel.item;
 
-import androidx.databinding.BaseObservable;
-import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.happs.ximand.ringcontrol.OnEventListener;
 import com.happs.ximand.ringcontrol.model.object.Lesson;
 import com.happs.ximand.ringcontrol.model.object.Timetable;
-import com.happs.ximand.ringcontrol.viewmodel.TimeHelper;
+import com.happs.ximand.ringcontrol.viewmodel.util.TimeHelper;
 
 @Deprecated
 public class NewTimetableItemViewModel extends BaseItemViewModel {
@@ -108,9 +105,9 @@ public class NewTimetableItemViewModel extends BaseItemViewModel {
                 break;
             }
             previewBuilder
-                    .append(TimeHelper.getPreviewTime(lesson.getStartTime()))
+                    .append(TimeHelper.getPreviewTime(lesson.getStartTimeDep()))
                     .append(" - ")
-                    .append(TimeHelper.getPreviewTime(lesson.getEndTime()))
+                    .append(TimeHelper.getPreviewTime(lesson.getEndTimeDep()))
                     .append(", ");
         }
         return prunePreviewString(previewBuilder.toString());

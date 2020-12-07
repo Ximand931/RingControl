@@ -2,24 +2,16 @@ package com.happs.ximand.ringcontrol.view.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.BaseObservable;
-import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.ItemTimetableBinding;
 import com.happs.ximand.ringcontrol.model.object.Lesson;
-import com.happs.ximand.ringcontrol.model.object.Timetable;
-import com.happs.ximand.ringcontrol.model.repository.Repository;
-import com.happs.ximand.ringcontrol.viewmodel.SharedViewModel;
-import com.happs.ximand.ringcontrol.viewmodel.TimeHelper;
+import com.happs.ximand.ringcontrol.viewmodel.util.TimeHelper;
 import com.happs.ximand.ringcontrol.viewmodel.item.NewTimetableItemViewModel;
-import com.happs.ximand.ringcontrol.viewmodel.item.TimetableItemViewModel;
 
 import java.util.List;
 
@@ -62,6 +54,7 @@ public class AllTimetablesRecyclerViewAdapter extends RecyclerView.Adapter<Bindi
         return timetables.size();
     }
 
+    @Deprecated
     public static String mapLessonListToString(List<Lesson> lessons) {
         StringBuilder previewBuilder = new StringBuilder();
         for (Lesson lesson : lessons) {
@@ -69,9 +62,9 @@ public class AllTimetablesRecyclerViewAdapter extends RecyclerView.Adapter<Bindi
                 break;
             }
             previewBuilder
-                    .append(TimeHelper.getPreviewTime(lesson.getStartTime()))
+                    .append(TimeHelper.getPreviewTime(lesson.getStartTimeDep()))
                     .append(" - ")
-                    .append(TimeHelper.getPreviewTime(lesson.getEndTime()))
+                    .append(TimeHelper.getPreviewTime(lesson.getEndTimeDep()))
                     .append(", ");
         }
         return prunePreviewString(previewBuilder.toString());

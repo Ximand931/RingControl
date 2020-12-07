@@ -10,8 +10,6 @@ public class Timetable implements Serializable {
 
     private int id;
     private String title;
-    @Deprecated
-    private List<String> timeList;
     private List<Lesson> lessons;
 
     public Timetable(String title, List<Lesson> lessons) {
@@ -41,16 +39,6 @@ public class Timetable implements Serializable {
         this.title = title;
     }
 
-    @Deprecated
-    public List<String> getTimeList() {
-        return timeList;
-    }
-
-    @Deprecated
-    public void setTimeList(List<String> timeList) {
-        this.timeList = timeList;
-    }
-
     public List<Lesson> getLessons() {
         return lessons;
     }
@@ -64,13 +52,14 @@ public class Timetable implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Timetable timetable = (Timetable) o;
-        return Objects.equals(title, timetable.title) &&
-                Objects.equals(timeList, timetable.timeList);
+        return id == timetable.id &&
+                Objects.equals(title, timetable.title) &&
+                Objects.equals(lessons, timetable.lessons);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, timeList);
+        return Objects.hash(id, title, lessons);
     }
 
     @NonNull
@@ -79,7 +68,7 @@ public class Timetable implements Serializable {
         return "Timetable{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
-                ", timeList=" + timeList +
+                ", lessons=" + lessons +
                 '}';
     }
 }

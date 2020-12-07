@@ -3,13 +3,24 @@ package com.happs.ximand.ringcontrol.model.object;
 public class Lesson {
 
     private int number;
-    private String startTime;
-    private String endTime;
+    @Deprecated
+    private String startTimeDep;
+    @Deprecated
+    private String endTimeDep;
 
-    public Lesson(int number, String startTime, String endTime) {
+    private Time startTime;
+    private Time endTime;
+
+    public Lesson(int number, Time startTime, Time endTime) {
         this.number = number;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    public Lesson(int number, String startTime, String endTime) {
+        this.number = number;
+        this.startTimeDep = startTime;
+        this.endTimeDep = endTime;
     }
 
     public int getNumber() {
@@ -20,19 +31,39 @@ public class Lesson {
         this.number = number;
     }
 
-    public String getStartTime() {
+    public Time getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(Time startTime) {
         this.startTime = startTime;
     }
 
-    public String getEndTime() {
+    public Time getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(Time endTime) {
         this.endTime = endTime;
+    }
+
+    @Deprecated
+    public String getStartTimeDep() {
+        return startTimeDep;
+    }
+
+    @Deprecated
+    public void setStartTimeDep(String startTimeDep) {
+        this.startTimeDep = startTimeDep;
+    }
+
+    @Deprecated
+    public String getEndTimeDep() {
+        return endTimeDep;
+    }
+
+    @Deprecated
+    public void setEndTimeDep(String endTimeDep) {
+        this.endTimeDep = endTimeDep;
     }
 }

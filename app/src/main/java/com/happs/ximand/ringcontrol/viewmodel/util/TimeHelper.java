@@ -1,4 +1,4 @@
-package com.happs.ximand.ringcontrol.viewmodel;
+package com.happs.ximand.ringcontrol.viewmodel.util;
 
 import android.annotation.SuppressLint;
 

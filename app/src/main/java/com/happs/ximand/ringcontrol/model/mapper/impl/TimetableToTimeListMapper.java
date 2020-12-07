@@ -13,8 +13,8 @@ public class TimetableToTimeListMapper implements Mapper<Timetable, List<String>
     public List<String> map(Timetable from) {
         List<String> timeList = new ArrayList<>();
         for (Lesson lesson : from.getLessons()) {
-            timeList.add(lesson.getStartTime());
-            timeList.add(lesson.getEndTime());
+            timeList.add(lesson.getStartTimeDep());
+            timeList.add(lesson.getEndTimeDep());
         }
         return timeList;
     }

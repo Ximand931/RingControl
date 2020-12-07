@@ -1,10 +1,9 @@
 package com.happs.ximand.ringcontrol.viewmodel.item;
 
 import androidx.annotation.Nullable;
-import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
-import com.happs.ximand.ringcontrol.viewmodel.TimeHelper;
+import com.happs.ximand.ringcontrol.viewmodel.util.TimeHelper;
 
 @Deprecated
 public class TimeItemViewModel extends BaseItemViewModel {

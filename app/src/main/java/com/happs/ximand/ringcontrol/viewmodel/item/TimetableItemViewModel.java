@@ -7,7 +7,7 @@ import com.happs.ximand.ringcontrol.BR;
 import com.happs.ximand.ringcontrol.OnEventListener;
 import com.happs.ximand.ringcontrol.model.object.Lesson;
 import com.happs.ximand.ringcontrol.model.object.Timetable;
-import com.happs.ximand.ringcontrol.viewmodel.TimeHelper;
+import com.happs.ximand.ringcontrol.viewmodel.util.TimeHelper;
 
 import java.util.List;
 
@@ -57,9 +57,9 @@ public class TimetableItemViewModel extends BaseObservable {
         for (Lesson lesson : lessons) {
             if (previewBuilder.length() < 86) {
                 previewBuilder
-                        .append(TimeHelper.getPreviewTime(lesson.getStartTime()))
+                        .append(TimeHelper.getPreviewTime(lesson.getStartTimeDep()))
                         .append(" - ")
-                        .append(TimeHelper.getPreviewTime(lesson.getEndTime()))
+                        .append(TimeHelper.getPreviewTime(lesson.getEndTimeDep()))
                         .append(", ");
             }
         }

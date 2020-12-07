@@ -2,7 +2,6 @@ package com.happs.ximand.ringcontrol.viewmodel.fragment;
 
 import android.app.Application;
 import android.content.DialogInterface;
-import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.Bindable;
@@ -82,7 +81,7 @@ public class TimetableInfoViewModel extends BaseFragmentViewModel {
         @Override
         public TimeItemViewModel createViewModelByItem(Lesson lesson) {
             return new TimeItemViewModel(
-                    lesson.getNumber(), lesson.getStartTime(), lesson.getEndTime()
+                    lesson.getNumber(), lesson.getStartTimeDep(), lesson.getEndTimeDep()
             );
         }
     }

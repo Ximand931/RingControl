@@ -1,6 +1,6 @@
 package com.happs.ximand.ringcontrol;
 
-import com.happs.ximand.ringcontrol.viewmodel.TimeHelper;
+import com.happs.ximand.ringcontrol.viewmodel.util.TimeHelper;
 
 import org.junit.Test;
 

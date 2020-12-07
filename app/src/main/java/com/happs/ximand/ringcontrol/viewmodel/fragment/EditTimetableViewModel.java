@@ -105,7 +105,7 @@ public class EditTimetableViewModel extends BaseEditTimetableViewModel {
         @Override
         public EditItemViewModel createViewModelByItem(Lesson lesson) {
             return new EditItemViewModel(
-                    getHint(lesson.getNumber()), lesson.getStartTime(), lesson.getEndTime()
+                    getHint(lesson.getNumber()), lesson.getStartTimeDep(), lesson.getEndTimeDep()
             );
         }
 

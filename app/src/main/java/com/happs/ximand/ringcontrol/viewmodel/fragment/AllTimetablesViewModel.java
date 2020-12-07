@@ -1,6 +1,5 @@
 package com.happs.ximand.ringcontrol.viewmodel.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
@@ -17,14 +16,11 @@ import com.happs.ximand.ringcontrol.model.object.Timetable;
 import com.happs.ximand.ringcontrol.model.repository.Repository;
 import com.happs.ximand.ringcontrol.model.repository.impl.FakeTimetableRepository;
 import com.happs.ximand.ringcontrol.model.specification.impl.GetAllSqlSpecification;
-import com.happs.ximand.ringcontrol.model.writer.QueueWriter;
 import com.happs.ximand.ringcontrol.view.fragment.AddTimetableFragment;
 import com.happs.ximand.ringcontrol.view.fragment.TimetableInfoFragment;
-import com.happs.ximand.ringcontrol.viewmodel.TimeHelper;
+import com.happs.ximand.ringcontrol.viewmodel.util.TimeHelper;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class AllTimetablesViewModel extends BaseFragmentViewModel {

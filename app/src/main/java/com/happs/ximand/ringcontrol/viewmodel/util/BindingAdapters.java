@@ -1,4 +1,4 @@
-package com.happs.ximand.ringcontrol.viewmodel;
+package com.happs.ximand.ringcontrol.viewmodel.util;
 
 import android.os.Handler;
 import android.text.TextWatcher;
