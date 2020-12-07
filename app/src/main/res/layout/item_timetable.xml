@@ -5,8 +5,6 @@
 
     <data>
 
-
-
         <variable
             name="applyingPossible"
             type="androidx.databinding.ObservableBoolean" />
@@ -16,11 +14,12 @@
         <variable
             name="timetable"
             type="com.happs.ximand.ringcontrol.model.object.Timetable" />
-
-        <!-- DEPRECATED -->
         <variable
-            name="viewModel"
-            type="com.happs.ximand.ringcontrol.viewmodel.item.NewTimetableItemViewModel" />
+            name="applyClickListener"
+            type="android.view.View.OnClickListener" />
+        <variable
+            name="detailsClickListener"
+            type="android.view.View.OnClickListener" />
 
         <import type="android.view.View" />
         <import type="com.happs.ximand.ringcontrol.viewmodel.util.BindingConverter" />
@@ -81,7 +80,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:enabled="@{applyingPossible}"
-                    android:onClick="@{() -> viewModel.onApplyButtonClick()}"
+                    android:onClick="@{applyClickListener}"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
                     android:text="@string/apply"
@@ -92,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:onClick="@{() -> viewModel.onDetailsButtonClick()}"
+                    android:onClick="@{detailsClickListener}"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
                     android:text="@string/details"

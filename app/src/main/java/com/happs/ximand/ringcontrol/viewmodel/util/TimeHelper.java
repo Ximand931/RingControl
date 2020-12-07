@@ -9,7 +9,6 @@ public final class TimeHelper {
 
     private static final String DATE_TIME_PATTERN = "H:m:s";
 
-    //11:11:11
     public static String getPreviewTime(String time) {
         String simplifiedTime = time;
         if (time.length() == 8) {
