@@ -9,7 +9,7 @@ public class MaskWatcher implements TextWatcher {
     private String mask;
     private boolean adding;
 
-    MaskWatcher(String mask) {
+    public MaskWatcher(String mask) {
         this.mask = mask;
     }
 

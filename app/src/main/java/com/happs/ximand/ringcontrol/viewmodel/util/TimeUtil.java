@@ -5,11 +5,19 @@ import android.annotation.SuppressLint;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public final class TimeHelper {
+public class TimeUtil {
 
     private static final String DATE_TIME_PATTERN = "H:m:s";
 
-    @Deprecated
+    public static final String SIMPLE_TIME_PATTERN =
+            "(?:[01]\\d|2[0123]):(?:[012345]\\d) – (?:[01]\\d|2[0123]):(?:[012345]\\d)";
+    public static final String DETAILED_TIME_PATTERN =
+            "(?:[01]\\d|2[0123]):(?:[012345]\\d):(?:[012345]\\d) " +
+                    "– (?:[01]\\d|2[0123]):(?:[012345]\\d):(?:[012345]\\d)";
+
+    public static final String SIMPLE_TIME_MASK = "ss:ss – ss:ss";
+    public static final String DETAILED_TIME_MASK = "ss:ss:ss – ss:ss:ss";
+
     public static String getPreviewTime(String time) {
         String simplifiedTime = time;
         if (time.length() == 8) {
@@ -23,7 +31,6 @@ public final class TimeHelper {
         return simplifiedTime;
     }
 
-    @Deprecated
     @SuppressLint("SimpleDateFormat")
     public static String getCurrentTimeWithFewMinutes(int minutes) {
         final SimpleDateFormat format = new SimpleDateFormat(DATE_TIME_PATTERN);
@@ -33,5 +40,4 @@ public final class TimeHelper {
 
         return format.format(dateAfterFewMinutes);
     }
-
 }
