@@ -9,16 +9,10 @@ import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
 import com.happs.ximand.ringcontrol.model.object.exception.IncorrectInputException;
-import com.happs.ximand.ringcontrol.model.object.Lesson;
 import com.happs.ximand.ringcontrol.model.object.Timetable;
 import com.happs.ximand.ringcontrol.model.repository.Repository;
 import com.happs.ximand.ringcontrol.model.repository.impl.FakeTimetableRepository;
-import com.happs.ximand.ringcontrol.view.adapter.EditTimetableRecyclerViewAdapter;
 import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment;
-import com.happs.ximand.ringcontrol.viewmodel.item.EditItemViewModel;
-import com.happs.ximand.ringcontrol.viewmodel.item.ItemViewModelFactory;
-
-import java.util.List;
 
 public class EditTimetableViewModel extends BaseEditTimetableViewModel {
 

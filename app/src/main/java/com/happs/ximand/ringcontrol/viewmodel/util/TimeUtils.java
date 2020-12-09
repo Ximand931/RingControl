@@ -5,7 +5,7 @@ import android.annotation.SuppressLint;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class TimeUtil {
+public class TimeUtils {
 
     private static final String DATE_TIME_PATTERN = "H:m:s";
 

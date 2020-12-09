@@ -13,7 +13,7 @@ public class MaskWatcher implements TextWatcher {
         this.mask = mask;
     }
 
-    void setMask(String mask) {
+    public void setMask(String mask) {
         this.mask = mask;
     }
 
