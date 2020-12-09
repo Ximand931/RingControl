@@ -15,7 +15,6 @@ import com.happs.ximand.ringcontrol.view.adapter.TimeRecyclerViewAdapter;
 import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment;
 import com.happs.ximand.ringcontrol.view.fragment.EditTimetableFragment;
 import com.happs.ximand.ringcontrol.viewmodel.item.ItemViewModelFactory;
-import com.happs.ximand.ringcontrol.viewmodel.item.TimeItemViewModel;
 
 public class TimetableInfoViewModel extends BaseFragmentViewModel {
 

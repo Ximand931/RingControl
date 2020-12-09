@@ -4,80 +4,83 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableInt;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.happs.ximand.ringcontrol.OnEventListener;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.ItemTimetableBinding;
-import com.happs.ximand.ringcontrol.model.object.Lesson;
-import com.happs.ximand.ringcontrol.viewmodel.util.TimeHelper;
-import com.happs.ximand.ringcontrol.viewmodel.item.NewTimetableItemViewModel;
+import com.happs.ximand.ringcontrol.model.object.Timetable;
 
 import java.util.List;
 
-public class AllTimetablesRecyclerViewAdapter extends RecyclerView.Adapter<BindingViewHolder> {
+public class AllTimetablesRecyclerViewAdapter extends BaseRecyclerViewAdapter<Timetable, AllTimetablesRecyclerViewAdapter.AllTimetablesViewHolder> {
 
-    private List<NewTimetableItemViewModel> timetables;
+    private ObservableBoolean applyingPossible;
+    private ObservableInt appliedTimetableId;
+    @Nullable
+    private OnEventListener<Timetable> applyTimetableClickListener;
+    @Nullable
+    private OnEventListener<Timetable> detailsTimetableClickListener;
 
-    public AllTimetablesRecyclerViewAdapter(List<NewTimetableItemViewModel> timetables) {
-        this.timetables = timetables;
+    public AllTimetablesRecyclerViewAdapter(List<Timetable> timetables) {
+        super(timetables);
+        this.applyingPossible = new ObservableBoolean(false);
+        this.appliedTimetableId = new ObservableInt(-1);
     }
 
-    public void updateTimetables(List<NewTimetableItemViewModel> timetables) {
-        int size = this.timetables.size();
-        int newSize = timetables.size();
-        this.timetables = timetables;
-        if (size == newSize) {
-            notifyDataSetChanged();
-        } else if (size > newSize) {
-            notifyItemRangeRemoved(newSize, size);
-        } else {
-            notifyItemRangeInserted(size, newSize);
-        }
+    public void setApplyingPossible(boolean applyingPossible) {
+        this.applyingPossible.set(applyingPossible);
+    }
+
+    public void setAppliedTimetableId(int id) {
+        this.appliedTimetableId.set(id);
+    }
+
+    public void setApplyTimetableClickListener(@Nullable OnEventListener<Timetable>
+                                                       applyTimetableClickListener) {
+        this.applyTimetableClickListener = applyTimetableClickListener;
+    }
+
+    public void setDetailsTimetableClickListener(@Nullable OnEventListener<Timetable>
+                                                         detailsTimetableClickListener) {
+        this.detailsTimetableClickListener = detailsTimetableClickListener;
     }
 
     @NonNull
     @Override
-    public BindingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AllTimetablesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         ItemTimetableBinding binding = DataBindingUtil.inflate(inflater, R.layout.item_timetable, parent, false);
-        return new BindingViewHolder(binding);
+        return new AllTimetablesViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BindingViewHolder holder, int position) {
-        holder.bind(timetables.get(position));
+    public void onBindViewHolder(@NonNull AllTimetablesViewHolder holder, int position) {
+        holder.bind(applyingPossible, appliedTimetableId,
+                applyTimetableClickListener, detailsTimetableClickListener);
     }
 
-    @Override
-    public int getItemCount() {
-        return timetables.size();
-    }
+    static class AllTimetablesViewHolder extends RecyclerView.ViewHolder {
 
-    @Deprecated
-    public static String mapLessonListToString(List<Lesson> lessons) {
-        StringBuilder previewBuilder = new StringBuilder();
-        for (Lesson lesson : lessons) {
-            if (previewBuilder.length() > 86) {
-                break;
-            }
-            previewBuilder
-                    .append(TimeHelper.getPreviewTime(lesson.getStartTimeDep()))
-                    .append(" - ")
-                    .append(TimeHelper.getPreviewTime(lesson.getEndTimeDep()))
-                    .append(", ");
+        private ItemTimetableBinding binding;
+
+        AllTimetablesViewHolder(@NonNull ItemTimetableBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
-        return prunePreviewString(previewBuilder.toString());
-    }
 
-    private static String prunePreviewString(String s) {
-        if (s.length() > 86) {
-            return s.substring(
-                    0, s.substring(0, 86).lastIndexOf(',')
-            ) + "...";
-        } else {
-            return s.substring(0, s.length() - 2);
+        void bind(ObservableBoolean applyingPossible, ObservableInt appliedTimetableId,
+                  OnEventListener<Timetable> applyTimetableClickListener,
+                  OnEventListener<Timetable> detailsTimetableClickListener) {
+            binding.setApplyingPossible(applyingPossible);
+            binding.setAppliedTimetableId(appliedTimetableId);
+            binding.setApplyClickListener(applyTimetableClickListener);
+            binding.setDetailsClickListener(detailsTimetableClickListener);
+            binding.executePendingBindings();
         }
     }
-
 }

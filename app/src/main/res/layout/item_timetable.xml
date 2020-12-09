@@ -9,17 +9,19 @@
             name="applyingPossible"
             type="androidx.databinding.ObservableBoolean" />
         <variable
-            name="currentTimetableId"
+            name="appliedTimetableId"
             type="androidx.databinding.ObservableInt" />
         <variable
             name="timetable"
             type="com.happs.ximand.ringcontrol.model.object.Timetable" />
+
         <variable
             name="applyClickListener"
-            type="android.view.View.OnClickListener" />
+            type="com.happs.ximand.ringcontrol.OnEventListener&lt;com.happs.ximand.ringcontrol.model.object.Timetable>" />
+
         <variable
             name="detailsClickListener"
-            type="android.view.View.OnClickListener" />
+            type="com.happs.ximand.ringcontrol.OnEventListener&lt;com.happs.ximand.ringcontrol.model.object.Timetable>" />
 
         <import type="android.view.View" />
         <import type="com.happs.ximand.ringcontrol.viewmodel.util.BindingConverters" />
@@ -47,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/last_applied"
-                android:visibility="@{timetable.id == currentTimetableId ? View.VISIBLE : View.GONE}" />
+                android:visibility="@{timetable.id == appliedTimetableId ? View.VISIBLE : View.GONE}" />
 
             <TextView
                 style="@style/TextAppearance.MaterialComponents.Headline5"
@@ -65,7 +67,7 @@
                 android:layout_marginTop="8dp"
                 android:ellipsize="end"
                 android:ems="20"
-                android:text="@{String.format(@string/format_timetable_desc, timetable.lessons.size(), BindingConverter.convertListToLessonsDetails(timetable.lessons))}"
+                android:text="@{String.format(@string/format_timetable_desc, timetable.lessons.size(), BindingConverters.convertListToLessonsDetails(timetable.lessons))}"
                 tools:text="Описание"/>
 
             <LinearLayout

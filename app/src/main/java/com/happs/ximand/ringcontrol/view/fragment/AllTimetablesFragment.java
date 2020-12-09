@@ -21,7 +21,6 @@ import com.happs.ximand.ringcontrol.view.adapter.AllTimetablesRecyclerViewAdapte
 import com.happs.ximand.ringcontrol.viewmodel.SharedViewModel;
 import com.happs.ximand.ringcontrol.viewmodel.fragment.AllTimetablesViewModel;
 import com.happs.ximand.ringcontrol.viewmodel.item.ItemViewModelFactory;
-import com.happs.ximand.ringcontrol.viewmodel.item.NewTimetableItemViewModel;
 
 import java.util.List;
 
