@@ -41,8 +41,8 @@
     <string name="debug">Only for Debug-version</string>
     <string name="add_test_lesson">+ lesson</string>
     <string name="remove_test_lesson">- lesson</string>
-    <string name="time_title">Lesson %d</string>
-    <string name="test_timetable_desc">Lessons - %d, rings - %d, starting at current time and 1 minute</string>
-    <string name="timetable_desc">Lessons - %d: %s</string>
+    <string name="format_time_title">Lesson %d</string>
+    <string name="format_test_timetable_desc">Lessons - %d, rings - %d, starting at current time and 1 minute</string>
+    <string name="format_timetable_desc">Lessons - %d: %s</string>
     <string name="connected">Successfuly connected</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.happs.ximand.ringcontrol.view.adapter;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -10,17 +9,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.ItemTimeBinding;
-import com.happs.ximand.ringcontrol.viewmodel.item.TimeItemViewModel;
+import com.happs.ximand.ringcontrol.model.object.LessonScope;
 
 import java.util.List;
 
 public class TimeRecyclerViewAdapter
-        extends RecyclerView.Adapter<TimeRecyclerViewAdapter.TimeViewHolder> {
+        extends BaseRecyclerViewAdapter<LessonScope, TimeRecyclerViewAdapter.TimeViewHolder> {
 
-    private final List<TimeItemViewModel> viewModels;
-
-    public TimeRecyclerViewAdapter(List<TimeItemViewModel> viewModels) {
-        this.viewModels = viewModels;
+    public TimeRecyclerViewAdapter(List<LessonScope> lessonScopes) {
+        super(lessonScopes);
     }
 
     @NonNull
@@ -34,12 +31,7 @@ public class TimeRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(@NonNull TimeViewHolder holder, int position) {
-        holder.bind(viewModels.get(position));
-    }
-
-    @Override
-    public int getItemCount() {
-        return viewModels.size();
+        holder.bind(position + 1, getItems().get(position));
     }
 
     static class TimeViewHolder extends RecyclerView.ViewHolder {
@@ -51,9 +43,10 @@ public class TimeRecyclerViewAdapter
             this.binding = binding;
         }
 
-        void bind(TimeItemViewModel viewModel) {
-            binding.setViewModel(viewModel);
+        void bind(int number, LessonScope lessonScope) {
+            binding.setNumber(number);
+            binding.setLessonScope(lessonScope);
+            binding.executePendingBindings();
         }
     }
-
 }

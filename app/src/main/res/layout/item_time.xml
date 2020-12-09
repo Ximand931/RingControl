@@ -4,10 +4,16 @@
     <data>
 
         <variable
-            name="viewModel"
-            type="com.happs.ximand.ringcontrol.viewmodel.item.TimeItemViewModel" />
+            name="number"
+            type="int" />
+
+        <variable
+            name="lessonScope"
+            type="com.happs.ximand.ringcontrol.model.object.LessonScope" />
 
         <import type="android.view.View" />
+
+        <import type="com.happs.ximand.ringcontrol.viewmodel.util.BindingConverters" />
     </data>
 
     <LinearLayout
@@ -19,20 +25,11 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView"
-            style="@style/TextAppearance.MaterialComponents.Overline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:text="@{viewModel.overline}"
-            android:visibility="@{viewModel.overline == null ? View.GONE : View.VISIBLE}" />
-
-        <TextView
             android:id="@+id/textView2"
             style="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.format(@string/time_title, viewModel.numOfLesson)}" />
+            android:text="@{String.format(@string/format_time_title, number)}" />
 
         <TextView
             android:id="@+id/textView3"
@@ -40,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@{viewModel.previewTime}" />
+            android:text="@{String.format(@string/format_preview_time, BindingConverters.convertTimeToPreviewTimeString(lessonScope.startTime), BindingConverters.convertTimeToPreviewTimeString(lessonScope.endTime))}" />
 
         <View
             android:layout_width="match_parent"

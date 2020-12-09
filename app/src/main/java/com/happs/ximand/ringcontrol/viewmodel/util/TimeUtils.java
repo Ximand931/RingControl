@@ -18,6 +18,7 @@ public class TimeUtils {
     public static final String SIMPLE_TIME_MASK = "ss:ss – ss:ss";
     public static final String DETAILED_TIME_MASK = "ss:ss:ss – ss:ss:ss";
 
+    @Deprecated
     public static String getPreviewTime(String time) {
         String simplifiedTime = time;
         if (time.length() == 8) {

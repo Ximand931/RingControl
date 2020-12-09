@@ -52,10 +52,12 @@
     <string name="add_test_lesson">+ урок</string>
     <string name="remove_test_lesson">- урок</string>
 
-    <string name="time_title">Урок %d</string>
+    <!-- Для String.format -->
+    <string name="format_time_title">Урок %d</string>
+    <string name="format_test_timetable_desc">Уроки - %d, звонки - %d, начиная с текущего времени плюс 1 минуты</string>
+    <string name="format_timetable_desc">Уроки - %d: %s</string>
+    <string name="format_preview_time">%s – %s</string>
 
-    <string name="test_timetable_desc">Уроки - %d, звонки - %d, начиная с текущего времени плюс 1 минуты</string>
-    <string name="timetable_desc">Уроки - %d: %s</string>
     <string name="test_timetable">Тестовое расписание</string>
 
 </resources>

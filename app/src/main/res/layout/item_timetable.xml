@@ -65,7 +65,7 @@
                 android:layout_marginTop="8dp"
                 android:ellipsize="end"
                 android:ems="20"
-                android:text="@{String.format(@string/timetable_desc, timetable.lessons.size(), BindingConverter.convertListToLessonsDetails(timetable.lessons))}"
+                android:text="@{String.format(@string/format_timetable_desc, timetable.lessons.size(), BindingConverter.convertListToLessonsDetails(timetable.lessons))}"
                 tools:text="Описание"/>
 
             <LinearLayout

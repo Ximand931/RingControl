@@ -164,6 +164,7 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
             binding.setInput(input);
             binding.setErrorId(errorId);
             binding.input.addTextChangedListener(maskWatcher);
+            binding.executePendingBindings();
         }
 
     }
