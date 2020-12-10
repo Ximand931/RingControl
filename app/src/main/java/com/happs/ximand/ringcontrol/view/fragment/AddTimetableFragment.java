@@ -5,6 +5,7 @@ import android.view.MenuInflater;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.FragmentAddTimetableBinding;
@@ -14,10 +15,10 @@ import com.happs.ximand.ringcontrol.viewmodel.fragment.AddTimetableViewModel;
 public class AddTimetableFragment
         extends BaseFragment<AddTimetableViewModel, FragmentAddTimetableBinding> {
 
-    private static final String TAG = "AddTimetable";
+    private RecyclerView addTimetableRecyclerView;
 
     public AddTimetableFragment() {
-        super(R.layout.fragment_add_timetable, TAG);
+        super(R.layout.fragment_add_timetable);
     }
 
     public static AddTimetableFragment newInstance() {

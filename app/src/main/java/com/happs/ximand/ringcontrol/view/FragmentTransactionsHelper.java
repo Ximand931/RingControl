@@ -9,6 +9,7 @@ public class FragmentTransactionsHelper {
 
     private static final int CONTAINER_ID = R.id.container_main;
 
+    @SuppressWarnings("rawtypes")
     public static void replaceFragment(FragmentManager manager, BaseFragment fragment) {
 
         FragmentTransaction transaction = manager.beginTransaction();
@@ -16,8 +17,8 @@ public class FragmentTransactionsHelper {
                 R.animator.fade_in, R.animator.fade_out,
                 R.animator.fade_in, R.animator.fade_out
         );
-        transaction.replace(CONTAINER_ID, fragment, fragment.getDefaultFragmentTag());
-        transaction.addToBackStack(fragment.getDefaultFragmentTag());
+        transaction.replace(CONTAINER_ID, fragment, fragment.getDefaultTag());
+        transaction.addToBackStack(fragment.getDefaultTag());
         transaction.commitAllowingStateLoss();
     }
 

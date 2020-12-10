@@ -34,12 +34,9 @@ public abstract class BaseFragment<VM extends BaseFragmentViewModel, B extends V
     private VM viewModel;
 
     private final int layoutId;
-    @Deprecated
-    private final String tag;
 
-    public BaseFragment(int layoutId, String tag) {
+    public BaseFragment(int layoutId) {
         this.layoutId = layoutId;
-        this.tag = tag;
     }
 
     @NonNull
@@ -57,9 +54,8 @@ public abstract class BaseFragment<VM extends BaseFragmentViewModel, B extends V
         );
     }
 
-    @Deprecated
-    String getDefaultFragmentTag() {
-        return tag;
+    public String getDefaultTag() {
+        return this.getClass().getSimpleName();
     }
 
     @Override
