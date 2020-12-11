@@ -1,64 +1,34 @@
 package com.happs.ximand.ringcontrol.viewmodel.fragment;
 
-import android.app.Application;
+import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
-import androidx.databinding.Bindable;
 import androidx.lifecycle.MutableLiveData;
 
-import com.happs.ximand.ringcontrol.BR;
 import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
-import com.happs.ximand.ringcontrol.SingleLiveEvent;
+
+import java.util.ArrayList;
 
 public class AddTimetableViewModel extends BaseEditTimetableViewModel {
 
-    private final SingleLiveEvent<Void> updateDataInAllTimetablesFragmentLiveEvent;
-
     private final MutableLiveData<String> titleLiveData = new MutableLiveData<>();
-    private final MutableLiveData<String> titleErrorLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> titleErrorLiveData = new MutableLiveData<>();
 
-    @Deprecated
-    private String title;
-    @Deprecated
-    private String titleError;
-
-    public AddTimetableViewModel(@NonNull Application application) {
-        super(application);
-        this.updateDataInAllTimetablesFragmentLiveEvent = new SingleLiveEvent<>();
+    public AddTimetableViewModel() {
         this.detailEditing = false;
+        setLessons(new ArrayList<>());
     }
 
-    public SingleLiveEvent<Void> getUpdateDataInAllTimetablesFragmentLiveEvent() {
-        return updateDataInAllTimetablesFragmentLiveEvent;
+    public MutableLiveData<String> getTitleLiveData() {
+        return titleLiveData;
     }
 
-    @Bindable
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-        notifyPropertyChanged(BR.title);
-    }
-
-    @Bindable
-    public String getTitleError() {
-        return titleError;
-    }
-
-    private void setTitleError(String titleError) {
-        this.titleError = titleError;
-        notifyPropertyChanged(BR.titleError);
-    }
-
-    public void initEditTimetableRecyclerViewAdapter() {
-        //TODO
+    public MutableLiveData<Boolean> getTitleErrorLiveData() {
+        return titleErrorLiveData;
     }
 
     @Override
-    public boolean onOptionsItemSelected(int itemId) {
+    public boolean notifyOptionsMenuItemClicked(int itemId) {
         switch (itemId) {
             case R.id.toolbar_add:
                 onAddTimetableClick();
@@ -71,16 +41,9 @@ public class AddTimetableViewModel extends BaseEditTimetableViewModel {
     }
 
     public void onAddTimetableClick() {
-        if (title == null || title.isEmpty()) {
-            showIncorrectTitleMessage();
+        if (TextUtils.isEmpty(titleLiveData.getValue())) {
+            titleErrorLiveData.setValue(true);
         }
-        //TODO;
-    }
-
-    private void showIncorrectTitleMessage() {
-        setTitleError(
-                getApplication().getString(R.string.incorrect_timetable_title)
-        );
     }
 
     public void onCancelClick() {

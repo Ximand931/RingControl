@@ -10,9 +10,6 @@ import androidx.databinding.PropertyChangeRegistry;
 import androidx.lifecycle.ViewModel;
 
 import com.happs.ximand.ringcontrol.SingleLiveEvent;
-import com.happs.ximand.ringcontrol.model.object.Timetable;
-import com.happs.ximand.ringcontrol.model.repository.Repository;
-import com.happs.ximand.ringcontrol.model.repository.impl.FakeTimetableRepository;
 import com.happs.ximand.ringcontrol.view.BaseFragment;
 
 public abstract class BaseFragmentViewModel extends ViewModel implements Observable {
@@ -51,7 +48,7 @@ public abstract class BaseFragmentViewModel extends ViewModel implements Observa
         return (T) app;
     }
 
-    public boolean onOptionsItemSelected(int itemId) {
+    public boolean notifyOptionsMenuItemClicked(int itemId) {
         return false;
     }
 

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import com.happs.ximand.ringcontrol.model.database.TimetableDatabaseHelper;
 import com.happs.ximand.ringcontrol.model.mapper.Mapper;
 import com.happs.ximand.ringcontrol.model.object.Lesson;
+import com.happs.ximand.ringcontrol.model.object.Time;
 import com.happs.ximand.ringcontrol.model.object.Timetable;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class CursorToTimetableMapper implements Mapper<Cursor, Timetable> {
         String[] timeArray = from.getString(timetableColumnIndex).split(";");
         for (int i = 0; i < timeArray.length; i += 2) {
             int num = i / 2 + 1;
-            Lesson lesson = new Lesson(num, timeArray[i], timeArray[i + 1]);
+            Lesson lesson = new Lesson(num, new Time(timeArray[i]), new Time(timeArray[i + 1]));
             lessons.add(lesson);
         }
 

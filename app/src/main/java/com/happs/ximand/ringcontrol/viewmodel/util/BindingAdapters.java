@@ -13,6 +13,8 @@ import com.google.android.material.textfield.TextInputLayout;
 
 public final class BindingAdapters {
 
+    private static final int ERROR_MESSAGE_SHOW_DURATION = 5000;
+
     private BindingAdapters() {
 
     }
@@ -39,7 +41,7 @@ public final class BindingAdapters {
             return;
         }
         layout.setError(error);
-        new Handler().postDelayed(() -> layout.setError(""), 5000);
+        new Handler().postDelayed(() -> layout.setError(null), ERROR_MESSAGE_SHOW_DURATION);
     }
 
 

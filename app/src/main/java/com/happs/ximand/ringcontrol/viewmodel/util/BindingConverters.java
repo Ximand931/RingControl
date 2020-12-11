@@ -34,9 +34,9 @@ public final class BindingConverters {
                 break;
             }
             previewBuilder
-                    .append(TimeHelper.getPreviewTime(lesson.getStartTimeDep()))
+                    .append(convertTimeToPreviewTimeString(lesson.getStartTime()))
                     .append(" - ")
-                    .append(TimeHelper.getPreviewTime(lesson.getEndTimeDep()))
+                    .append(convertTimeToPreviewTimeString(lesson.getEndTime()))
                     .append(", ");
         }
         return prunePreviewString(previewBuilder.toString());

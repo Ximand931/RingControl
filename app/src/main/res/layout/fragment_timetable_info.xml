@@ -10,7 +10,6 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/timetable_info_recycler_view"
-        adapter="@{viewModel.adapter}"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </layout>

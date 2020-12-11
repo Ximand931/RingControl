@@ -1,26 +1,23 @@
 package com.happs.ximand.ringcontrol.viewmodel.fragment;
 
-import android.app.Application;
-
-import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
-import com.happs.ximand.ringcontrol.model.object.exception.IncorrectInputException;
 import com.happs.ximand.ringcontrol.model.object.Timetable;
+import com.happs.ximand.ringcontrol.model.object.exception.IncorrectInputException;
 import com.happs.ximand.ringcontrol.model.repository.Repository;
 import com.happs.ximand.ringcontrol.model.repository.impl.FakeTimetableRepository;
 import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment;
 
 public class EditTimetableViewModel extends BaseEditTimetableViewModel {
 
+    //private final MutableLiveData<List<Lesson>> lesson
     private final MutableLiveData<String> editStatus;
     private Timetable editingTimetable;
 
-    public EditTimetableViewModel(@NonNull Application application) {
-        super(application);
+    public EditTimetableViewModel() {
         this.editStatus = new MutableLiveData<>();
     }
 
@@ -32,12 +29,8 @@ public class EditTimetableViewModel extends BaseEditTimetableViewModel {
         this.editingTimetable = editingTimetable;
     }
 
-    public void initEditTimetableRecyclerViewAdapter() {
-    }
-
-
     @Override
-    public boolean onOptionsItemSelected(int itemId) {
+    public boolean notifyOptionsMenuItemClicked(int itemId) {
         switch (itemId) {
             case R.id.toolbar_save:
                 saveChanges();
@@ -76,7 +69,7 @@ public class EditTimetableViewModel extends BaseEditTimetableViewModel {
     }
 
     private void notifyAppliedTimetableUpdated() {
-        String tag = AllTimetablesFragment.FRAGMENT_TAG;
+        String tag = AllTimetablesFragment.class.getSimpleName(); //TODO
         int id = AllTimetablesFragment.EVENT_APPLIED_TIMETABLE_UPDATED;
         FragmentNavigation.getInstance().notifyFragmentAboutEvent(tag, id);
     }

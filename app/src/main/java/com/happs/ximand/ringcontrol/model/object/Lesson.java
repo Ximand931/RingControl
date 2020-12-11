@@ -3,24 +3,16 @@ package com.happs.ximand.ringcontrol.model.object;
 public class Lesson {
 
     private int number;
-    @Deprecated
-    private String startTimeDep;
-    @Deprecated
-    private String endTimeDep;
+    private LessonScope lessonScope;
 
-    private Time startTime;
-    private Time endTime;
+    public Lesson(int number) {
+        this.number = number;
+        this.lessonScope = new LessonScope(Time.getMidnightTime(), Time.getMidnightTime());
+    }
 
     public Lesson(int number, Time startTime, Time endTime) {
         this.number = number;
-        this.startTime = startTime;
-        this.endTime = endTime;
-    }
-
-    public Lesson(int number, String startTime, String endTime) {
-        this.number = number;
-        this.startTimeDep = startTime;
-        this.endTimeDep = endTime;
+        this.lessonScope = new LessonScope(startTime, endTime);
     }
 
     public int getNumber() {
@@ -32,38 +24,18 @@ public class Lesson {
     }
 
     public Time getStartTime() {
-        return startTime;
+        return lessonScope.getStartTime();
     }
 
     public void setStartTime(Time startTime) {
-        this.startTime = startTime;
+        this.lessonScope.setStartTime(startTime);
     }
 
     public Time getEndTime() {
-        return endTime;
+        return lessonScope.getEndTime();
     }
 
     public void setEndTime(Time endTime) {
-        this.endTime = endTime;
-    }
-
-    @Deprecated
-    public String getStartTimeDep() {
-        return startTimeDep;
-    }
-
-    @Deprecated
-    public void setStartTimeDep(String startTimeDep) {
-        this.startTimeDep = startTimeDep;
-    }
-
-    @Deprecated
-    public String getEndTimeDep() {
-        return endTimeDep;
-    }
-
-    @Deprecated
-    public void setEndTimeDep(String endTimeDep) {
-        this.endTimeDep = endTimeDep;
+        this.lessonScope.setEndTime(endTime);
     }
 }

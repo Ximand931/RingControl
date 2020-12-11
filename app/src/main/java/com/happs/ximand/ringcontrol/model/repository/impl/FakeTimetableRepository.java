@@ -3,6 +3,7 @@ package com.happs.ximand.ringcontrol.model.repository.impl;
 import android.util.Log;
 
 import com.happs.ximand.ringcontrol.model.object.Lesson;
+import com.happs.ximand.ringcontrol.model.object.Time;
 import com.happs.ximand.ringcontrol.model.object.Timetable;
 import com.happs.ximand.ringcontrol.model.repository.Repository;
 import com.happs.ximand.ringcontrol.model.specification.SqlSpecification;
@@ -19,8 +20,8 @@ public final class FakeTimetableRepository implements Repository<Timetable> {
     private FakeTimetableRepository() {
         this.timetables = new ArrayList<Timetable>() {{
             add(new Timetable(0, "Стандартное расписание", new ArrayList<Lesson>() {{
-                add(new Lesson(1, "08:30:00", "09:15:00"));
-                add(new Lesson(2, "09:25:00", "10:10:00"));
+                add(new Lesson(1, new Time("08:30:00"), new Time("09:15:00")));
+                add(new Lesson(2, new Time("09:25:00"), new Time("10:10:00")));
             }}));
             /*
             add(new Timetable(1, "Сокращенное расписание", new ArrayList<Lesson>() {{

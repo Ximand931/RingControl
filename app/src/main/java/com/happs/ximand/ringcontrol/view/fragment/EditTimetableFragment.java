@@ -1,8 +1,6 @@
 package com.happs.ximand.ringcontrol.view.fragment;
 
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -16,6 +14,7 @@ import com.happs.ximand.ringcontrol.databinding.FragmentEditTimetableBinding;
 import com.happs.ximand.ringcontrol.model.object.Lesson;
 import com.happs.ximand.ringcontrol.model.object.Timetable;
 import com.happs.ximand.ringcontrol.view.BaseFragment;
+import com.happs.ximand.ringcontrol.view.adapter.EditTimetableRecyclerViewAdapter;
 import com.happs.ximand.ringcontrol.viewmodel.fragment.EditTimetableViewModel;
 
 import java.util.List;
@@ -23,13 +22,13 @@ import java.util.List;
 public class EditTimetableFragment
         extends BaseFragment<EditTimetableViewModel, FragmentEditTimetableBinding> {
 
-    private static final String FRAGMENT_TAG = "EditTimetable";
-    private static final String KEY_ID = "TIMETABLE";
-    private RecyclerView editRecyclerView;
+    private static final String KEY_TIMETABLE = "TIMETABLE";
+    private RecyclerView lessonsRecyclerView;
+    @Nullable
     private Timetable timetable;
 
     public EditTimetableFragment() {
-        super(R.layout.fragment_edit_timetable, FRAGMENT_TAG);
+        super(R.layout.fragment_edit_timetable, R.menu.menu_toolbar_editing);
     }
 
     public static EditTimetableFragment newInstance(Timetable timetable) {
@@ -41,37 +40,27 @@ public class EditTimetableFragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_ID)) {
-            this.timetable = (Timetable) savedInstanceState.getSerializable(KEY_ID);
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_TIMETABLE)) {
+            this.timetable = (Timetable) savedInstanceState.getSerializable(KEY_TIMETABLE);
         }
+    }
+
+    @Override
+    protected void onViewDataBindingCreated(@NonNull FragmentEditTimetableBinding binding) {
+        lessonsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        lessonsRecyclerView = binding.lessonsRecyclerView;
     }
 
     @Override
     protected void onPreViewModelAttaching(@NonNull EditTimetableViewModel viewModel) {
         viewModel.setEditingTimetable(timetable);
-        viewModel.initEditTimetableRecyclerViewAdapter();
-        viewModel.getLessonsMutableLiveData().observe(getViewLifecycleOwner(), lessons -> {
-
-        });
+        viewModel.getLessonsMutableLiveData().observe(getViewLifecycleOwner(), this::initAdapter);
     }
 
     private void initAdapter(List<Lesson> lessons) {
-        if (editRecyclerView.getAdapter() == null) {
-            editRecyclerView.setAdapter(createNewAdapter(lessons));
-        } else {
-            editRecyclerView.getAdapter();
-        }
-    }
-
-    private RecyclerView.Adapter<RecyclerView.ViewHolder> createNewAdapter(List<Lesson> lessons) {
-        //TODO
-        return null;
-    }
-
-    @Override
-    protected void onViewDataBindingCreated(@NonNull FragmentEditTimetableBinding binding) {
-        editRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        editRecyclerView = binding.lessonsRecyclerView;
+        lessonsRecyclerView.setAdapter(
+                new EditTimetableRecyclerViewAdapter(lessons)
+        );
     }
 
     @Override
@@ -87,11 +76,6 @@ public class EditTimetableFragment
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putSerializable(KEY_ID, timetable);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_toolbar_editing, menu);
+        outState.putSerializable(KEY_TIMETABLE, timetable);
     }
 }

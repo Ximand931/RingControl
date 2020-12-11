@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.happs.ximand.ringcontrol.BR;
-import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment;
 import com.happs.ximand.ringcontrol.viewmodel.fragment.BaseFragmentViewModel;
 
 import java.lang.reflect.ParameterizedType;
@@ -30,13 +28,14 @@ import java.util.Objects;
 public abstract class BaseFragment<VM extends BaseFragmentViewModel, B extends ViewDataBinding>
         extends Fragment {
 
+    private final int layoutId;
+    private final int menuResId;
     @Nullable
     private VM viewModel;
 
-    private final int layoutId;
-
-    public BaseFragment(int layoutId) {
+    public BaseFragment(int layoutId, int menuResId) {
         this.layoutId = layoutId;
+        this.menuResId = menuResId;
     }
 
     @NonNull
@@ -54,8 +53,9 @@ public abstract class BaseFragment<VM extends BaseFragmentViewModel, B extends V
         );
     }
 
-    public String getDefaultTag() {
-        return this.getClass().getSimpleName();
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(menuResId, menu);
     }
 
     @Override
@@ -84,19 +84,19 @@ public abstract class BaseFragment<VM extends BaseFragmentViewModel, B extends V
                              @Nullable Bundle savedInstanceState) {
         B viewDataBinding = DataBindingUtil
                 .inflate(inflater, layoutId, container, false);
+        onViewDataBindingCreated(viewDataBinding);
 
         onPreViewModelAttaching(getViewModel());
         viewDataBinding.setVariable(BR.viewModel, viewModel);
 
-        onViewDataBindingCreated(viewDataBinding);
         return viewDataBinding.getRoot();
     }
 
-    protected void onPreViewModelAttaching(@NonNull VM viewModel) {
+    protected void onViewDataBindingCreated(@NonNull B binding) {
 
     }
 
-    protected void onViewDataBindingCreated(@NonNull B binding) {
+    protected void onPreViewModelAttaching(@NonNull VM viewModel) {
 
     }
 
@@ -106,12 +106,11 @@ public abstract class BaseFragment<VM extends BaseFragmentViewModel, B extends V
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        return getViewModel().onOptionsItemSelected(item.getItemId());
+        return getViewModel().notifyOptionsMenuItemClicked(item.getItemId());
     }
 
-    @Deprecated
-    protected void initRecyclerViewLayoutManager(RecyclerView recyclerView) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    public String getDefaultTag() {
+        return this.getClass().getSimpleName();
     }
 
     protected void setActionBarTitle(int resId) {
@@ -148,10 +147,5 @@ public abstract class BaseFragment<VM extends BaseFragmentViewModel, B extends V
                 ((ParameterizedType) Objects.requireNonNull(
                         getClass().getGenericSuperclass())
                 ).getActualTypeArguments()[0];
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-
     }
 }

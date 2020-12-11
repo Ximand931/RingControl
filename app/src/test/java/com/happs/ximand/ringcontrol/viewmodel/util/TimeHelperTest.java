@@ -1,10 +1,8 @@
 package com.happs.ximand.ringcontrol.viewmodel.util;
 
-import com.happs.ximand.ringcontrol.viewmodel.util.TimeHelper;
-
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class TimeHelperTest {
 

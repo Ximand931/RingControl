@@ -1,8 +1,5 @@
 package com.happs.ximand.ringcontrol.viewmodel.fragment;
 
-import android.app.Application;
-
-import androidx.annotation.NonNull;
 import androidx.databinding.Bindable;
 
 import com.happs.ximand.ringcontrol.BR;
@@ -22,8 +19,7 @@ public class ExceptionViewModel extends BaseFragmentViewModel {
 
     private BluetoothException exception;
 
-    public ExceptionViewModel(@NonNull Application application) {
-        super(application);
+    public ExceptionViewModel() {
         this.restartApplicationLiveEvent = new SingleLiveEvent<>();
     }
 

@@ -1,8 +1,5 @@
 package com.happs.ximand.ringcontrol.viewmodel.fragment;
 
-import android.app.Application;
-
-import androidx.annotation.NonNull;
 import androidx.databinding.Bindable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -19,7 +16,7 @@ import com.happs.ximand.ringcontrol.model.repository.impl.FakeTimetableRepositor
 import com.happs.ximand.ringcontrol.model.specification.impl.GetAllSqlSpecification;
 import com.happs.ximand.ringcontrol.view.fragment.AddTimetableFragment;
 import com.happs.ximand.ringcontrol.view.fragment.TimetableInfoFragment;
-import com.happs.ximand.ringcontrol.viewmodel.util.TimeHelper;
+import com.happs.ximand.ringcontrol.viewmodel.util.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +28,7 @@ public class AllTimetablesViewModel extends BaseFragmentViewModel {
 
     private int numOfTestLessons;
 
-    public AllTimetablesViewModel(@NonNull Application application) {
-        super(application);
+    public AllTimetablesViewModel() {
         this.timetableRepository = FakeTimetableRepository.getInstance();
         this.allTimetablesLiveData = new MutableLiveData<>();
         this.numOfTestLessons = 2;
@@ -75,8 +71,8 @@ public class AllTimetablesViewModel extends BaseFragmentViewModel {
         List<Lesson> lessons = new ArrayList<>(numOfTestLessons * 2);
         for (int i = 1; i <= numOfTestLessons * 2; i+=2) {
             lessons.add(new Lesson(
-                    i / 2 + 1, TimeHelper.getCurrentTimeWithFewMinutes(i),
-                    TimeHelper.getCurrentTimeWithFewMinutes(i + 1)
+                    i / 2 + 1, TimeUtils.getCurrentTimeWithFewMinutes(i),
+                    TimeUtils.getCurrentTimeWithFewMinutes(i + 1)
             ));
         }
         applyTimetable(new Timetable(-1, "Test", lessons));
@@ -98,7 +94,7 @@ public class AllTimetablesViewModel extends BaseFragmentViewModel {
     }
 
     @Override
-    public boolean onOptionsItemSelected(int itemId) {
+    public boolean notifyOptionsMenuItemClicked(int itemId) {
         if (itemId == R.id.toolbar_add) {
             moveToAddTimetableFragment();
             return true;

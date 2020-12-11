@@ -15,9 +15,9 @@ public class TimetableToContentValuesMapper implements Mapper<Timetable, Content
 
         for (Lesson lesson : from.getLessons()) {
             timetableBuilder
-                    .append(lesson.getStartTimeDep())
+                    .append(lesson.getStartTime().toString())
                     .append(";")
-                    .append(lesson.getEndTimeDep())
+                    .append(lesson.getEndTime().toString())
                     .append(";");
         }
 
