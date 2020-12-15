@@ -17,11 +17,11 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textInputLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            errorText="@{viewModel.titleErrorLiveData ? @string/incorrect_input_time : null}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:hint="@string/timetable_title"
+            app:constantErrorText="@{viewModel.titleErrorLiveData ? @string/incorrect_input_time : null}"
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

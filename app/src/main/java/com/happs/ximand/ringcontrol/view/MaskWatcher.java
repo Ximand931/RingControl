@@ -6,8 +6,14 @@ import android.text.TextWatcher;
 public class MaskWatcher implements TextWatcher {
 
     private static final char INPUT_CHAR = 's';
+
     private String mask;
     private boolean adding;
+    private OnLineFilledListener lineFilledListener;
+
+    public void setLineFilledListener(OnLineFilledListener lineFilledListener) {
+        this.lineFilledListener = lineFilledListener;
+    }
 
     public MaskWatcher(String mask) {
         this.mask = mask;
@@ -15,15 +21,6 @@ public class MaskWatcher implements TextWatcher {
 
     public void setMask(String mask) {
         this.mask = mask;
-    }
-
-    @Override
-    public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
-        this.adding = after > count;
-    }
-
-    @Override
-    public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
     }
 
     @Override
@@ -40,6 +37,22 @@ public class MaskWatcher implements TextWatcher {
                     editable.delete(editable.length() - 1, editable.length());
                 }
             }
+        } else {
+            lineFilledListener.onFilled();
         }
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+        this.adding = after > count;
+    }
+
+    @Override
+    public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+    }
+
+    @FunctionalInterface
+    public interface OnLineFilledListener {
+        void onFilled();
     }
 }

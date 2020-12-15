@@ -1,10 +1,6 @@
 package com.happs.ximand.ringcontrol.view.fragment;
 
-import android.os.Bundle;
-import android.view.View;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,13 +37,6 @@ public class AddTimetableFragment
         viewModel.getLessonsMutableLiveData().observe(
                 getViewLifecycleOwner(), this::initAdapter
         );
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        EditTimetableRecyclerViewAdapter adapter =
-                (EditTimetableRecyclerViewAdapter) lessonsRecyclerView.getAdapter();
-
     }
 
     protected void initAdapter(List<Lesson> lessons) {

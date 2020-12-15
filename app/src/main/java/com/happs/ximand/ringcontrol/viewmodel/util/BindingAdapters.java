@@ -1,13 +1,10 @@
 package com.happs.ximand.ringcontrol.viewmodel.util;
 
 import android.os.Handler;
-import android.text.TextWatcher;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.BindingAdapter;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -19,29 +16,27 @@ public final class BindingAdapters {
 
     }
 
-    @BindingAdapter("adapter")
-    public static void setRecyclerViewAdapter(@NonNull RecyclerView recyclerView,
-                                              @Nullable RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
-        if (adapter != null) {
-            recyclerView.setAdapter(adapter);
+    @BindingAdapter("constantErrorText")
+    public static void setConstantErrorText(@NonNull TextInputLayout layout, @Nullable String error) {
+        setErrorText(layout, error);
+    }
+
+    @BindingAdapter("temporaryErrorText")
+    public static void setTemporaryErrorText(@NonNull TextInputLayout layout,
+                                             @Nullable String error) {
+        boolean success =
+                setErrorText(layout, error);
+        if (success) {
+            new Handler().postDelayed(() -> layout.setError(null), ERROR_MESSAGE_SHOW_DURATION);
         }
     }
 
-    @BindingAdapter("textWatcher")
-    public static void setTextWatcher(@NonNull EditText editText,
-                                      @Nullable TextWatcher textWatcher) {
-        if (textWatcher != null) {
-            editText.addTextChangedListener(textWatcher);
-        }
-    }
-
-    @BindingAdapter("errorText")
-    public static void setErrorText(@NonNull TextInputLayout layout, @Nullable String error) {
+    private static boolean setErrorText(@NonNull TextInputLayout layout, @Nullable String error) {
         if (layout.getError() == null && error == null) {
-            return;
+            return false;
         }
         layout.setError(error);
-        new Handler().postDelayed(() -> layout.setError(null), ERROR_MESSAGE_SHOW_DURATION);
+        return true;
     }
 
 

@@ -5,11 +5,13 @@
     <data>
 
         <variable
-            name="errorId"
-            type="androidx.databinding.ObservableInt" />
+            name="error"
+            type="androidx.databinding.ObservableBoolean" />
+
         <variable
-            name="number"
+            name="viewPosition"
             type="int" />
+
         <variable
             name="input"
             type="androidx.databinding.ObservableField&lt;String>" />
@@ -17,13 +19,13 @@
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        app:errorText="@{errorId == number ? @string/incorrect_input_time : null}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:hint="@{String.format(@string/lesson, number)}"
+        android:hint="@{String.format(@string/lesson, viewPosition + 1)}"
+        app:constantErrorText="@{error ? @string/incorrect_input_time : null}"
         app:errorEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText

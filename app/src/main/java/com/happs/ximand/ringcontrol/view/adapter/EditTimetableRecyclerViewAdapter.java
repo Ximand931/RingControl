@@ -7,8 +7,8 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableInt;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.happs.ximand.ringcontrol.OnEventListener;
@@ -27,16 +27,14 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
 
     private static final String START_END_TIME_DIVIDER = " – ";
 
-    private final List<ObservableField<String>> inputs;
-    private final List<MaskWatcher> maskWatchers;
-    private final ObservableInt errorId = new ObservableInt(-1);
+    private final List<ObservableField<String>> inputs = new ArrayList<>();
+    private final List<MaskWatcher> maskWatchers = new ArrayList<>();
+    private final List<ObservableBoolean> errorList = new ArrayList<>();
     private final OnEventListener<Integer> lineFilledEvent;
     private boolean detailEditing;
 
     public EditTimetableRecyclerViewAdapter(List<Lesson> lessons) {
         super(lessons);
-        this.inputs = new ArrayList<>();
-        this.maskWatchers = new ArrayList<>();
         this.detailEditing = !lessons.isEmpty();
         this.lineFilledEvent = this::onLineFilled;
         initByLessonList(lessons);
@@ -50,25 +48,44 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
             maskWatchers.add(new MaskWatcher(
                     TimeUtils.DETAILED_TIME_MASK
             ));
+            errorList.add(new ObservableBoolean(false));
         }
     }
 
     private void onLineFilled(int num) {
         String input = inputs.get(num).get();
         if (isInputCorrect(input)) {
-            Time startTime = new Time(getDetailedStartTime(input));
-            Time endTime = new Time(getDetailedEndTime(input));
-            Lesson lesson = new Lesson(num + 1, startTime, endTime);
+            updateErrorIdStatusForCorrectLine(num);
+            Lesson lesson = getLessonForInput(num, input);
             getItems().set(num, lesson);
         } else {
-            errorId.set(num);
+            errorList.get(num).set(true);
         }
     }
 
+    private void updateErrorIdStatusForCorrectLine(int num) {
+        ObservableBoolean errorObservable = errorList.get(num);
+        if (errorObservable.get()) {
+            errorObservable.set(false);
+        }
+    }
+
+    @Override
+    public List<Lesson> getItems() {
+        return super.getItems();
+    }
+
+    private Lesson getLessonForInput(int num, String input) {
+        Time startTime = new Time(getDetailedStartTime(input));
+        Time endTime = new Time(getDetailedEndTime(input));
+        return new Lesson(num + 1, startTime, endTime);
+    }
+
     public void addEmptyLesson() {
-        getItems().add(new Lesson(getItemCount()));
+        getItems().add(new Lesson(getItemCount() + 1));
         inputs.add(new ObservableField<>());
         maskWatchers.add(createMaskWatcher());
+        errorList.add(new ObservableBoolean(false));
         notifyItemRangeInserted(getItems().size() - 1, 1);
     }
 
@@ -156,7 +173,7 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
                 TimeUtils.DETAILED_TIME_PATTERN : TimeUtils.SIMPLE_TIME_PATTERN;
     }
 
-    protected String getMaskForCurrentDetailEditingStatus() {
+    private String getMaskForCurrentDetailEditingStatus() {
         return detailEditing ?
                 TimeUtils.DETAILED_TIME_MASK : TimeUtils.SIMPLE_TIME_MASK;
     }
@@ -164,6 +181,15 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
     protected String getMaskForInverseDetailEditingStatus() {
         return detailEditing ?
                 TimeUtils.SIMPLE_TIME_MASK : TimeUtils.DETAILED_TIME_MASK;
+    }
+
+    public boolean isAllLinesCorrect() {
+        for (ObservableBoolean errorObservable : errorList) {
+            if (!errorObservable.get()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @NonNull
@@ -177,9 +203,9 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
 
     @Override
     public void onBindViewHolder(@NonNull EditTimetableViewHolder holder, int position) {
-        Lesson lesson = getItems().get(position);
         holder.bind(
-                lesson, inputs.get(position), errorId, maskWatchers.get(position), lineFilledEvent
+                inputs.get(position), errorList.get(position),
+                maskWatchers.get(position), lineFilledEvent
         );
     }
 
@@ -194,19 +220,27 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
             this.timeEditText = binding.input;
         }
 
-        void bind(Lesson lesson, ObservableField<String> input,
-                  ObservableInt errorId, MaskWatcher maskWatcher,
+        void bind(ObservableField<String> input,
+                  ObservableBoolean error, MaskWatcher maskWatcher,
                   OnEventListener<Integer> lineFilledEvent) {
-            binding.setNumber(lesson.getNumber());
+            binding.setViewPosition(getAdapterPosition());
             binding.setInput(input);
-            binding.setErrorId(errorId);
-            binding.input.addTextChangedListener(maskWatcher);
+            binding.setError(error);
+            attachMaskWatcher(maskWatcher, lineFilledEvent);
             timeEditText.setOnFocusChangeListener((view, hasFocus) -> {
                 if (!hasFocus) {
                     lineFilledEvent.onEvent(getAdapterPosition());
                 }
             });
             binding.executePendingBindings();
+        }
+
+        private void attachMaskWatcher(MaskWatcher maskWatcher,
+                                       OnEventListener<Integer> lineFilledEvent) {
+            maskWatcher.setLineFilledListener(
+                    () -> lineFilledEvent.onEvent(getAdapterPosition())
+            );
+            binding.input.addTextChangedListener(maskWatcher);
         }
 
     }
