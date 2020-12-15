@@ -10,7 +10,7 @@ import com.happs.ximand.ringcontrol.model.repository.impl.TimetableRepository;
 import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment;
 import com.happs.ximand.ringcontrol.view.fragment.EditTimetableFragment;
 
-public class TimetableInfoViewModel extends BaseFragmentViewModel {
+public class TimetableInfoViewModel extends BaseViewModel {
 
     //TODO: Use event instead liveEvent
     private final SingleLiveEvent<DialogInterface.OnClickListener> alertDialogLiveEvent;

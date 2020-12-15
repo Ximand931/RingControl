@@ -21,8 +21,9 @@
     <string name="incorrect_input_time">Неверно введено время</string>
     <string name="incorrect_timetable_title">Неверно введено название расписания</string>
 
-    <string name="timetable_was_not_updated">Расписание не было обновлено, проверьте все поля ввода</string>
-    
+    <string name="timetable_was_not_added">Расписание не было добавлено. Проверьте введенные данные</string>
+    <string name="timetable_was_not_updated">Расписание не было обновлено. Проверьте введенные данные</string>
+
     <string name="timetables_list_updated">Список расписаний был обновлен</string>
     <string name="applied_timetable_updated">Последнее примененное расписание было обновлено</string>
 

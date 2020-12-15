@@ -19,13 +19,14 @@ import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.happs.ximand.ringcontrol.BR;
-import com.happs.ximand.ringcontrol.viewmodel.fragment.BaseFragmentViewModel;
+import com.happs.ximand.ringcontrol.viewmodel.fragment.BaseViewModel;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Objects;
 
-public abstract class BaseFragment<VM extends BaseFragmentViewModel, B extends ViewDataBinding>
+public abstract class BaseFragment<VM extends BaseViewModel, B extends ViewDataBinding>
         extends Fragment {
 
     private final int layoutId;
@@ -88,6 +89,7 @@ public abstract class BaseFragment<VM extends BaseFragmentViewModel, B extends V
 
         onPreViewModelAttaching(getViewModel());
         viewDataBinding.setVariable(BR.viewModel, viewModel);
+        viewDataBinding.setLifecycleOwner(getViewLifecycleOwner());
 
         return viewDataBinding.getRoot();
     }
@@ -102,6 +104,17 @@ public abstract class BaseFragment<VM extends BaseFragmentViewModel, B extends V
 
     public void onExternalEvent(int eventId) {
 
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getViewModel().getMakeSnackbarEvent().observe(getViewLifecycleOwner(), snackbarDto -> {
+            if (getView() != null) {
+                Snackbar.make(getView(), snackbarDto.getMessageResId(), snackbarDto.getDuration())
+                        .show();
+            }
+        });
     }
 
     @Override

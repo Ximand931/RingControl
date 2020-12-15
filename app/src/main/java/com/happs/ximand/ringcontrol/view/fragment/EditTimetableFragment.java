@@ -1,14 +1,12 @@
 package com.happs.ximand.ringcontrol.view.fragment;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.FragmentEditTimetableBinding;
 import com.happs.ximand.ringcontrol.model.object.Lesson;
@@ -54,24 +52,13 @@ public class EditTimetableFragment
     @Override
     protected void onPreViewModelAttaching(@NonNull EditTimetableViewModel viewModel) {
         viewModel.setEditingTimetable(timetable);
-        viewModel.getLessonsMutableLiveData().observe(getViewLifecycleOwner(), this::initAdapter);
+        viewModel.getLessonsLiveData().observe(getViewLifecycleOwner(), this::initAdapter);
     }
 
     private void initAdapter(List<Lesson> lessons) {
         lessonsRecyclerView.setAdapter(
                 new EditTimetableRecyclerViewAdapter(lessons)
         );
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        getViewModel().getEditStatus().observe(getViewLifecycleOwner(), editStatus -> {
-            if (getView() != null) {
-                //TODO: event instead mutable data
-                Snackbar.make(getView(), editStatus, Snackbar.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override

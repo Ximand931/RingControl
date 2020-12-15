@@ -68,7 +68,7 @@
                         android:layout_marginTop="16dp"
                         android:ellipsize="end"
                         android:ems="20"
-                        android:text="@{String.format(@string/format_test_timetable_desc, viewModel.numOfTestLessons, viewModel.numOfTestLessons * 2)}"
+                        android:text="@{String.format(@string/format_test_timetable_desc, viewModel.numOfTestLessonsLiveData, viewModel.numOfTestLessonsLiveData * 2)}"
                         app:layout_constraintStart_toStartOf="@+id/test_title"
                         app:layout_constraintTop_toBottomOf="@+id/test_title" />
 
@@ -92,7 +92,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:enabled="@{viewModel.numOfTestLessons &lt; 7}"
+                        android:enabled="@{viewModel.numOfTestLessonsLiveData &lt; 7}"
                         android:onClick="@{() -> viewModel.addTestLesson()}"
                         android:paddingStart="0dp"
                         android:paddingEnd="0dp"
@@ -106,7 +106,7 @@
                         style="@style/DebugMaterialButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:enabled="@{viewModel.numOfTestLessons > 1}"
+                        android:enabled="@{viewModel.numOfTestLessonsLiveData > 1}"
                         android:onClick="@{() -> viewModel.removeTestLesson()}"
                         android:paddingStart="0dp"
                         android:paddingEnd="0dp"

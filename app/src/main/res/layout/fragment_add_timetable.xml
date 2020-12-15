@@ -21,11 +21,11 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:hint="@string/timetable_title"
-            app:constantErrorText="@{viewModel.titleErrorLiveData ? @string/incorrect_input_time : null}"
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:temporaryErrorText="@{viewModel.titleErrorLiveData ? @string/incorrect_input_time : null}">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -101,7 +101,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginEnd="16dp"
-            android:background="@android:color/transparent"
+            android:background="?android:selectableItemBackgroundBorderless"
             android:contentDescription="@string/add_lesson"
             android:onClick="@{() -> viewModel.addEmptyLesson()}"
             android:src="@drawable/ic_add"
@@ -119,12 +119,46 @@
             app:layout_constraintStart_toStartOf="@id/textView6"
             app:layout_constraintTop_toBottomOf="@id/textView6" />
 
+        <TextView
+            android:id="@+id/textView7"
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/remove_last_lesson"
+            app:layout_constraintStart_toStartOf="@+id/view2"
+            app:layout_constraintTop_toBottomOf="@+id/view2" />
+
+        <ImageButton
+            android:id="@+id/icon_remove"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:contentDescription="@string/add_lesson"
+            android:enabled="@{viewModel.numOfLessons > 0}"
+            android:onClick="@{() -> viewModel.removeLastLesson()}"
+            android:src="@drawable/ic_remove"
+            app:layout_constraintBottom_toBottomOf="@+id/textView7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView7" />
+
+        <View
+            android:id="@+id/view4"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/margin_divider"
+            android:background="@color/colorDivider"
+            app:layout_constraintEnd_toEndOf="@+id/icon_remove"
+            app:layout_constraintStart_toStartOf="@+id/textView7"
+            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lessons_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view2" />
+            app:layout_constraintTop_toBottomOf="@+id/view4" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

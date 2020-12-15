@@ -1,28 +1,21 @@
 package com.happs.ximand.ringcontrol.viewmodel.fragment;
 
-import androidx.lifecycle.MutableLiveData;
-
+import com.google.android.material.snackbar.Snackbar;
 import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
 import com.happs.ximand.ringcontrol.model.object.Timetable;
-import com.happs.ximand.ringcontrol.model.object.exception.IncorrectInputException;
 import com.happs.ximand.ringcontrol.model.repository.Repository;
 import com.happs.ximand.ringcontrol.model.repository.impl.FakeTimetableRepository;
 import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment;
+import com.happs.ximand.ringcontrol.viewmodel.SnackbarDto;
 
 public class EditTimetableViewModel extends BaseEditTimetableViewModel {
 
-    //private final MutableLiveData<List<Lesson>> lesson
-    private final MutableLiveData<String> editStatus;
     private Timetable editingTimetable;
 
     public EditTimetableViewModel() {
-        this.editStatus = new MutableLiveData<>();
-    }
 
-    public MutableLiveData<String> getEditStatus() {
-        return editStatus;
     }
 
     public void setEditingTimetable(Timetable editingTimetable) {
@@ -30,33 +23,29 @@ public class EditTimetableViewModel extends BaseEditTimetableViewModel {
     }
 
     @Override
-    public boolean notifyOptionsMenuItemClicked(int itemId) {
-        switch (itemId) {
-            case R.id.toolbar_save:
-                saveChanges();
-                return true;
-            case R.id.toolbar_cancel:
-                FragmentNavigation.getInstance().navigateToPreviousFragment();
-                return true;
-        }
-        return false;
-    }
-
-    private void saveChanges() {
-        try {
+    protected void completeEditAction() {
+        boolean correct = checkTitle() && checkLessons();
+        if (correct) {
             updateEditingTimetable();
             updateRepository();
             if (isAppliedTimetable()) {
                 notifyAppliedTimetableUpdated();
             }
             FragmentNavigation.getInstance().navigateToPreviousFragment();
-        } catch (IncorrectInputException e) {
-            updateEditStatus();
+        } else {
+            getMakeSnackbarEvent().setValue(new SnackbarDto(
+                    R.string.timetable_was_not_updated, Snackbar.LENGTH_SHORT
+            ));
         }
     }
 
-    private void updateEditingTimetable() throws IncorrectInputException {
-        //TODO
+    private void updateEditingTimetable() {
+        this.editingTimetable.setTitle(
+                getTitleLiveData().getValue()
+        );
+        this.editingTimetable.setLessons(
+                getLessonsLiveData().getValue()
+        );
     }
 
     private void updateRepository() {
@@ -69,16 +58,9 @@ public class EditTimetableViewModel extends BaseEditTimetableViewModel {
     }
 
     private void notifyAppliedTimetableUpdated() {
-        String tag = AllTimetablesFragment.class.getSimpleName(); //TODO
+        String tag = AllTimetablesFragment.class.getSimpleName();
         int id = AllTimetablesFragment.EVENT_APPLIED_TIMETABLE_UPDATED;
         FragmentNavigation.getInstance().notifyFragmentAboutEvent(tag, id);
     }
 
-
-    //TODO: replace with enum
-    private void updateEditStatus() {
-        editStatus.setValue(
-                getApplication().getString(R.string.timetable_was_not_updated)
-        );
-    }
 }

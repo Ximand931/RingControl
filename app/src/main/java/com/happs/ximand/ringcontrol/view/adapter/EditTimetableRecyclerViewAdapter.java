@@ -52,6 +52,32 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
         }
     }
 
+    public boolean isAllLinesCorrect() {
+        for (ObservableBoolean errorObservable : errorList) {
+            if (!errorObservable.get()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @NonNull
+    @Override
+    public EditTimetableViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        ItemEditLessonBinding binding = DataBindingUtil
+                .inflate(inflater, R.layout.item_edit_lesson, parent, false);
+        return new EditTimetableViewHolder(binding);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull EditTimetableViewHolder holder, int position) {
+        holder.bind(
+                inputs.get(position), errorList.get(position),
+                maskWatchers.get(position), lineFilledEvent
+        );
+    }
+
     private void onLineFilled(int num) {
         String input = inputs.get(num).get();
         if (isInputCorrect(input)) {
@@ -96,7 +122,10 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
 
     public void removeLastLesson() {
         int lastItemIndex = getItems().size() - 1;
-        this.getItems().remove(lastItemIndex);
+        getItems().remove(lastItemIndex);
+        inputs.remove(lastItemIndex);
+        maskWatchers.remove(lastItemIndex);
+        errorList.remove(lastItemIndex);
         notifyItemRemoved(lastItemIndex);
     }
 
@@ -178,35 +207,9 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
                 TimeUtils.DETAILED_TIME_MASK : TimeUtils.SIMPLE_TIME_MASK;
     }
 
-    protected String getMaskForInverseDetailEditingStatus() {
+    private String getMaskForInverseDetailEditingStatus() {
         return detailEditing ?
                 TimeUtils.SIMPLE_TIME_MASK : TimeUtils.DETAILED_TIME_MASK;
-    }
-
-    public boolean isAllLinesCorrect() {
-        for (ObservableBoolean errorObservable : errorList) {
-            if (!errorObservable.get()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @NonNull
-    @Override
-    public EditTimetableViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ItemEditLessonBinding binding = DataBindingUtil
-                .inflate(inflater, R.layout.item_edit_lesson, parent, false);
-        return new EditTimetableViewHolder(binding);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull EditTimetableViewHolder holder, int position) {
-        holder.bind(
-                inputs.get(position), errorList.get(position),
-                maskWatchers.get(position), lineFilledEvent
-        );
     }
 
     static class EditTimetableViewHolder extends RecyclerView.ViewHolder {

@@ -19,7 +19,7 @@ public class AddTimetableFragment
     private RecyclerView lessonsRecyclerView;
 
     public AddTimetableFragment() {
-        super(R.layout.fragment_add_timetable, R.menu.menu_toolbar_add);
+        super(R.layout.fragment_add_timetable, R.menu.menu_toolbar_editing);
     }
 
     public static AddTimetableFragment newInstance() {
@@ -34,9 +34,17 @@ public class AddTimetableFragment
 
     @Override
     protected void onPreViewModelAttaching(@NonNull AddTimetableViewModel viewModel) {
-        viewModel.getLessonsMutableLiveData().observe(
+        viewModel.getLessonsLiveData().observe(
                 getViewLifecycleOwner(), this::initAdapter
         );
+        viewModel.setCorrectnessCheck(() -> {
+            EditTimetableRecyclerViewAdapter adapter = (EditTimetableRecyclerViewAdapter)
+                    lessonsRecyclerView.getAdapter();
+            if (adapter != null) {
+                return adapter.isAllLinesCorrect();
+            }
+            return false;
+        });
     }
 
     protected void initAdapter(List<Lesson> lessons) {

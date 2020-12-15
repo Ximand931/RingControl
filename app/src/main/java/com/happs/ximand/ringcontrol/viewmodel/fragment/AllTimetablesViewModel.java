@@ -1,10 +1,8 @@
 package com.happs.ximand.ringcontrol.viewmodel.fragment;
 
-import androidx.databinding.Bindable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.happs.ximand.ringcontrol.BR;
 import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
@@ -21,17 +19,14 @@ import com.happs.ximand.ringcontrol.viewmodel.util.TimeUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllTimetablesViewModel extends BaseFragmentViewModel {
+public class AllTimetablesViewModel extends BaseViewModel {
 
-    private final Repository<Timetable> timetableRepository;
-    private final MutableLiveData<List<Timetable>> allTimetablesLiveData;
-
-    private int numOfTestLessons;
+    private final Repository<Timetable> timetableRepository = FakeTimetableRepository.getInstance();
+    private final MutableLiveData<List<Timetable>> allTimetablesLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Integer> numOfTestLessonsLiveData = new MutableLiveData<>();
 
     public AllTimetablesViewModel() {
-        this.timetableRepository = FakeTimetableRepository.getInstance();
-        this.allTimetablesLiveData = new MutableLiveData<>();
-        this.numOfTestLessons = 2;
+        this.numOfTestLessonsLiveData.setValue(2);
         updateTimetables();
     }
 
@@ -39,14 +34,8 @@ public class AllTimetablesViewModel extends BaseFragmentViewModel {
         return allTimetablesLiveData;
     }
 
-    @Bindable
-    public int getNumOfTestLessons() {
-        return numOfTestLessons;
-    }
-
-    public void setNumOfTestLessons(int numOfTestLessons) {
-        this.numOfTestLessons = numOfTestLessons;
-        notifyPropertyChanged(BR.numOfTestLessons);
+    public MutableLiveData<Integer> getNumOfTestLessonsLiveData() {
+        return numOfTestLessonsLiveData;
     }
 
     public void updateTimetables() {
@@ -68,8 +57,10 @@ public class AllTimetablesViewModel extends BaseFragmentViewModel {
     }
 
     public void applyTestTimetable() {
+        @SuppressWarnings("ConstantConditions")
+        int numOfTestLessons = numOfTestLessonsLiveData.getValue();
         List<Lesson> lessons = new ArrayList<>(numOfTestLessons * 2);
-        for (int i = 1; i <= numOfTestLessons * 2; i+=2) {
+        for (int i = 1; i <= numOfTestLessons * 2; i += 2) {
             lessons.add(new Lesson(
                     i / 2 + 1, TimeUtils.getCurrentTimeWithFewMinutes(i),
                     TimeUtils.getCurrentTimeWithFewMinutes(i + 1)
@@ -86,11 +77,15 @@ public class AllTimetablesViewModel extends BaseFragmentViewModel {
     }
 
     public void addTestLesson() {
-        setNumOfTestLessons(numOfTestLessons + 1);
+        @SuppressWarnings("ConstantConditions")
+        int numOfTestLessons = numOfTestLessonsLiveData.getValue();
+        numOfTestLessonsLiveData.setValue(numOfTestLessons + 1);
     }
 
     public void removeTestLesson() {
-        setNumOfTestLessons(numOfTestLessons - 1);
+        @SuppressWarnings("ConstantConditions")
+        int numOfTestLessons = numOfTestLessonsLiveData.getValue();
+        numOfTestLessonsLiveData.setValue(numOfTestLessons - 1);
     }
 
     @Override
@@ -102,7 +97,6 @@ public class AllTimetablesViewModel extends BaseFragmentViewModel {
         return false;
     }
 
-    //TODO: ineffective
     public boolean isLastAppliedTimetable(Timetable timetable) {
         return timetable.getId() == SharedPreferencesDao.getInstance().getAppliedTimetableId();
     }
