@@ -31,22 +31,36 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
     private final List<MaskWatcher> maskWatchers = new ArrayList<>();
     private final List<ObservableBoolean> errorList = new ArrayList<>();
     private final OnEventListener<Integer> lineFilledEvent;
-    private boolean detailEditing;
+    private Boolean detailEditing;
 
     public EditTimetableRecyclerViewAdapter(List<Lesson> lessons) {
         super(lessons);
-        this.detailEditing = !lessons.isEmpty();
         this.lineFilledEvent = this::onLineFilled;
-        initByLessonList(lessons);
     }
 
-    private void initByLessonList(List<Lesson> lessons) {
+    public void setDetailEditingStatus(boolean detailEditing) {
+        if (this.detailEditing == null) {
+            this.detailEditing = detailEditing;
+            initByLessonList();
+            return;
+        }
+        if (this.detailEditing != detailEditing) {
+            for (MaskWatcher mask : maskWatchers) {
+                mask.setMask(getMaskForInverseDetailEditingStatus());
+            }
+            updateInputsForNewDetailEditingStatus();
+            this.detailEditing = detailEditing;
+        }
+    }
+
+    private void initByLessonList() {
+        List<Lesson> lessons = getItems();
         for (Lesson lesson : lessons) {
             inputs.add(new ObservableField<>(
                     getLessonScopes(lesson))
             );
             maskWatchers.add(new MaskWatcher(
-                    TimeUtils.DETAILED_TIME_MASK
+                    getMaskForCurrentDetailEditingStatus()
             ));
             errorList.add(new ObservableBoolean(false));
         }
@@ -96,11 +110,6 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
         }
     }
 
-    @Override
-    public List<Lesson> getItems() {
-        return super.getItems();
-    }
-
     private Lesson getLessonForInput(int num, String input) {
         Time startTime = new Time(getDetailedStartTime(input));
         Time endTime = new Time(getDetailedEndTime(input));
@@ -110,12 +119,12 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
     public void addEmptyLesson() {
         getItems().add(new Lesson(getItemCount() + 1));
         inputs.add(new ObservableField<>());
-        maskWatchers.add(createMaskWatcher());
+        maskWatchers.add(createMaskWatcherForEmptyLesson());
         errorList.add(new ObservableBoolean(false));
         notifyItemRangeInserted(getItems().size() - 1, 1);
     }
 
-    private MaskWatcher createMaskWatcher() {
+    private MaskWatcher createMaskWatcherForEmptyLesson() {
         final String mask = getMaskForCurrentDetailEditingStatus();
         return new MaskWatcher(mask);
     }
@@ -127,14 +136,6 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
         maskWatchers.remove(lastItemIndex);
         errorList.remove(lastItemIndex);
         notifyItemRemoved(lastItemIndex);
-    }
-
-    public void changeDetailEditingStatus() {
-        for (MaskWatcher mask : maskWatchers) {
-            mask.setMask(getMaskForInverseDetailEditingStatus());
-        }
-        updateInputsForNewDetailEditingStatus();
-        detailEditing = !detailEditing;
     }
 
     private void updateInputsForNewDetailEditingStatus() {
@@ -162,18 +163,23 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
             if (isInputCorrect(inputValue)) {
                 String startTime = getDetailedStartTime(inputValue);
                 String endTime = getDetailedEndTime(inputValue);
-                input.set(
-                        startTime.substring(0, startTime.lastIndexOf(":"))
-                                + START_END_TIME_DIVIDER
-                                + endTime.substring(0, endTime.lastIndexOf(":"))
-                );
+                input.set(getSimpleLessonScopesFromDetailedTime(startTime, endTime));
             }
         }
     }
 
     private String getLessonScopes(Lesson lesson) {
-        return lesson.getStartTime().toString() + START_END_TIME_DIVIDER
-                + lesson.getEndTime().toString();
+        if (detailEditing) {
+            return lesson.getStartTime().toString() + START_END_TIME_DIVIDER
+                    + lesson.getEndTime().toString();
+        } else {
+            return getSimpleLessonScopesFromDetailedTime(lesson.getStartTime().toString(),
+                    lesson.getEndTime().toString());
+        }
+    }
+
+    private String getSimpleLessonScopesFromDetailedTime(String startTime, String endTime) {
+        return startTime.substring(0, 5) + START_END_TIME_DIVIDER + endTime.substring(0, 5);
     }
 
     private String getDetailedStartTime(String input) {

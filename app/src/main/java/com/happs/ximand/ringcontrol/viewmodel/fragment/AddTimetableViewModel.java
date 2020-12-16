@@ -12,9 +12,8 @@ import java.util.ArrayList;
 public class AddTimetableViewModel extends BaseEditTimetableViewModel {
 
     public AddTimetableViewModel() {
-        this.detailEditing = false;
+        setLessonList(new ArrayList<>());
         this.numOfLessons.setValue(0);
-        setLessons(new ArrayList<>());
     }
 
     @Override

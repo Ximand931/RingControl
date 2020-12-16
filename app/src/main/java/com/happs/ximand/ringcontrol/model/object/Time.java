@@ -53,7 +53,9 @@ public class Time {
     private void updateDetailedTime() {
         StringBuilder timeBuilder = new StringBuilder();
         addOnePartOfTime(hours, timeBuilder);
+        timeBuilder.append(":");
         addOnePartOfTime(minutes, timeBuilder);
+        timeBuilder.append(":");
         addOnePartOfTime(seconds, timeBuilder);
         this.detailedTime = timeBuilder.toString();
     }

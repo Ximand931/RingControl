@@ -9,6 +9,7 @@ import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.SingleLiveEvent;
 import com.happs.ximand.ringcontrol.model.object.Lesson;
+import com.happs.ximand.ringcontrol.model.object.Time;
 
 import java.util.List;
 
@@ -18,10 +19,10 @@ public abstract class BaseEditTimetableViewModel extends BaseViewModel {
     private final MutableLiveData<List<Lesson>> lessonsMutableLiveData = new MutableLiveData<>();
     private final MutableLiveData<String> titleLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> titleErrorLiveData = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> detailEditingLiveData = new MutableLiveData<>();
     private final SingleLiveEvent<Void> addLessonEvent = new SingleLiveEvent<>();
     private final SingleLiveEvent<Void> removeLessonEvent = new SingleLiveEvent<>();
     private final SingleLiveEvent<Void> changeDetailEditMode = new SingleLiveEvent<>();
-    protected boolean detailEditing = true;
     private CorrectnessCheck correctnessCheck;
 
     public LiveData<Integer> getNumOfLessons() {
@@ -38,6 +39,10 @@ public abstract class BaseEditTimetableViewModel extends BaseViewModel {
 
     public MutableLiveData<Boolean> getTitleErrorLiveData() {
         return titleErrorLiveData;
+    }
+
+    public MutableLiveData<Boolean> getDetailEditingLiveData() {
+        return detailEditingLiveData;
     }
 
     public SingleLiveEvent<Void> getAddLessonEvent() {
@@ -58,10 +63,6 @@ public abstract class BaseEditTimetableViewModel extends BaseViewModel {
 
     public void setCorrectnessCheck(CorrectnessCheck correctnessCheck) {
         this.correctnessCheck = correctnessCheck;
-    }
-
-    protected void setLessons(List<Lesson> lessons) {
-        this.lessonsMutableLiveData.setValue(lessons);
     }
 
     public void addEmptyLesson() {
@@ -95,6 +96,26 @@ public abstract class BaseEditTimetableViewModel extends BaseViewModel {
 
     protected abstract void completeEditAction();
 
+    protected void setLessonList(List<Lesson> lessons) {
+        lessonsMutableLiveData.setValue(lessons);
+        detailEditingLiveData.setValue(getDetailEditingStatusForCurrentLessonsList(lessons));
+    }
+
+    private boolean getDetailEditingStatusForCurrentLessonsList(List<Lesson> lessons) {
+        for (Lesson lesson : lessons) {
+            boolean simplifiable = canTimeBeConvertedToSimple(lesson.getStartTime())
+                    && canTimeBeConvertedToSimple(lesson.getEndTime());
+            if (!simplifiable) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean canTimeBeConvertedToSimple(Time time) {
+        return time.getSeconds() == 0;
+    }
+
     protected boolean checkTitle() {
         boolean correct = !TextUtils.isEmpty(titleLiveData.getValue());
         if (!correct) {
@@ -104,11 +125,7 @@ public abstract class BaseEditTimetableViewModel extends BaseViewModel {
     }
 
     protected boolean checkLessons() {
-        boolean correct = getCorrectnessCheck().isListCorrect();
-        if (!correct) {
-            //TODO: on incorrect
-        }
-        return correct;
+        return getCorrectnessCheck().isListCorrect();
     }
 
     public void onCancelClick() {

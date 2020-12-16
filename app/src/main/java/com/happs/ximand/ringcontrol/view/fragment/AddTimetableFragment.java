@@ -37,14 +37,23 @@ public class AddTimetableFragment
         viewModel.getLessonsLiveData().observe(
                 getViewLifecycleOwner(), this::initAdapter
         );
+        viewModel.getDetailEditingLiveData().observe(getViewLifecycleOwner(), detailed -> {
+            EditTimetableRecyclerViewAdapter adapter = getEditTimetableAdapter();
+            if (adapter != null) {
+                adapter.setDetailEditingStatus(detailed);
+            }
+        });
         viewModel.setCorrectnessCheck(() -> {
-            EditTimetableRecyclerViewAdapter adapter = (EditTimetableRecyclerViewAdapter)
-                    lessonsRecyclerView.getAdapter();
+            EditTimetableRecyclerViewAdapter adapter = getEditTimetableAdapter();
             if (adapter != null) {
                 return adapter.isAllLinesCorrect();
             }
             return false;
         });
+    }
+
+    private EditTimetableRecyclerViewAdapter getEditTimetableAdapter() {
+        return (EditTimetableRecyclerViewAdapter) lessonsRecyclerView.getAdapter();
     }
 
     protected void initAdapter(List<Lesson> lessons) {
@@ -56,9 +65,6 @@ public class AddTimetableFragment
         );
         getViewModel().getRemoveLessonEvent().observe(getViewLifecycleOwner(),
                 aVoid -> adapter.removeLastLesson()
-        );
-        getViewModel().getChangeDetailEditMode().observe(getViewLifecycleOwner(),
-                aVoid -> adapter.changeDetailEditingStatus()
         );
     }
 }

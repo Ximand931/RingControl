@@ -38,4 +38,5 @@ public class Lesson {
     public void setEndTime(Time endTime) {
         this.lessonScope.setEndTime(endTime);
     }
+
 }
