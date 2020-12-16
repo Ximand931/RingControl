@@ -14,11 +14,13 @@ public final class BindingConverters {
     public static String convertTimeToPreviewTimeString(Time time) {
         StringBuilder simplifiedTimeBuilder = new StringBuilder();
         simplifiedTimeBuilder.append(time.getHours());
+        simplifiedTimeBuilder.append(":");
         if (time.getMinutes() < 10) {
             simplifiedTimeBuilder.append("0");
         }
         simplifiedTimeBuilder.append(time.getMinutes());
         if (time.getSeconds() != 0) {
+            simplifiedTimeBuilder.append(":");
             if (time.getSeconds() < 10) {
                 simplifiedTimeBuilder.append("0");
             }

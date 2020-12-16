@@ -39,13 +39,20 @@ import com.happs.ximand.ringcontrol.viewmodel.SharedViewModel;
 public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_LOCATION = 1;
-
     private static final int REQUEST_ENABLE_BT = 1;
-
     private static final int PROGRESS_BAR_SIZE = 96;
 
     private SharedViewModel sharedViewModel;
     private Snackbar connectStatusSnackbar;
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
+            finishAndRemoveTask();
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

@@ -60,7 +60,7 @@ public class AllTimetablesRecyclerViewAdapter extends BaseRecyclerViewAdapter<Ti
 
     @Override
     public void onBindViewHolder(@NonNull AllTimetablesViewHolder holder, int position) {
-        holder.bind(applyingPossible, appliedTimetableId,
+        holder.bind(getItems().get(position), applyingPossible, appliedTimetableId,
                 applyTimetableClickListener, detailsTimetableClickListener);
     }
 
@@ -73,9 +73,10 @@ public class AllTimetablesRecyclerViewAdapter extends BaseRecyclerViewAdapter<Ti
             this.binding = binding;
         }
 
-        void bind(ObservableBoolean applyingPossible, ObservableInt appliedTimetableId,
+        void bind(Timetable timetable, ObservableBoolean applyingPossible, ObservableInt appliedTimetableId,
                   OnEventListener<Timetable> applyTimetableClickListener,
                   OnEventListener<Timetable> detailsTimetableClickListener) {
+            binding.setTimetable(timetable);
             binding.setApplyingPossible(applyingPossible);
             binding.setAppliedTimetableId(appliedTimetableId);
             binding.setApplyClickListener(applyTimetableClickListener);

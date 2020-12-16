@@ -68,7 +68,7 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
 
     public boolean isAllLinesCorrect() {
         for (ObservableBoolean errorObservable : errorList) {
-            if (!errorObservable.get()) {
+            if (errorObservable.get()) {
                 return false;
             }
         }

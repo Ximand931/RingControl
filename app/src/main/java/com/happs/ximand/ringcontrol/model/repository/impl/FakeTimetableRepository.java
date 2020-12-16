@@ -60,6 +60,7 @@ public final class FakeTimetableRepository implements Repository<Timetable> {
         }};
     }
 
+    @Deprecated
     public static FakeTimetableRepository getInstance() {
         if (instance == null) {
             throw new NullPointerException("Instance of timetable repository " +

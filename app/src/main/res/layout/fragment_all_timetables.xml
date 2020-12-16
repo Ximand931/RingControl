@@ -6,20 +6,16 @@
         <variable
             name="viewModel"
             type="com.happs.ximand.ringcontrol.viewmodel.fragment.AllTimetablesViewModel" />
+
         <variable
             name="sharedViewModel"
             type="com.happs.ximand.ringcontrol.viewmodel.SharedViewModel" />
     </data>
 
-    <RelativeLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/all_timetables_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/all_timetables_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="16dp"/>
-
-    </RelativeLayout>
 </layout>

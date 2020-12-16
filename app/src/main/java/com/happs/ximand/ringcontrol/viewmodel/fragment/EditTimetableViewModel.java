@@ -5,8 +5,7 @@ import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
 import com.happs.ximand.ringcontrol.model.object.Timetable;
-import com.happs.ximand.ringcontrol.model.repository.Repository;
-import com.happs.ximand.ringcontrol.model.repository.impl.FakeTimetableRepository;
+import com.happs.ximand.ringcontrol.model.repository.impl.TimetableRepository;
 import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment;
 import com.happs.ximand.ringcontrol.viewmodel.SnackbarDto;
 
@@ -24,7 +23,7 @@ public class EditTimetableViewModel extends BaseEditTimetableViewModel {
         boolean correct = checkTitle() && checkLessons();
         if (correct) {
             updateEditingTimetable();
-            updateRepository();
+            TimetableRepository.getInstance().update(editingTimetable);
             if (isAppliedTimetable()) {
                 notifyAppliedTimetableUpdated();
             }
@@ -43,11 +42,6 @@ public class EditTimetableViewModel extends BaseEditTimetableViewModel {
         this.editingTimetable.setLessons(
                 getLessonsLiveData().getValue()
         );
-    }
-
-    private void updateRepository() {
-        Repository<Timetable> repository = FakeTimetableRepository.getInstance();
-        repository.update(editingTimetable);
     }
 
     private boolean isAppliedTimetable() {

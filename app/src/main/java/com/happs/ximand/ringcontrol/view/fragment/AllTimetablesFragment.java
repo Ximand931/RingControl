@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.happs.ximand.ringcontrol.R;
@@ -61,11 +62,17 @@ public class AllTimetablesFragment
     }
 
     @Override
+    protected void onPreViewModelAttaching(@NonNull AllTimetablesViewModel viewModel) {
+        viewModel.getAllTimetablesLiveData()
+                .observe(getViewLifecycleOwner(), this::initAdapter);
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        allTimetablesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         setActionBarTitle(R.string.all_timetables);
-        getViewModel().getAllTimetablesLiveData()
-                .observe(getViewLifecycleOwner(), this::initAdapter);
+
     }
 
     private void initAdapter(List<Timetable> timetables) {

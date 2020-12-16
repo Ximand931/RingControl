@@ -9,8 +9,7 @@ import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
 import com.happs.ximand.ringcontrol.model.mapper.impl.TimetableToTimeListMapper;
 import com.happs.ximand.ringcontrol.model.object.Lesson;
 import com.happs.ximand.ringcontrol.model.object.Timetable;
-import com.happs.ximand.ringcontrol.model.repository.Repository;
-import com.happs.ximand.ringcontrol.model.repository.impl.FakeTimetableRepository;
+import com.happs.ximand.ringcontrol.model.repository.impl.TimetableRepository;
 import com.happs.ximand.ringcontrol.model.specification.impl.GetAllSqlSpecification;
 import com.happs.ximand.ringcontrol.view.fragment.AddTimetableFragment;
 import com.happs.ximand.ringcontrol.view.fragment.TimetableInfoFragment;
@@ -21,7 +20,6 @@ import java.util.List;
 
 public class AllTimetablesViewModel extends BaseViewModel {
 
-    private final Repository<Timetable> timetableRepository = FakeTimetableRepository.getInstance();
     private final MutableLiveData<List<Timetable>> allTimetablesLiveData = new MutableLiveData<>();
     private final MutableLiveData<Integer> numOfTestLessonsLiveData = new MutableLiveData<>();
 
@@ -39,7 +37,8 @@ public class AllTimetablesViewModel extends BaseViewModel {
     }
 
     public void updateTimetables() {
-        List<Timetable> timetables = timetableRepository.query(new GetAllSqlSpecification());
+        List<Timetable> timetables = TimetableRepository.getInstance()
+                .query(new GetAllSqlSpecification());
         allTimetablesLiveData.setValue(timetables);
     }
 
