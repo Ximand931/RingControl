@@ -60,5 +60,6 @@
     <string name="format_preview_time">%s – %s</string>
 
     <string name="test_timetable">Тестовое расписание</string>
+    <string name="title_exception">Ошибка при подключении</string>
 
 </resources>

@@ -6,18 +6,21 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.FragmentTimetableInfoBinding;
+import com.happs.ximand.ringcontrol.model.object.Lesson;
 import com.happs.ximand.ringcontrol.model.object.Timetable;
-import com.happs.ximand.ringcontrol.view.BaseFragment;
+import com.happs.ximand.ringcontrol.view.adapter.TimeRecyclerViewAdapter;
 import com.happs.ximand.ringcontrol.viewmodel.fragment.TimetableInfoViewModel;
 
-public class TimetableInfoFragment
-        extends BaseFragment<TimetableInfoViewModel, FragmentTimetableInfoBinding> {
+import java.util.List;
 
-    private static final String KEY_TIMETABLE = "TIMETABLE";
+public class TimetableInfoFragment extends BaseFragmentWithRecyclerView<TimetableInfoViewModel,
+        FragmentTimetableInfoBinding, Lesson, TimeRecyclerViewAdapter> {
+
     private Timetable timetable;
 
     public TimetableInfoFragment() {
@@ -31,34 +34,31 @@ public class TimetableInfoFragment
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (timetable == null && savedInstanceState != null) {
-            this.timetable = (Timetable) savedInstanceState.getSerializable(KEY_TIMETABLE);
-        }
+    protected RecyclerView getRecyclerViewFromBinding(FragmentTimetableInfoBinding binding) {
+        return binding.timetableInfoRecyclerView;
     }
 
     @Override
     protected void onPreViewModelAttaching(@NonNull TimetableInfoViewModel viewModel) {
-        viewModel.setTimetable(timetable);
+        if (timetable != null) {
+            viewModel.setTimetable(timetable);
+        }
+        viewModel.getTimetableLiveData().observe(getViewLifecycleOwner(),
+                timetable -> initAdapter(timetable.getLessons())
+        );
         viewModel.getAlertDialogLiveEvent().observe(
                 getViewLifecycleOwner(), this::onCreateAlertDialog);
     }
 
     @Override
-    protected void onViewDataBindingCreated(@NonNull FragmentTimetableInfoBinding binding) {
-        //init recycler view
+    protected TimeRecyclerViewAdapter createNewAdapter(List<Lesson> items) {
+        return new TimeRecyclerViewAdapter(items);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setActionBarTitle(timetable.getTitle());
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putSerializable(KEY_TIMETABLE, timetable);
     }
 
     private void onCreateAlertDialog(DialogInterface.OnClickListener onPositiveClick) {

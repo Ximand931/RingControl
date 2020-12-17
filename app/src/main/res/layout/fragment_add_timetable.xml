@@ -76,7 +76,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:checked="@={viewModel.detailEditingLiveData}"
-                android:onClick="@{() -> viewModel.changeDetailEditMode()}"
                 app:layout_constraintBottom_toBottomOf="@+id/detail_editing_desc"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/detail_editing_title" />
@@ -163,6 +162,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
                 android:paddingBottom="48dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider_4" />

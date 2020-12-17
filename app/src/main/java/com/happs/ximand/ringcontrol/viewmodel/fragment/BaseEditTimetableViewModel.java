@@ -5,11 +5,13 @@ import android.text.TextUtils;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.SingleLiveEvent;
 import com.happs.ximand.ringcontrol.model.object.Lesson;
 import com.happs.ximand.ringcontrol.model.object.Time;
+import com.happs.ximand.ringcontrol.viewmodel.SnackbarDto;
 
 import java.util.List;
 
@@ -22,7 +24,6 @@ public abstract class BaseEditTimetableViewModel extends BaseViewModel {
     private final MutableLiveData<Boolean> detailEditingLiveData = new MutableLiveData<>();
     private final SingleLiveEvent<Void> addLessonEvent = new SingleLiveEvent<>();
     private final SingleLiveEvent<Void> removeLessonEvent = new SingleLiveEvent<>();
-    private final SingleLiveEvent<Void> changeDetailEditMode = new SingleLiveEvent<>();
     private CorrectnessCheck correctnessCheck;
 
     public LiveData<Integer> getNumOfLessons() {
@@ -53,10 +54,6 @@ public abstract class BaseEditTimetableViewModel extends BaseViewModel {
         return removeLessonEvent;
     }
 
-    public SingleLiveEvent<Void> getChangeDetailEditMode() {
-        return changeDetailEditMode;
-    }
-
     protected CorrectnessCheck getCorrectnessCheck() {
         return correctnessCheck;
     }
@@ -77,10 +74,6 @@ public abstract class BaseEditTimetableViewModel extends BaseViewModel {
         numOfLessons.setValue(numOfLessons.getValue() - 1);
     }
 
-    public void changeDetailEditMode() {
-        changeDetailEditMode.call();
-    }
-
     @Override
     public boolean notifyOptionsMenuItemClicked(int itemId) {
         switch (itemId) {
@@ -94,7 +87,26 @@ public abstract class BaseEditTimetableViewModel extends BaseViewModel {
         return false;
     }
 
-    protected abstract void completeEditAction();
+    protected void completeEditAction() {
+        boolean correct = checkTitle() && checkLessons();
+        if (correct) {
+            onCompleteEditAction();
+            onEditActionCompleted();
+            FragmentNavigation.getInstance().navigateToPreviousFragment();
+        } else {
+            getMakeSnackbarEvent().setValue(new SnackbarDto(
+                    getErrorMessageResId(), Snackbar.LENGTH_SHORT
+            ));
+        }
+    }
+
+    protected abstract void onCompleteEditAction();
+
+    protected void onEditActionCompleted() {
+
+    }
+
+    protected abstract int getErrorMessageResId();
 
     protected void setLessonList(List<Lesson> lessons) {
         lessonsMutableLiveData.setValue(lessons);

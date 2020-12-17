@@ -4,12 +4,8 @@
     <data>
 
         <variable
-            name="number"
-            type="int" />
-
-        <variable
-            name="lessonScope"
-            type="com.happs.ximand.ringcontrol.model.object.LessonScope" />
+            name="lesson"
+            type="com.happs.ximand.ringcontrol.model.object.Lesson" />
 
         <import type="android.view.View" />
 
@@ -20,8 +16,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="6dp"
         android:layout_marginEnd="12dp"
+        android:layout_marginBottom="6dp"
         android:orientation="vertical">
 
         <TextView
@@ -29,7 +26,7 @@
             style="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.format(@string/format_time_title, number)}" />
+            android:text="@{String.format(@string/format_time_title, lesson.number)}" />
 
         <TextView
             android:id="@+id/textView3"
@@ -37,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@{String.format(@string/format_preview_time, BindingConverters.convertTimeToPreviewTimeString(lessonScope.startTime), BindingConverters.convertTimeToPreviewTimeString(lessonScope.endTime))}" />
+            android:text="@{String.format(@string/format_preview_time, BindingConverters.convertTimeToPreviewTimeString(lesson.startTime), BindingConverters.convertTimeToPreviewTimeString(lesson.endTime))}" />
 
         <View
             android:layout_width="match_parent"

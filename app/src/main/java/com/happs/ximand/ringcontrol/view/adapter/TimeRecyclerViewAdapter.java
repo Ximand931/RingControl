@@ -9,15 +9,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.ItemTimeBinding;
-import com.happs.ximand.ringcontrol.model.object.LessonScope;
+import com.happs.ximand.ringcontrol.model.object.Lesson;
 
 import java.util.List;
 
 public class TimeRecyclerViewAdapter
-        extends BaseRecyclerViewAdapter<LessonScope, TimeRecyclerViewAdapter.TimeViewHolder> {
+        extends BaseRecyclerViewAdapter<Lesson, TimeRecyclerViewAdapter.TimeViewHolder> {
 
-    public TimeRecyclerViewAdapter(List<LessonScope> lessonScopes) {
-        super(lessonScopes);
+    public TimeRecyclerViewAdapter(List<Lesson> lessons) {
+        super(lessons);
     }
 
     @NonNull
@@ -31,7 +31,7 @@ public class TimeRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(@NonNull TimeViewHolder holder, int position) {
-        holder.bind(position + 1, getItems().get(position));
+        holder.bind(getItems().get(position));
     }
 
     static class TimeViewHolder extends RecyclerView.ViewHolder {
@@ -43,9 +43,8 @@ public class TimeRecyclerViewAdapter
             this.binding = binding;
         }
 
-        void bind(int number, LessonScope lessonScope) {
-            binding.setNumber(number);
-            binding.setLessonScope(lessonScope);
+        void bind(Lesson lesson) {
+            binding.setLesson(lesson);
             binding.executePendingBindings();
         }
     }

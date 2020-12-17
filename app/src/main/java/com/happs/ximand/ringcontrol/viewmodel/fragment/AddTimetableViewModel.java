@@ -1,11 +1,8 @@
 package com.happs.ximand.ringcontrol.viewmodel.fragment;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.model.object.Timetable;
 import com.happs.ximand.ringcontrol.model.repository.impl.TimetableRepository;
-import com.happs.ximand.ringcontrol.viewmodel.SnackbarDto;
 
 import java.util.ArrayList;
 
@@ -17,17 +14,14 @@ public class AddTimetableViewModel extends BaseEditTimetableViewModel {
     }
 
     @Override
-    protected void completeEditAction() {
-        boolean correct = checkTitle() && checkLessons();
-        if (correct) {
-            Timetable newTimetable = createNewTimetable();
-            TimetableRepository.getInstance().add(newTimetable);
-            FragmentNavigation.getInstance().navigateToPreviousFragment();
-        } else {
-            getMakeSnackbarEvent().setValue(new SnackbarDto(
-                    R.string.timetable_was_not_added, Snackbar.LENGTH_SHORT
-            ));
-        }
+    protected void onCompleteEditAction() {
+        Timetable timetable = createNewTimetable();
+        TimetableRepository.getInstance().add(timetable);
+    }
+
+    @Override
+    protected int getErrorMessageResId() {
+        return R.string.timetable_was_not_added;
     }
 
     private Timetable createNewTimetable() {

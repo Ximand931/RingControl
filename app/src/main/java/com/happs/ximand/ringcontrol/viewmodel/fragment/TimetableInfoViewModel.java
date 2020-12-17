@@ -2,6 +2,9 @@ package com.happs.ximand.ringcontrol.viewmodel.fragment;
 
 import android.content.DialogInterface;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.SingleLiveEvent;
@@ -12,9 +15,8 @@ import com.happs.ximand.ringcontrol.view.fragment.EditTimetableFragment;
 
 public class TimetableInfoViewModel extends BaseViewModel {
 
-    //TODO: Use event instead liveEvent
     private final SingleLiveEvent<DialogInterface.OnClickListener> alertDialogLiveEvent;
-    private Timetable timetable;
+    private MutableLiveData<Timetable> timetableLiveData = new MutableLiveData<>();
 
     public TimetableInfoViewModel() {
         this.alertDialogLiveEvent = new SingleLiveEvent<>();
@@ -24,8 +26,12 @@ public class TimetableInfoViewModel extends BaseViewModel {
         return alertDialogLiveEvent;
     }
 
+    public LiveData<Timetable> getTimetableLiveData() {
+        return timetableLiveData;
+    }
+
     public void setTimetable(Timetable timetable) {
-        this.timetable = timetable;
+        timetableLiveData.setValue(timetable);
     }
 
     @Override
@@ -36,7 +42,9 @@ public class TimetableInfoViewModel extends BaseViewModel {
                 return true;
             case R.id.toolbar_edit:
                 FragmentNavigation.getInstance()
-                        .navigateToFragment(EditTimetableFragment.newInstance(timetable));
+                        .navigateToFragment(EditTimetableFragment.newInstance(
+                                timetableLiveData.getValue())
+                        );
                 return true;
         }
         return false;
@@ -44,7 +52,8 @@ public class TimetableInfoViewModel extends BaseViewModel {
 
     private void removeTimetable() {
         alertDialogLiveEvent.setValue((dialog, which) -> {
-            TimetableRepository.getInstance().remove(timetable);
+            //noinspection ConstantConditions
+            TimetableRepository.getInstance().remove(timetableLiveData.getValue());
             notifyAllTimetablesFragmentThatTimetableListUpdated();
             FragmentNavigation.getInstance().navigateToPreviousFragment();
         });

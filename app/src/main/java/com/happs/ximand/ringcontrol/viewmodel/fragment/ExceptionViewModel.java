@@ -1,5 +1,6 @@
 package com.happs.ximand.ringcontrol.viewmodel.fragment;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.happs.ximand.ringcontrol.SingleLiveEvent;
@@ -18,12 +19,8 @@ public class ExceptionViewModel extends BaseViewModel {
         return restartApplicationLiveEvent;
     }
 
-    public MutableLiveData<BluetoothException> getExceptionLiveData() {
+    public LiveData<BluetoothException> getExceptionLiveData() {
         return exceptionLiveData;
-    }
-
-    public String getDescription() {
-        return "Stub"; //TODO: use BindingConverter?
     }
 
     public void setException(BluetoothException exception) {
