@@ -14,6 +14,7 @@ public class EditTimetableViewModel extends BaseEditTimetableViewModel {
     public void setEditingTimetable(Timetable editingTimetable) {
         this.editingTimetable = editingTimetable;
         setLessonList(editingTimetable.getLessons());
+        getTitleLiveData().setValue(editingTimetable.getTitle());
     }
 
     @Override

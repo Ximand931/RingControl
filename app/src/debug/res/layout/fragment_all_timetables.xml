@@ -10,7 +10,7 @@
 
         <variable
             name="sharedViewModel"
-            type="com.happs.ximand.ringcontrol.viewmodel.SharedViewModel" />
+            type="com.happs.ximand.ringcontrol.viewmodel.ActivityViewModel" />
 
         <import type="com.happs.ximand.ringcontrol.viewmodel.ConnectStatus" />
     </data>

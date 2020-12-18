@@ -9,7 +9,7 @@
 
         <variable
             name="sharedViewModel"
-            type="com.happs.ximand.ringcontrol.viewmodel.SharedViewModel" />
+            type="com.happs.ximand.ringcontrol.viewmodel.ActivityViewModel" />
     </data>
 
     <androidx.recyclerview.widget.RecyclerView

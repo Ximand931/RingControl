@@ -31,10 +31,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Set;
 
-public class SharedViewModel extends ViewModel {
+public class ActivityViewModel extends ViewModel {
 
     private static final int TIME_TO_SEARCH = 20000;
-    private static final String DEVICE_NAME = "STUB"; //TODO: STUB
+    private static final String DEFAULT_DEVICE_NAME = "STUB";
 
     private final MutableLiveData<ConnectStatus> connectStatusLiveData;
     private final SingleLiveEvent<Void> enableBluetoothRequestEvent;
@@ -43,7 +43,7 @@ public class SharedViewModel extends ViewModel {
 
     private BluetoothDevice bluetoothDevice;
 
-    public SharedViewModel() {
+    public ActivityViewModel() {
         this.connectStatusLiveData = new MutableLiveData<>();
         this.enableBluetoothRequestEvent = new SingleLiveEvent<>();
         this.registerReceiverEvent = new SingleLiveEvent<>();
@@ -109,7 +109,7 @@ public class SharedViewModel extends ViewModel {
         Set<BluetoothDevice> boundedDevices = bluetoothAdapter.getBondedDevices();
         for (BluetoothDevice device : boundedDevices) {
             if (device != null && device.getName() != null
-                    && device.getName().equals(DEVICE_NAME)) {
+                    && device.getName().equals(DEFAULT_DEVICE_NAME)) {
                 this.bluetoothDevice = device;
             }
         }
@@ -149,7 +149,7 @@ public class SharedViewModel extends ViewModel {
 
     private boolean isSearchedDevice(BluetoothDevice device) {
         return device != null && device.getName() != null
-                && device.getName().equals(DEVICE_NAME);
+                && device.getName().equals(DEFAULT_DEVICE_NAME);
     }
 
     private void onDeviceFound(BluetoothDevice device) {

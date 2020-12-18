@@ -32,8 +32,8 @@ import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.ActivityMainBinding;
 import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment;
+import com.happs.ximand.ringcontrol.viewmodel.ActivityViewModel;
 import com.happs.ximand.ringcontrol.viewmodel.ConnectStatus;
-import com.happs.ximand.ringcontrol.viewmodel.SharedViewModel;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int PROGRESS_BAR_SIZE = 96;
 
-    private SharedViewModel sharedViewModel;
+    private ActivityViewModel sharedViewModel;
     private Snackbar connectStatusSnackbar;
 
     @Override
@@ -77,13 +77,13 @@ public class MainActivity extends AppCompatActivity {
         observeViewModelEvents();
     }
 
-    private SharedViewModel createViewModel() {
+    private ActivityViewModel createViewModel() {
         ViewModelProvider provider =
                 new ViewModelProvider(
                         getViewModelStore(),
                         new ViewModelProvider.NewInstanceFactory()
                 );
-        return provider.get(SharedViewModel.class);
+        return provider.get(ActivityViewModel.class);
     }
 
     private void requestLocationPermission() {
