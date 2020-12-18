@@ -4,9 +4,9 @@ import android.database.Cursor;
 
 import com.happs.ximand.ringcontrol.model.database.TimetableDatabaseHelper;
 import com.happs.ximand.ringcontrol.model.mapper.Mapper;
-import com.happs.ximand.ringcontrol.model.object.Lesson;
-import com.happs.ximand.ringcontrol.model.object.Time;
-import com.happs.ximand.ringcontrol.model.object.Timetable;
+import com.happs.ximand.ringcontrol.model.object.timetable.Lesson;
+import com.happs.ximand.ringcontrol.model.object.timetable.Time;
+import com.happs.ximand.ringcontrol.model.object.timetable.Timetable;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,7 +2,7 @@ package com.happs.ximand.ringcontrol.viewmodel.util;
 
 import android.annotation.SuppressLint;
 
-import com.happs.ximand.ringcontrol.model.object.Time;
+import com.happs.ximand.ringcontrol.model.object.timetable.Time;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

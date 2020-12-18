@@ -9,8 +9,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.SingleLiveEvent;
-import com.happs.ximand.ringcontrol.model.object.Lesson;
-import com.happs.ximand.ringcontrol.model.object.Time;
+import com.happs.ximand.ringcontrol.model.object.timetable.Lesson;
+import com.happs.ximand.ringcontrol.model.object.timetable.Time;
 import com.happs.ximand.ringcontrol.viewmodel.SnackbarDto;
 
 import java.util.List;

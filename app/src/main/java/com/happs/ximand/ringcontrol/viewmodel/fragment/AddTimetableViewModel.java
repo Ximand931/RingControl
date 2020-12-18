@@ -1,7 +1,7 @@
 package com.happs.ximand.ringcontrol.viewmodel.fragment;
 
 import com.happs.ximand.ringcontrol.R;
-import com.happs.ximand.ringcontrol.model.object.Timetable;
+import com.happs.ximand.ringcontrol.model.object.timetable.Timetable;
 import com.happs.ximand.ringcontrol.model.repository.impl.TimetableRepository;
 
 import java.util.ArrayList;

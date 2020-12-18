@@ -6,14 +6,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
 
-public class TimetableDatabaseHelper extends SQLiteOpenHelper {
+public class TrustedDevicesDatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String DATABASE_NAME = "TIMETABLES";
+    public static final String DATABASE_NAME = "TRUSTED_DEVICES";
     public static final String DB_FIELD_ID = "ID";
-    public static final String DB_FIELD_TITLE = "TITLE";
-    public static final String DB_FIELD_TIMETABLE = "TIMETABLE";
+    public static final String DB_FIELD_MANUFACTURER = "MANUFACTURER";
+    public static final String DB_FIELD_MODEL = "MODEL";
+    public static final String DB_FIELD_DATE = "DATE";
 
-    public TimetableDatabaseHelper(@Nullable Context context, int version) {
+    public TrustedDevicesDatabaseHelper(@Nullable Context context, int version) {
         super(context, DATABASE_NAME, null, version);
     }
 
@@ -21,10 +22,10 @@ public class TimetableDatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + DATABASE_NAME + "("
                 + DB_FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + DB_FIELD_TITLE + " TEXT, "
-                + DB_FIELD_TIMETABLE + " TEXT"
-                + ");"
-        );
+                + DB_FIELD_MANUFACTURER + " TEXT, "
+                + DB_FIELD_MODEL + " TEXT, "
+                + DB_FIELD_DATE + " TEXT"
+                + ");");
     }
 
     @Override

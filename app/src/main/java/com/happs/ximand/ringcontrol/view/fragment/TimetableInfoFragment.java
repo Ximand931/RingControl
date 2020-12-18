@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.FragmentTimetableInfoBinding;
-import com.happs.ximand.ringcontrol.model.object.Lesson;
-import com.happs.ximand.ringcontrol.model.object.Timetable;
+import com.happs.ximand.ringcontrol.model.object.timetable.Lesson;
+import com.happs.ximand.ringcontrol.model.object.timetable.Timetable;
 import com.happs.ximand.ringcontrol.view.adapter.TimeRecyclerViewAdapter;
 import com.happs.ximand.ringcontrol.viewmodel.fragment.TimetableInfoViewModel;
 

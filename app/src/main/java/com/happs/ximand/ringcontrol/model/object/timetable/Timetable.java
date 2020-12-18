@@ -1,4 +1,4 @@
-package com.happs.ximand.ringcontrol.model.object;
+package com.happs.ximand.ringcontrol.model.object.timetable;
 
 import androidx.annotation.NonNull;
 

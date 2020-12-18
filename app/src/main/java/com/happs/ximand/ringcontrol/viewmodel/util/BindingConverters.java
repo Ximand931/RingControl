@@ -1,8 +1,6 @@
 package com.happs.ximand.ringcontrol.viewmodel.util;
 
 import com.happs.ximand.ringcontrol.R;
-import com.happs.ximand.ringcontrol.model.object.Lesson;
-import com.happs.ximand.ringcontrol.model.object.Time;
 import com.happs.ximand.ringcontrol.model.object.exception.BluetoothException;
 import com.happs.ximand.ringcontrol.model.object.exception.BluetoothIsDisabledException;
 import com.happs.ximand.ringcontrol.model.object.exception.BluetoothNotSupportedException;
@@ -10,6 +8,8 @@ import com.happs.ximand.ringcontrol.model.object.exception.DeviceNotFoundExcepti
 import com.happs.ximand.ringcontrol.model.object.exception.DiscoveryModeIsNotStartedException;
 import com.happs.ximand.ringcontrol.model.object.exception.FailedToConnectException;
 import com.happs.ximand.ringcontrol.model.object.exception.LocationPermissionDeniedException;
+import com.happs.ximand.ringcontrol.model.object.timetable.Lesson;
+import com.happs.ximand.ringcontrol.model.object.timetable.Time;
 
 import java.util.List;
 

@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.happs.ximand.ringcontrol.OnEventListener;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.ItemEditLessonBinding;
-import com.happs.ximand.ringcontrol.model.object.Lesson;
-import com.happs.ximand.ringcontrol.model.object.Time;
+import com.happs.ximand.ringcontrol.model.object.timetable.Lesson;
+import com.happs.ximand.ringcontrol.model.object.timetable.Time;
 import com.happs.ximand.ringcontrol.view.MaskWatcher;
 import com.happs.ximand.ringcontrol.viewmodel.util.TimeUtils;
 

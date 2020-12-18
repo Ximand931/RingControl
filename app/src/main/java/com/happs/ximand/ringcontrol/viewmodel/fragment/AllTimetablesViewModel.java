@@ -6,9 +6,8 @@ import androidx.lifecycle.MutableLiveData;
 import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
-import com.happs.ximand.ringcontrol.model.mapper.impl.TimetableToTimeListMapper;
-import com.happs.ximand.ringcontrol.model.object.Lesson;
-import com.happs.ximand.ringcontrol.model.object.Timetable;
+import com.happs.ximand.ringcontrol.model.object.timetable.Lesson;
+import com.happs.ximand.ringcontrol.model.object.timetable.Timetable;
 import com.happs.ximand.ringcontrol.model.repository.impl.TimetableRepository;
 import com.happs.ximand.ringcontrol.model.specification.impl.GetAllSqlSpecification;
 import com.happs.ximand.ringcontrol.view.fragment.AddTimetableFragment;
@@ -69,10 +68,7 @@ public class AllTimetablesViewModel extends BaseViewModel {
     }
 
     public void applyTimetable(Timetable timetable) {
-        List<String> timeList =
-                new TimetableToTimeListMapper().map(timetable);
-        SharedPreferencesDao.getInstance().updateAppliedTimetableId(timetable.getId());
-        //QueueWriter.getInstance().write(timeList);
+
     }
 
     public void addTestLesson() {

@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.happs.ximand.ringcontrol.SingleLiveEvent;
+import com.happs.ximand.ringcontrol.model.bl.BluetoothDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,10 @@ public class SelectDeviceViewModel extends BaseViewModel {
         return startSettingsActivityLiveEvent;
     }
 
+    public void updateData() {
+        this.devicesLiveData.setValue(getBondedDevicesList());
+    }
+
     private List<BluetoothDevice> getBondedDevicesList() {
         BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
         return new ArrayList<>(adapter.getBondedDevices());
@@ -38,6 +43,7 @@ public class SelectDeviceViewModel extends BaseViewModel {
     }
 
     public void notifyDeviceSelected(BluetoothDevice device) {
-
+        BluetoothDao.getInstance().startConnectToDeviceTask(device);
     }
+
 }

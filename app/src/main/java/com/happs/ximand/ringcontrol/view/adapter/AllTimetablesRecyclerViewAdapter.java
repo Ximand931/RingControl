@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.happs.ximand.ringcontrol.OnEventListener;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.ItemTimetableBinding;
-import com.happs.ximand.ringcontrol.model.object.Timetable;
+import com.happs.ximand.ringcontrol.model.object.timetable.Timetable;
 
 import java.util.List;
 

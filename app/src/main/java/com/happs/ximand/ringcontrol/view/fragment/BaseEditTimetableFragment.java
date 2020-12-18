@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.ViewDataBinding;
 
 import com.happs.ximand.ringcontrol.R;
-import com.happs.ximand.ringcontrol.model.object.Lesson;
+import com.happs.ximand.ringcontrol.model.object.timetable.Lesson;
 import com.happs.ximand.ringcontrol.view.adapter.EditTimetableRecyclerViewAdapter;
 import com.happs.ximand.ringcontrol.viewmodel.fragment.BaseEditTimetableViewModel;
 

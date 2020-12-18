@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.FragmentEditTimetableBinding;
-import com.happs.ximand.ringcontrol.model.object.Timetable;
+import com.happs.ximand.ringcontrol.model.object.timetable.Timetable;
 import com.happs.ximand.ringcontrol.viewmodel.fragment.EditTimetableViewModel;
 
 public class EditTimetableFragment

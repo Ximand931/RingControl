@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.ItemTimeBinding;
-import com.happs.ximand.ringcontrol.model.object.Lesson;
+import com.happs.ximand.ringcontrol.model.object.timetable.Lesson;
 
 import java.util.List;
 

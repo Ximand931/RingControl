@@ -1,16 +1,17 @@
 package com.happs.ximand.ringcontrol.model.object.command;
 
-import com.happs.ximand.ringcontrol.model.object.Lesson;
-import com.happs.ximand.ringcontrol.model.object.Timetable;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.happs.ximand.ringcontrol.model.object.timetable.Lesson;
+import com.happs.ximand.ringcontrol.model.object.timetable.Time;
+import com.happs.ximand.ringcontrol.model.object.timetable.Timetable;
 
 public class ReplaceTimetableCommand extends BluetoothCommand {
 
     private static final String REPLACE_TIMETABLE_COMMAND_CODE = "01";
+    private static final String TIMETABLE_ID_STUB = "1";
 
-    private Timetable timetable;
+    private final StringBuilder commandBuilder = new StringBuilder();
+    private final Timetable timetable;
+
     //01103|130000140000150000e Command-TimetableNum-NumOfRings-Time1-Time2...-e
     protected ReplaceTimetableCommand(Timetable newTimetable) {
         super(REPLACE_TIMETABLE_COMMAND_CODE);
@@ -19,15 +20,29 @@ public class ReplaceTimetableCommand extends BluetoothCommand {
 
     @Override
     public String getCommand() {
-        List<Lesson> lessons = new ArrayList<>();
-        StringBuilder builder = new StringBuilder()
-                .append(getCode())
-                .append(1)
-                .append(getTimetableSize());
-        for (int i = 0; i < lessons.size(); i++) {
-            Lesson lesson = lessons.get(i);
+        appendMeta();
+        for (Lesson lesson : timetable.getLessons()) {
+            appendTime(lesson.getStartTime());
+            appendTime(lesson.getEndTime());
         }
-        return null; //TODO
+        appendEndOfLine();
+        return commandBuilder.toString();
+    }
+
+    private void appendMeta() {
+        commandBuilder.append(getCode())
+                .append(TIMETABLE_ID_STUB)
+                .append(getTimetableSize());
+    }
+
+    private void appendTime(Time time) {
+        commandBuilder.append(time.getHours())
+                .append(time.getMinutes())
+                .append(time.getSeconds());
+    }
+
+    private void appendEndOfLine() {
+        commandBuilder.append("e");
     }
 
     private String getTimetableSize() {

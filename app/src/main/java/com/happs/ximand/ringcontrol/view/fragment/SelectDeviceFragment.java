@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.FragmentSelectDevicesBinding;
@@ -16,12 +17,26 @@ import java.util.List;
 public class SelectDeviceFragment extends BaseFragmentWithRecyclerView<SelectDeviceViewModel,
         FragmentSelectDevicesBinding, BluetoothDevice, BluetoothDevicesRecyclerViewAdapter> {
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     public SelectDeviceFragment() {
         super(R.layout.fragment_select_devices, 0);
     }
 
     public static SelectDeviceFragment newInstance() {
         return new SelectDeviceFragment();
+    }
+
+    @Override
+    protected void onViewDataBindingCreated(@NonNull FragmentSelectDevicesBinding binding) {
+        super.onViewDataBindingCreated(binding);
+        swipeRefreshLayout = binding.swipeRefreshLayout;
+        swipeRefreshLayout.setOnRefreshListener(this::onRefresh);
+    }
+
+    private void onRefresh() {
+        getViewModel().updateData();
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

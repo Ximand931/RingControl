@@ -15,15 +15,15 @@
 
         <variable
             name="timetable"
-            type="com.happs.ximand.ringcontrol.model.object.Timetable" />
+            type="com.happs.ximand.ringcontrol.model.object.timetable.Timetable" />
 
         <variable
             name="applyClickListener"
-            type="com.happs.ximand.ringcontrol.OnEventListener&lt;com.happs.ximand.ringcontrol.model.object.Timetable>" />
+            type="com.happs.ximand.ringcontrol.OnEventListener&lt;com.happs.ximand.ringcontrol.model.object.timetable.Timetable>" />
 
         <variable
             name="detailsClickListener"
-            type="com.happs.ximand.ringcontrol.OnEventListener&lt;com.happs.ximand.ringcontrol.model.object.Timetable>" />
+            type="com.happs.ximand.ringcontrol.OnEventListener&lt;com.happs.ximand.ringcontrol.model.object.timetable.Timetable>" />
 
         <import type="android.view.View" />
 

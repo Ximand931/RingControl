@@ -4,8 +4,8 @@ import android.content.ContentValues;
 
 import com.happs.ximand.ringcontrol.model.database.TimetableDatabaseHelper;
 import com.happs.ximand.ringcontrol.model.mapper.Mapper;
-import com.happs.ximand.ringcontrol.model.object.Lesson;
-import com.happs.ximand.ringcontrol.model.object.Timetable;
+import com.happs.ximand.ringcontrol.model.object.timetable.Lesson;
+import com.happs.ximand.ringcontrol.model.object.timetable.Timetable;
 
 public class TimetableToContentValuesMapper implements Mapper<Timetable, ContentValues> {
 

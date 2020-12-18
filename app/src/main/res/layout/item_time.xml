@@ -5,7 +5,7 @@
 
         <variable
             name="lesson"
-            type="com.happs.ximand.ringcontrol.model.object.Lesson" />
+            type="com.happs.ximand.ringcontrol.model.object.timetable.Lesson" />
 
         <import type="android.view.View" />
 

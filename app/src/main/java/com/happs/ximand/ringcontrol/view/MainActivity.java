@@ -1,12 +1,8 @@
 package com.happs.ximand.ringcontrol.view;
 
 import android.Manifest;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.os.Build;
@@ -18,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -31,9 +26,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.ActivityMainBinding;
-import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
-import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment;
-import com.happs.ximand.ringcontrol.view.fragment.SelectDeviceFragment;
 import com.happs.ximand.ringcontrol.viewmodel.ActivityViewModel;
 import com.happs.ximand.ringcontrol.viewmodel.ConnectStatus;
 
@@ -44,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BT = 1;
     private static final int PROGRESS_BAR_SIZE = 96;
 
-    private ActivityViewModel sharedViewModel;
+    private ActivityViewModel viewModel;
     private Snackbar connectStatusSnackbar;
 
     @Override
@@ -60,23 +52,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FragmentNavigation.initialize(getSupportFragmentManager());
-
         ActivityMainBinding binding = DataBindingUtil
                 .setContentView(this, R.layout.activity_main);
-        this.sharedViewModel = createViewModel();
+        this.viewModel = createViewModel();
         this.connectStatusSnackbar = makeLoadingSnackbar();
-        binding.setSharedViewModel(sharedViewModel);
-
-        requestLocationPermission();
-
-        if (checkLocationPermission()) {
-            navigateToAllTimetablesFragment();
-        }
+        binding.setSharedViewModel(viewModel);
+        checkPermission();
 
         Toolbar toolbar = binding.mainToolbar;
         setSupportActionBar(toolbar);
-
         observeViewModelEvents();
+        viewModel.afterOnCreate();
     }
 
     private ActivityViewModel createViewModel() {
@@ -88,11 +74,11 @@ public class MainActivity extends AppCompatActivity {
         return provider.get(ActivityViewModel.class);
     }
 
-    private void requestLocationPermission() {
+    private void checkPermission() {
         if (!checkLocationPermission()) {
             ActivityCompat.requestPermissions(this,
                     new String[]{(Manifest.permission.ACCESS_FINE_LOCATION)},
-                    1);
+                    REQUEST_LOCATION);
         }
     }
 
@@ -102,62 +88,18 @@ public class MainActivity extends AppCompatActivity {
                 == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void navigateToAllTimetablesFragment() {
-        if (SharedPreferencesDao.getInstance().getTargetDeviceAddress() != null) {
-            FragmentNavigation.getInstance()
-                    .navigateToFragment(AllTimetablesFragment.newInstance());
-            connectStatusSnackbar.show();
-        } else {
-            FragmentNavigation.getInstance()
-                    .navigateToFragment(SelectDeviceFragment.newInstance());
-        }
-    }
-
     private void observeViewModelEvents() {
-        sharedViewModel.getRegisterReceiverEvent().observe(
-                this, this::registerReceiver
-        );
-        sharedViewModel.getEnableBluetoothRequestEvent().observe(
-                this, this::suggestUserToEnableBluetooth
-        );
-        sharedViewModel.getConnectStatusLiveData().observe(
+        viewModel.getConnectStatusLiveData().observe(
                 this, this::changeSnackbarContent
         );
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_LOCATION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                navigateToAllTimetablesFragment();
-            } else {
-                sharedViewModel.notifyUserRefuseToProvideLocation();
-            }
-        }
+        viewModel.getEnableBluetoothLiveEvent().observe(
+                this, this::suggestUserToEnableBluetooth
+        );
     }
 
     private void suggestUserToEnableBluetooth(Void aVoid) {
         Intent enableBluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         startActivityForResult(enableBluetoothIntent, REQUEST_ENABLE_BT);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_ENABLE_BT) {
-            if (resultCode == Activity.RESULT_OK) {
-                sharedViewModel.notifyUserEnabledBluetooth();
-            } else {
-                sharedViewModel.notifyUserRefusedToEnableBluetooth();
-            }
-        }
-    }
-
-    private void registerReceiver(BroadcastReceiver broadcastReceiver) {
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        registerReceiver(broadcastReceiver, filter);
     }
 
     private void changeSnackbarContent(ConnectStatus connectStatus) {
