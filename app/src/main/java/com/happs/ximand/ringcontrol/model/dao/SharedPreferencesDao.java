@@ -20,6 +20,9 @@ public final class SharedPreferencesDao {
     }
 
     private static final String PREF_NAME = "PREFERENCES";
+
+    private static final String PREF_TARGET_DEVICE_ADDRESS = "TARGET_DEVICE";
+
     private static final String PREF_APPLIED_TIMETABLE = "APPLIED_TIMETABLE_ID";
     private static final int APPLIED_TIMETABLE_DEF_VALUE = 1;
 
@@ -37,6 +40,16 @@ public final class SharedPreferencesDao {
     public void updateAppliedTimetableId(int newId) {
         preferences.edit()
                 .putInt(PREF_APPLIED_TIMETABLE, newId)
+                .apply();
+    }
+
+    public String getTargetDeviceAddress() {
+        return preferences.getString(PREF_TARGET_DEVICE_ADDRESS, null);
+    }
+
+    public void updateTargetDeviceAddress(String address) {
+        preferences.edit()
+                .putString(PREF_TARGET_DEVICE_ADDRESS, address)
                 .apply();
     }
 }

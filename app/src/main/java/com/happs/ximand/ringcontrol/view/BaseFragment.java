@@ -56,7 +56,9 @@ public abstract class BaseFragment<VM extends BaseViewModel, B extends ViewDataB
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(menuResId, menu);
+        if (menuResId != 0) {
+            inflater.inflate(menuResId, menu);
+        }
     }
 
     @Override

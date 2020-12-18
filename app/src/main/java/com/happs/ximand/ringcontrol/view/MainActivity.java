@@ -31,7 +31,9 @@ import com.google.android.material.snackbar.Snackbar;
 import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.ActivityMainBinding;
+import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
 import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment;
+import com.happs.ximand.ringcontrol.view.fragment.SelectDeviceFragment;
 import com.happs.ximand.ringcontrol.viewmodel.ActivityViewModel;
 import com.happs.ximand.ringcontrol.viewmodel.ConnectStatus;
 
@@ -101,9 +103,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void navigateToAllTimetablesFragment() {
-        FragmentNavigation.getInstance()
-                .navigateToFragment(AllTimetablesFragment.newInstance());
-        connectStatusSnackbar.show();
+        if (SharedPreferencesDao.getInstance().getTargetDeviceAddress() != null) {
+            FragmentNavigation.getInstance()
+                    .navigateToFragment(AllTimetablesFragment.newInstance());
+            connectStatusSnackbar.show();
+        } else {
+            FragmentNavigation.getInstance()
+                    .navigateToFragment(SelectDeviceFragment.newInstance());
+        }
     }
 
     private void observeViewModelEvents() {

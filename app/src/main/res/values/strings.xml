@@ -28,6 +28,7 @@
     <string name="applied_timetable_updated">Последнее примененное расписание было обновлено</string>
 
     <!-- Описания ошибок -->
+    <string name="address_is_empty">Не удалось получить адрес</string>
     <string name="bluetooth_is_disabled">Для корректной работы приложения требуется Bluetooth. Проверьте, что он включен и повторите попытку.</string>
     <string name="device_not_found">Устройство не найдено. Проверьте, что оно включено и находится достаточно близко.</string>
     <string name="location_permission_denied">Для корректной работы Bluetooth требуется доступ к местоположению устройства.</string>
@@ -42,7 +43,6 @@
     <string name="connecting_to_device">Подключение к устройству…</string>
     <string name="connected">Успешно подключено</string>
 
-    <string name="lesson">Урок %d</string>
     <string name="lessons">уроки</string>
     <string name="retry">Повторить попытку</string>
     <string name="last_applied">Последнее примененное расписание</string>
@@ -54,6 +54,7 @@
     <string name="remove_test_lesson">- урок</string>
 
     <!-- Для String.format -->
+    <string name="lesson">Урок %d</string>
     <string name="format_time_title">Урок %d</string>
     <string name="format_test_timetable_desc">Уроки - %d, звонки - %d, начиная с текущего времени плюс 1 минуты</string>
     <string name="format_timetable_desc">Уроки - %d: %s</string>
@@ -61,5 +62,8 @@
 
     <string name="test_timetable">Тестовое расписание</string>
     <string name="title_exception">Ошибка при подключении</string>
+    <string name="select_device">Выберите устройство для подключения</string>
+    <string name="cant_find_device">Устройства нет в списке или вы еще не подключились к нему?</string>
+    <string name="connect_device">Подключиться к устройству</string>
 
 </resources>
