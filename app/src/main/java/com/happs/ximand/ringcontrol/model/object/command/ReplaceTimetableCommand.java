@@ -12,7 +12,6 @@ public class ReplaceTimetableCommand extends BluetoothCommand {
     private final StringBuilder commandBuilder = new StringBuilder();
     private final Timetable timetable;
 
-    //01103|130000140000150000e Command-TimetableNum-NumOfRings-Time1-Time2...-e
     protected ReplaceTimetableCommand(Timetable newTimetable) {
         super(REPLACE_TIMETABLE_COMMAND_CODE);
         this.timetable = newTimetable;

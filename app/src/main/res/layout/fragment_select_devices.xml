@@ -6,6 +6,8 @@
         <variable
             name="viewModel"
             type="com.happs.ximand.ringcontrol.viewmodel.fragment.SelectDeviceViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -13,46 +15,83 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <TextView
-                style="@style/TextAppearance.MaterialComponents.Headline6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:ems="12"
-                android:text="@string/select_device" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/devices_recycler_view"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp" />
+                android:orientation="vertical">
 
-            <TextView
-                style="@style/TextAppearance.MaterialComponents.Caption"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="24dp"
-                android:ems="22"
-                android:gravity="center"
-                android:text="@string/cant_find_device" />
+                <TextView
+                    style="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:ems="12"
+                    android:text="@string/select_device" />
 
-            <Button
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:onClick="@{() -> viewModel.startSettingsActivity()}"
-                android:text="@string/connect_device" />
+                <View
+                    style="@style/BaseDivider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp" />
 
-        </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/devices_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false" />
+
+                <View
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="36dp"
+                    android:background="@drawable/ic_baseline_clear_96"
+                    android:visibility="@{viewModel.devicesLiveData.empty ? View.VISIBLE : View.GONE}" />
+
+                <TextView
+                    style="@style/TextAppearance.MaterialComponents.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="36dp"
+                    android:ems="16"
+                    android:gravity="center"
+                    android:text="@string/no_one_bonded_device"
+                    android:visibility="@{viewModel.devicesLiveData.empty ? View.VISIBLE : View.GONE}" />
+
+                <View
+                    style="@style/BaseDivider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:visibility="@{viewModel.devicesLiveData.empty ? View.VISIBLE : View.GONE}" />
+
+                <TextView
+                    style="@style/TextAppearance.MaterialComponents.Caption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="24dp"
+                    android:ems="22"
+                    android:gravity="center"
+                    android:text="@string/cant_find_device" />
+
+                <Button
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="16dp"
+                    android:onClick="@{() -> viewModel.startSettingsActivity()}"
+                    android:text="@string/connect_device" />
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

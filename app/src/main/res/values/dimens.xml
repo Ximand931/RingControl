@@ -2,4 +2,5 @@
 <resources>
     <dimen name="margin_divider">16dp</dimen>
     <dimen name="snackbar_icon_padding">8dp</dimen>
+    <dimen name="base_divider_margin">12dp</dimen>
 </resources>

@@ -43,7 +43,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
     private void notifyItemUpdated(List<T> updatedItems) {
         int dif = findDifference(updatedItems);
         this.items = updatedItems;
-        notifyItemChanged(dif);
+        //notifyItemChanged(dif);
     }
 
     private int findDifference(List<T> updatedItems) {
