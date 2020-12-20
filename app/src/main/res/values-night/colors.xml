@@ -3,18 +3,14 @@
     <color name="colorPrimary">#BB86FC</color>
     <color name="colorBackground">@android:color/background_dark</color>
     <color name="colorAccent">#BB86FC</color>
-
     <color name="colorSnackbarActionText">#E3B8FF</color>
-
     <color name="colorPrimaryIcon">@android:color/white</color>
-
     <color name="colorProgressBar">@android:color/black</color>
-
     <color name="colorHeadline">#FFFFFF</color>
     <color name="colorCaption">#99FFFFFF</color>
-
     <color name="colorIconToolbar">#CCFFFFFF</color> <!-- TODO -->
     <color name="colorIcon">#CCFFFFFF</color> <!-- TODO -->
+    <color name="colorSnackbarError">#B00020</color>
     <color name="colorIconSnackbar">@android:color/black</color>
 
     <color name="colorDivider">#1C1C1C</color>

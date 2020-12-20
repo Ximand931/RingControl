@@ -8,7 +8,6 @@
             name="viewModel"
             type="com.happs.ximand.ringcontrol.viewmodel.fragment.ExceptionViewModel" />
 
-        <import type="com.happs.ximand.ringcontrol.viewmodel.util.BindingConverters" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,7 +49,7 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:maxEms="18"
-                android:text="@{BindingConverters.convertBluetoothExceptionToMessageResId(viewModel.exceptionLiveData)}"
+                android:text="@{viewModel.exceptionLiveData.messageResId}"
                 android:textColor="@color/colorCaption"
                 android:textSize="14sp" />
 

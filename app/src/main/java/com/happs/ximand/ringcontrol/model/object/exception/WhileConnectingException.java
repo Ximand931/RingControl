@@ -2,10 +2,10 @@ package com.happs.ximand.ringcontrol.model.object.exception;
 
 import com.happs.ximand.ringcontrol.R;
 
-public class BluetoothNotSupportedException extends BluetoothException {
+public class WhileConnectingException extends BluetoothException {
 
     @Override
     public int getMessageResId() {
-        return R.string.bluetooth_not_supported;
+        return R.string.error_while_connecting;
     }
 }

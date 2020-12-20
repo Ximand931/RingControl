@@ -8,7 +8,6 @@
             name="viewModel"
             type="com.happs.ximand.ringcontrol.viewmodel.fragment.ExceptionViewModel" />
 
-        <import type="com.happs.ximand.ringcontrol.viewmodel.util.BindingConverters" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,6 +28,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
+                android:contentDescription="@null"
                 android:src="@drawable/ic_bluetooth_disabled" />
 
             <TextView
@@ -38,7 +38,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="12dp"
                 android:letterSpacing="0.05"
-                android:text="Ошибка при подключении"
+                android:text="@string/title_exception"
                 android:textColor="@color/colorHeadline" />
 
             <TextView
@@ -49,7 +49,7 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:maxEms="28"
-                android:text="@{BindingConverters.convertBluetoothExceptionToMessageResId(viewModel.exceptionLiveData)}"
+                android:text="@{viewModel.exceptionLiveData.messageResId}"
                 android:textColor="@color/colorCaption"
                 android:textSize="14sp" />
 

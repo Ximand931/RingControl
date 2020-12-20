@@ -29,9 +29,7 @@ public class FragmentNavigation {
     }
 
     public synchronized static void initialize(FragmentManager manager) {
-        if (instance == null) {
-            instance = new FragmentNavigation(manager);
-        }
+        instance = new FragmentNavigation(manager);
     }
 
     public void navigateToPreviousFragment() {

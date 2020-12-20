@@ -20,7 +20,7 @@ public class SelectDeviceFragment extends BaseFragmentWithRecyclerView<SelectDev
     private SwipeRefreshLayout swipeRefreshLayout;
 
     public SelectDeviceFragment() {
-        super(R.layout.fragment_select_devices, 0);
+        super(R.layout.fragment_select_devices, MENU_NONE);
     }
 
     public static SelectDeviceFragment newInstance() {

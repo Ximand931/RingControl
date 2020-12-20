@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.happs.ximand.ringcontrol.SingleLiveEvent;
-import com.happs.ximand.ringcontrol.model.bl.BluetoothDao;
+import com.happs.ximand.ringcontrol.model.dao.BluetoothDao;
 
 import java.util.ArrayList;
 import java.util.List;

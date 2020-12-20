@@ -29,6 +29,8 @@ import java.util.Objects;
 public abstract class BaseFragment<VM extends BaseViewModel, B extends ViewDataBinding>
         extends Fragment {
 
+    protected static final int MENU_NONE = 0;
+
     private final int layoutId;
     private final int menuResId;
     @Nullable
@@ -56,7 +58,7 @@ public abstract class BaseFragment<VM extends BaseViewModel, B extends ViewDataB
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        if (menuResId != 0) {
+        if (menuResId != MENU_NONE) {
             inflater.inflate(menuResId, menu);
         }
     }

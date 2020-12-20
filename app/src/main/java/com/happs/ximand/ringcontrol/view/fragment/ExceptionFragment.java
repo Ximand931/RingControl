@@ -18,7 +18,7 @@ public class ExceptionFragment extends BaseFragment<ExceptionViewModel, Fragment
     private BluetoothException exception;
 
     public ExceptionFragment() {
-        super(R.layout.fragment_exception, 0);
+        super(R.layout.fragment_exception, MENU_NONE);
     }
 
     public static ExceptionFragment newInstance(BluetoothException e) {

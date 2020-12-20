@@ -34,14 +34,18 @@
     <string name="location_permission_denied">Для корректной работы Bluetooth требуется доступ к местоположению устройства.</string>
     <string name="bluetooth_was_not_initialized">Не удалось перевести Bluetooth в режим поиска. Попробуйте еще раз.</string>
     <string name="bluetooth_not_supported">Этот телефон не поддерживает работу с Bluetooth.</string>
-    <string name="failed_to_connect">Не удалось подключиться к устройству. Попробуйте еще раз.</string>
+    <string name="desc_auth_error_not_recognized">Устройству не удалось распознать телефон. Попробуйте еще раз или сбросьте настройки устройства пользуясь инструкцией.</string>
+    <string name="desc_auth_error_unexpected">Не удалось подключиться к устройству. Попробуйте еще раз</string>
 
     <!-- Содержание Snackbar'а -->
     <string name="initialization">Инициализация…</string>
     <string name="waiting_for_bluetooth">Ожидание Bluetooth…</string>
-    <string name="searching_device">Поиск устройства…</string>
     <string name="connecting_to_device">Подключение к устройству…</string>
     <string name="connected">Успешно подключено</string>
+    <string name="bluetooth_error">Ошибка при работе Bluetooth</string>
+    <string name="failed_to_connect">Не удалось подключиться к устройству. Убедитесь, что вы выбрали правильное устройство.</string>
+    <string name="error_while_connecting">Ошибка при подключении. Убедитесь, что вы выбрали правильное устройство.</string>
+    <string name="auth_error">Ошибка аутентификации</string>
 
     <string name="lessons">уроки</string>
     <string name="retry">Повторить попытку</string>

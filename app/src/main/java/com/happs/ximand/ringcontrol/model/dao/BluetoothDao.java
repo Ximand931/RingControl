@@ -1,21 +1,23 @@
-package com.happs.ximand.ringcontrol.model.bl;
+package com.happs.ximand.ringcontrol.model.dao;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 
-import androidx.lifecycle.MutableLiveData;
-
 import com.happs.ximand.ringcontrol.OnEventListener;
-import com.happs.ximand.ringcontrol.viewmodel.ConnectStatus;
+import com.happs.ximand.ringcontrol.model.object.exception.BluetoothException;
+import com.happs.ximand.ringcontrol.model.object.exception.FailedToConnectException;
+import com.happs.ximand.ringcontrol.model.object.exception.WhileConnectingException;
+import com.happs.ximand.ringcontrol.model.object.info.ConnectedEvent;
+import com.happs.ximand.ringcontrol.model.object.info.ConnectingEvent;
+import com.happs.ximand.ringcontrol.model.object.info.InfoEvent;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,12 +25,20 @@ public final class BluetoothDao {
 
     private static BluetoothDao instance;
 
-    private final List<OnEventListener<String>> messageReceiveListeners = new ArrayList<>();
-    private MutableLiveData<ConnectStatus> connectStatus;
+    private final BluetoothAdapter bluetoothAdapter;
+
+    private final Set<BluetoothEventListener<String>> messageReceiveListeners =
+            new HashSet<>();
+    private final Set<BluetoothEventListener<InfoEvent>> infoEventListeners =
+            new HashSet<>();
+    private final Set<BluetoothEventListener<BluetoothException>> exceptionEventListeners =
+            new HashSet<>();
+
     private BluetoothSocket bluetoothSocket;
     private BluetoothThread bluetoothThread;
 
     private BluetoothDao() {
+        this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
     public static BluetoothDao getInstance() {
@@ -38,16 +48,55 @@ public final class BluetoothDao {
         return instance;
     }
 
-    public void setConnectStatus(MutableLiveData<ConnectStatus> connectStatus) {
-        this.connectStatus = connectStatus;
+    public void subscribeToBluetoothMessages(BluetoothEventListener<String> messageReceiveListener) {
+        messageReceiveListeners.add(messageReceiveListener);
+    }
+
+    public void unsubscribeFromBluetoothMessages(BluetoothEventListener<String>
+                                                         messageReceiveListener) {
+        messageReceiveListeners.remove(messageReceiveListener);
+    }
+
+    public void subscribeToInfoEvents(BluetoothEventListener<InfoEvent> infoEventListener) {
+        infoEventListeners.add(infoEventListener);
+    }
+
+    public void unsubscribeFromInfoEvents(BluetoothEventListener<InfoEvent> infoEventListener) {
+        infoEventListeners.remove(infoEventListener);
+    }
+
+    private void notifySubscribersAboutEvent(InfoEvent infoEvent) {
+        for (BluetoothEventListener<InfoEvent> subscriber : infoEventListeners) {
+            subscriber.onEvent(infoEvent);
+        }
+    }
+
+    public void subscribeToExceptionEvents(BluetoothEventListener<BluetoothException>
+                                                   exceptionEventListener) {
+        exceptionEventListeners.add(exceptionEventListener);
+    }
+
+    public void unsubscribeFromExceptionEvents(BluetoothEventListener<BluetoothException>
+                                                       exceptionEventListener) {
+        exceptionEventListeners.remove(exceptionEventListener);
+    }
+
+    private void notifySubscribersAboutException(BluetoothException exception) {
+        for (BluetoothEventListener<BluetoothException> subscriber : exceptionEventListeners) {
+            subscriber.onEvent(exception);
+        }
     }
 
     public boolean isBluetoothEnable() {
-        return BluetoothAdapter.getDefaultAdapter().enable();
+        return bluetoothAdapter.isEnabled();
+    }
+
+    public boolean enableBluetoothIfDisabled() {
+        return bluetoothAdapter.enable();
     }
 
     public void startConnectToDeviceTask(BluetoothDevice target) {
-        connectStatus.setValue(ConnectStatus.CONNECTING);
+        notifySubscribersAboutEvent(new ConnectingEvent());
         new ConnectTaskThread(target, this::afterConnect)
                 .start();
     }
@@ -62,22 +111,18 @@ public final class BluetoothDao {
         }
     }
 
-    public void subscribeToBluetoothMessages(OnEventListener<String> messageReceiveListener) {
-        messageReceiveListeners.add(messageReceiveListener);
-    }
-
     private void afterConnect(BluetoothSocket socket) {
         if (socket == null || !socket.isConnected()) {
-            connectStatus.postValue(ConnectStatus.ERROR);
+            notifySubscribersAboutException(new FailedToConnectException());
             return;
         }
         this.bluetoothSocket = socket;
         this.bluetoothThread = createBluetoothThreadBySocket();
         if (bluetoothThread != null) {
             bluetoothThread.start();
-            this.connectStatus.postValue(ConnectStatus.CONNECTED);
+            notifySubscribersAboutEvent(new ConnectedEvent());
         } else {
-            this.connectStatus.postValue(ConnectStatus.ERROR);
+            notifySubscribersAboutException(new WhileConnectingException());
         }
     }
 
@@ -90,7 +135,7 @@ public final class BluetoothDao {
             );
             return bluetoothThread;
         } catch (IOException e) {
-            connectStatus.postValue(ConnectStatus.ERROR);
+            notifySubscribersAboutException(new WhileConnectingException());
         }
         return null;
     }
@@ -129,10 +174,10 @@ public final class BluetoothDao {
 
         private final BufferedReader reader;
         private final BufferedWriter writer;
-        private final List<OnEventListener<String>> messageReceiveListener;
+        private final Set<BluetoothEventListener<String>> messageReceiveListener;
 
         public BluetoothThread(BufferedReader reader, BufferedWriter writer,
-                               List<OnEventListener<String>> messageReceiveListener) {
+                               Set<BluetoothEventListener<String>> messageReceiveListener) {
             this.writer = writer;
             this.reader = reader;
             this.messageReceiveListener = messageReceiveListener;
@@ -157,7 +202,7 @@ public final class BluetoothDao {
         }
 
         private void notifySubscribersAboutMessage(String message) {
-            for (OnEventListener<String> subscriber : messageReceiveListener) {
+            for (BluetoothEventListener<String> subscriber : messageReceiveListener) {
                 subscriber.onEvent(message);
             }
         }
