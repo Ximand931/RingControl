@@ -6,6 +6,8 @@
     <string name="details">Подробнее</string>
     <string name="add">Добавить</string>
     <string name="edit">Редактировать</string>
+    <string name="connect">Подключение к устройству</string>
+    <string name="exception">Ошибка</string>
     <string name="remove">Удалить</string>
     <string name="removing">Удаление</string>
     <string name="removing_description">Вы уверены что хотите удалить расписание?</string>
@@ -46,6 +48,7 @@
     <string name="failed_to_connect">Не удалось подключиться к устройству. Убедитесь, что вы выбрали правильное устройство.</string>
     <string name="error_while_connecting">Ошибка при подключении. Убедитесь, что вы выбрали правильное устройство.</string>
     <string name="auth_error">Ошибка аутентификации</string>
+    <string name="data_updated">Данные обновлены</string>
 
     <string name="lessons">уроки</string>
     <string name="retry">Повторить попытку</string>
@@ -70,5 +73,7 @@
     <string name="cant_find_device">Устройства нет в списке или вы еще не подключились к нему?</string>
     <string name="connect_device">Подключиться к устройству</string>
     <string name="no_one_bonded_device">Телефон не соединен ни с одним Bluetooth-устройством</string>
+    <string name="go_to_settings">Перейти в настройки</string>
+    <string name="choose_device_caption">Выберите подключенное устройство. Для подключения перейдите в настройки</string>
 
 </resources>

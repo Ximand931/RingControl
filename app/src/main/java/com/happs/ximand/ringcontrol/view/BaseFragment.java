@@ -90,12 +90,24 @@ public abstract class BaseFragment<VM extends BaseViewModel, B extends ViewDataB
         B viewDataBinding = DataBindingUtil
                 .inflate(inflater, layoutId, container, false);
         onViewDataBindingCreated(viewDataBinding);
+        setActionBarTitle();
 
         onPreViewModelAttaching(getViewModel());
         viewDataBinding.setVariable(BR.viewModel, viewModel);
         viewDataBinding.setLifecycleOwner(getViewLifecycleOwner());
 
         return viewDataBinding.getRoot();
+    }
+
+    protected void setActionBarTitle() {
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            onSetActionBarTitle(actionBar);
+        }
+    }
+
+    protected void onSetActionBarTitle(@NonNull ActionBar actionBar) {
+
     }
 
     protected void onViewDataBindingCreated(@NonNull B binding) {
@@ -128,20 +140,6 @@ public abstract class BaseFragment<VM extends BaseViewModel, B extends ViewDataB
 
     public String getDefaultTag() {
         return this.getClass().getSimpleName();
-    }
-
-    protected void setActionBarTitle(int resId) {
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(resId);
-        }
-    }
-
-    protected void setActionBarTitle(String string) {
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(string);
-        }
     }
 
     private ActionBar getActionBar() {

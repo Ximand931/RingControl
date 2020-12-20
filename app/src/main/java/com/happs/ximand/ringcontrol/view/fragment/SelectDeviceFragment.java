@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -28,6 +29,11 @@ public class SelectDeviceFragment extends BaseFragmentWithRecyclerView<SelectDev
     }
 
     @Override
+    protected void onSetActionBarTitle(@NonNull ActionBar actionBar) {
+        actionBar.setTitle(R.string.connect);
+    }
+
+    @Override
     protected void onViewDataBindingCreated(@NonNull FragmentSelectDevicesBinding binding) {
         super.onViewDataBindingCreated(binding);
         swipeRefreshLayout = binding.swipeRefreshLayout;
@@ -47,6 +53,7 @@ public class SelectDeviceFragment extends BaseFragmentWithRecyclerView<SelectDev
     @Override
     protected void onPreAttachRecyclerViewAdapter(BluetoothDevicesRecyclerViewAdapter adapter) {
         adapter.setDeviceSelectedListener(getViewModel()::notifyDeviceSelected);
+        adapter.setConnectingDeviceAddress(getViewModel().getConnectingAddress());
     }
 
     @Override

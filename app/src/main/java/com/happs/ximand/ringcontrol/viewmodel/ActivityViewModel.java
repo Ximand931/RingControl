@@ -11,7 +11,7 @@ import com.happs.ximand.ringcontrol.model.dao.BluetoothEventListener;
 import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
 import com.happs.ximand.ringcontrol.model.object.exception.BluetoothException;
 import com.happs.ximand.ringcontrol.model.object.exception.BluetoothIsDisabledException;
-import com.happs.ximand.ringcontrol.model.object.info.InfoEvent;
+import com.happs.ximand.ringcontrol.model.object.info.BluetoothEvent;
 import com.happs.ximand.ringcontrol.view.BaseFragment;
 import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment;
 import com.happs.ximand.ringcontrol.view.fragment.ExceptionFragment;
@@ -24,7 +24,7 @@ public class ActivityViewModel extends ViewModel {
     private final MutableLiveData<Integer> infoLiveData = new MutableLiveData<>();
     private final MutableLiveData<Integer> errorLiveData = new MutableLiveData<>();
 
-    private final BluetoothEventListener<InfoEvent> infoEventListener;
+    private final BluetoothEventListener<BluetoothEvent> infoEventListener;
     private final BluetoothEventListener<BluetoothException> exceptionEventListener;
 
     private final SingleLiveEvent<Void> enableBluetoothLiveEvent = new SingleLiveEvent<>();
@@ -48,7 +48,7 @@ public class ActivityViewModel extends ViewModel {
         return enableBluetoothLiveEvent;
     }
 
-    private void onInfoEvent(InfoEvent infoEvent) {
+    private void onInfoEvent(BluetoothEvent infoEvent) {
         infoLiveData.postValue(infoEvent.getMessageResId());
     }
 

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.FragmentExceptionBinding;
@@ -25,6 +26,11 @@ public class ExceptionFragment extends BaseFragment<ExceptionViewModel, Fragment
         ExceptionFragment exceptionFragment = new ExceptionFragment();
         exceptionFragment.exception = e;
         return exceptionFragment;
+    }
+
+    @Override
+    protected void onSetActionBarTitle(@NonNull ActionBar actionBar) {
+        actionBar.setTitle(R.string.title_exception);
     }
 
     @Override

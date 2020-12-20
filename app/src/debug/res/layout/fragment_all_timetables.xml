@@ -12,7 +12,6 @@
             name="sharedViewModel"
             type="com.happs.ximand.ringcontrol.viewmodel.ActivityViewModel" />
 
-        <import type="com.happs.ximand.ringcontrol.viewmodel.ConnectStatus" />
     </data>
 
     <androidx.core.widget.NestedScrollView

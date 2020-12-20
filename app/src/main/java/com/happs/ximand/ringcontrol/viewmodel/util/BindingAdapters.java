@@ -1,6 +1,7 @@
 package com.happs.ximand.ringcontrol.viewmodel.util;
 
 import android.os.Handler;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,5 +40,17 @@ public final class BindingAdapters {
         return true;
     }
 
+    @BindingAdapter("inactiveOnEvent")
+    public static void inactiveOnEvent(@NonNull View view, boolean event) {
+        if (event) {
+            view.setEnabled(false);
+            AnimationUtils.inactiveAnimation(view);
+        } else {
+            AnimationUtils.activeAnimation(view);
+            new Handler().postDelayed(
+                    () -> view.setEnabled(true), AnimationUtils.ALPHA_DURATION
+            );
+        }
+    }
 
 }

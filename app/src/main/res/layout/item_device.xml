@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -8,19 +9,24 @@
             name="device"
             type="android.bluetooth.BluetoothDevice" />
 
+        <variable
+            name="connectingEvent"
+            type="androidx.databinding.ObservableBoolean" />
+
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:inactiveOnEvent="@{connectingEvent}">
 
         <TextView
             style="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="74dp"
             android:layout_marginTop="12dp"
             android:text="@{device.name}"
             tools:text="Bluetooth Device" />
@@ -29,18 +35,11 @@
             style="@style/TextAppearance.MaterialComponents.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="74dp"
             android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp"
             android:text="@{device.address == null ? @string/address_is_empty : device.address}"
             tools:text="00:00:00:00:00" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="12dp"
-            android:background="@color/colorDivider" />
 
     </LinearLayout>
 </layout>

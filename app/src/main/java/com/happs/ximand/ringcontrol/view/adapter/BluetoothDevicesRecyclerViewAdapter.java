@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ObservableBoolean;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.happs.ximand.ringcontrol.OnEventListener;
@@ -18,6 +19,7 @@ public class BluetoothDevicesRecyclerViewAdapter extends BaseRecyclerViewAdapter
         BluetoothDevicesRecyclerViewAdapter.DeviceViewHolder> {
 
     private OnEventListener<BluetoothDevice> deviceSelectedListener;
+    private ObservableBoolean connecting;
 
     public BluetoothDevicesRecyclerViewAdapter(List<BluetoothDevice> items) {
         super(items);
@@ -25,6 +27,10 @@ public class BluetoothDevicesRecyclerViewAdapter extends BaseRecyclerViewAdapter
 
     public void setDeviceSelectedListener(OnEventListener<BluetoothDevice> listener) {
         this.deviceSelectedListener = listener;
+    }
+
+    public void setConnectingDeviceAddress(ObservableBoolean connecting) {
+        this.connecting = connecting;
     }
 
     @NonNull
@@ -37,7 +43,7 @@ public class BluetoothDevicesRecyclerViewAdapter extends BaseRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(@NonNull DeviceViewHolder holder, int position) {
-        holder.bind(getItems().get(position), deviceSelectedListener);
+        holder.bind(getItems().get(position), deviceSelectedListener, connecting);
     }
 
     static class DeviceViewHolder extends RecyclerView.ViewHolder {
@@ -49,8 +55,10 @@ public class BluetoothDevicesRecyclerViewAdapter extends BaseRecyclerViewAdapter
             this.binding = binding;
         }
 
-        void bind(BluetoothDevice device, OnEventListener<BluetoothDevice> selectedListener) {
+        void bind(BluetoothDevice device, OnEventListener<BluetoothDevice> selectedListener,
+                  ObservableBoolean connecting) {
             binding.setDevice(device);
+            binding.setConnectingEvent(connecting);
             binding.getRoot().setOnClickListener(v -> selectedListener.onEvent(device));
             binding.executePendingBindings();
         }

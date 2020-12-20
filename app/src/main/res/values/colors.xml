@@ -9,7 +9,7 @@
     <color name="colorHeadline">#DE000000</color>
     <color name="colorCaption">#99000000</color>
     <color name="colorCardBackground">#ffffff</color>
-    <color name="colorIconToolbar">#7E7E7E</color>
+    <color name="colorIconToolbar">@android:color/black</color>
     <color name="colorIcon">#7E7E7E</color>
     <color name="colorIconSnackbar">@android:color/white</color>
     <color name="colorSnackbarError">#CF6679</color>

@@ -8,9 +8,7 @@ import com.happs.ximand.ringcontrol.OnEventListener;
 import com.happs.ximand.ringcontrol.model.object.exception.BluetoothException;
 import com.happs.ximand.ringcontrol.model.object.exception.FailedToConnectException;
 import com.happs.ximand.ringcontrol.model.object.exception.WhileConnectingException;
-import com.happs.ximand.ringcontrol.model.object.info.ConnectedEvent;
-import com.happs.ximand.ringcontrol.model.object.info.ConnectingEvent;
-import com.happs.ximand.ringcontrol.model.object.info.InfoEvent;
+import com.happs.ximand.ringcontrol.model.object.info.BluetoothEvent;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -29,7 +27,7 @@ public final class BluetoothDao {
 
     private final Set<BluetoothEventListener<String>> messageReceiveListeners =
             new HashSet<>();
-    private final Set<BluetoothEventListener<InfoEvent>> infoEventListeners =
+    private final Set<BluetoothEventListener<BluetoothEvent>> infoEventListeners =
             new HashSet<>();
     private final Set<BluetoothEventListener<BluetoothException>> exceptionEventListeners =
             new HashSet<>();
@@ -57,16 +55,16 @@ public final class BluetoothDao {
         messageReceiveListeners.remove(messageReceiveListener);
     }
 
-    public void subscribeToInfoEvents(BluetoothEventListener<InfoEvent> infoEventListener) {
+    public void subscribeToInfoEvents(BluetoothEventListener<BluetoothEvent> infoEventListener) {
         infoEventListeners.add(infoEventListener);
     }
 
-    public void unsubscribeFromInfoEvents(BluetoothEventListener<InfoEvent> infoEventListener) {
+    public void unsubscribeFromInfoEvents(BluetoothEventListener<BluetoothEvent> infoEventListener) {
         infoEventListeners.remove(infoEventListener);
     }
 
-    private void notifySubscribersAboutEvent(InfoEvent infoEvent) {
-        for (BluetoothEventListener<InfoEvent> subscriber : infoEventListeners) {
+    private void notifySubscribersAboutEvent(BluetoothEvent infoEvent) {
+        for (BluetoothEventListener<BluetoothEvent> subscriber : infoEventListeners) {
             subscriber.onEvent(infoEvent);
         }
     }
@@ -91,12 +89,8 @@ public final class BluetoothDao {
         return bluetoothAdapter.isEnabled();
     }
 
-    public boolean enableBluetoothIfDisabled() {
-        return bluetoothAdapter.enable();
-    }
-
     public void startConnectToDeviceTask(BluetoothDevice target) {
-        notifySubscribersAboutEvent(new ConnectingEvent());
+        notifySubscribersAboutEvent(BluetoothEvent.CONNECTING);
         new ConnectTaskThread(target, this::afterConnect)
                 .start();
     }
@@ -114,15 +108,17 @@ public final class BluetoothDao {
     private void afterConnect(BluetoothSocket socket) {
         if (socket == null || !socket.isConnected()) {
             notifySubscribersAboutException(new FailedToConnectException());
+            notifySubscribersAboutEvent(BluetoothEvent.ERROR_WHILE_CONNECTING);
             return;
         }
         this.bluetoothSocket = socket;
         this.bluetoothThread = createBluetoothThreadBySocket();
         if (bluetoothThread != null) {
             bluetoothThread.start();
-            notifySubscribersAboutEvent(new ConnectedEvent());
+            notifySubscribersAboutEvent(BluetoothEvent.CONNECTED);
         } else {
             notifySubscribersAboutException(new WhileConnectingException());
+            notifySubscribersAboutEvent(BluetoothEvent.ERROR_WHILE_CONNECTING);
         }
     }
 
@@ -135,9 +131,13 @@ public final class BluetoothDao {
             );
             return bluetoothThread;
         } catch (IOException e) {
-            notifySubscribersAboutException(new WhileConnectingException());
+            notifySubscribersAboutEvent(BluetoothEvent.ERROR_WHILE_CONNECTING);
         }
         return null;
+    }
+
+    private void startAuthentification() {
+
     }
 
     public void clear() {

@@ -226,7 +226,7 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
         EditTimetableViewHolder(@NonNull ItemEditLessonBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            this.timeEditText = binding.input;
+            this.timeEditText = binding.timeEditText;
         }
 
         void bind(ObservableField<String> input,
@@ -249,7 +249,7 @@ public class EditTimetableRecyclerViewAdapter extends BaseRecyclerViewAdapter<Le
             maskWatcher.setLineFilledListener(
                     () -> lineFilledEvent.onEvent(getAdapterPosition())
             );
-            binding.input.addTextChangedListener(maskWatcher);
+            binding.timeEditText.addTextChangedListener(maskWatcher);
         }
 
     }

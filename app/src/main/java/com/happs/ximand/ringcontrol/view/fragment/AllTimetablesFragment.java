@@ -1,10 +1,7 @@
 package com.happs.ximand.ringcontrol.view.fragment;
 
-import android.os.Bundle;
-import android.view.View;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.happs.ximand.ringcontrol.R;
@@ -44,9 +41,8 @@ public class AllTimetablesFragment extends BaseFragmentWithRecyclerView<AllTimet
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setActionBarTitle(R.string.all_timetables);
+    protected void onSetActionBarTitle(@NonNull ActionBar actionBar) {
+        actionBar.setTitle(R.string.all_timetables);
     }
 
     @Override

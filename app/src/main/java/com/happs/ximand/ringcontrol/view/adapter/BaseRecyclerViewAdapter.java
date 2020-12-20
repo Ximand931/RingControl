@@ -31,24 +31,32 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
 
     private void notifyItemAdded(List<T> updatedItems) {
         this.items = updatedItems;
-        notifyItemInserted(updatedItems.size() - 1);
+        notifyItemInserted(updatedItems.size());
     }
 
     private void notifyItemRemoved(List<T> updatedItems) {
         int difference = findDifference(updatedItems);
         this.items = updatedItems;
-        notifyItemRemoved(difference);
+        if (difference == -1) {
+            notifyDataSetChanged();
+        } else {
+            notifyItemRangeRemoved(difference, getItemCount());
+        }
     }
 
     private void notifyItemUpdated(List<T> updatedItems) {
         int dif = findDifference(updatedItems);
         this.items = updatedItems;
-        //notifyItemChanged(dif);
+        if (dif == -1) {
+            notifyDataSetChanged();
+        } else {
+            notifyItemChanged(dif);
+        }
     }
 
     private int findDifference(List<T> updatedItems) {
         if (updatedItems.isEmpty() || items.isEmpty())
-            return 0;
+            return -1;
         for (int i = 0; i < updatedItems.size(); i++) {
             T itemFromUpdatedList = updatedItems.get(i);
             T itemFromOldList = items.get(i);
