@@ -78,6 +78,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:enabled="@{false}"
+                        android:onClick="@{() -> viewModel.applyTestTimetable()}"
                         android:paddingStart="0dp"
                         android:paddingEnd="0dp"
                         android:text="@string/apply"
@@ -122,8 +123,8 @@
                 android:id="@+id/all_timetables_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="true"
                 android:layout_marginTop="16dp"
+                android:nestedScrollingEnabled="true"
                 android:overScrollMode="never" />
 
         </LinearLayout>

@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.happs.ximand.ringcontrol.BR;
+import com.happs.ximand.ringcontrol.viewmodel.SnackbarDto;
 import com.happs.ximand.ringcontrol.viewmodel.fragment.BaseViewModel;
 
 import java.lang.reflect.ParameterizedType;
@@ -125,12 +126,23 @@ public abstract class BaseFragment<VM extends BaseViewModel, B extends ViewDataB
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getViewModel().getMakeSnackbarEvent().observe(getViewLifecycleOwner(), snackbarDto -> {
-            if (getView() != null) {
-                Snackbar.make(getView(), snackbarDto.getMessageResId(), snackbarDto.getDuration())
-                        .show();
+        getViewModel().getMakeSnackbarEvent().observe(
+                getViewLifecycleOwner(), this::showSnackbarBySnackbarDto
+        );
+    }
+
+    private void showSnackbarBySnackbarDto(SnackbarDto snackbarDto) {
+        if (getView() != null) {
+            Snackbar snackbar = Snackbar.make(
+                    getView(), snackbarDto.getMessageResId(), snackbarDto.getDuration()
+            );
+            if (snackbarDto.getActionId() != SnackbarDto.ACTION_NONE) {
+                snackbar.setAction(
+                        snackbarDto.getActionId(), snackbarDto.getActionClickListener()
+                );
             }
-        });
+            snackbar.show();
+        }
     }
 
     @Override

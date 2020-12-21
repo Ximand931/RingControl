@@ -6,13 +6,13 @@ import com.happs.ximand.ringcontrol.model.object.timetable.Timetable;
 
 public class ReplaceTimetableCommand extends BluetoothCommand {
 
-    private static final String REPLACE_TIMETABLE_COMMAND_CODE = "01";
+    private static final String REPLACE_TIMETABLE_COMMAND_CODE = "10";
     private static final String TIMETABLE_ID_STUB = "1";
 
     private final StringBuilder commandBuilder = new StringBuilder();
     private final Timetable timetable;
 
-    protected ReplaceTimetableCommand(Timetable newTimetable) {
+    public ReplaceTimetableCommand(Timetable newTimetable) {
         super(REPLACE_TIMETABLE_COMMAND_CODE);
         this.timetable = newTimetable;
     }

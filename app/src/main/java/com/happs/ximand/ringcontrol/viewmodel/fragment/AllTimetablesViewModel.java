@@ -1,17 +1,25 @@
 package com.happs.ximand.ringcontrol.viewmodel.fragment;
 
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableInt;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
+import com.happs.ximand.ringcontrol.model.dao.BluetoothDao;
+import com.happs.ximand.ringcontrol.model.dao.BluetoothEventListener;
 import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
+import com.happs.ximand.ringcontrol.model.object.command.ReplaceTimetableCommand;
+import com.happs.ximand.ringcontrol.model.object.info.BluetoothEvent;
 import com.happs.ximand.ringcontrol.model.object.timetable.Lesson;
 import com.happs.ximand.ringcontrol.model.object.timetable.Timetable;
 import com.happs.ximand.ringcontrol.model.repository.impl.TimetableRepository;
 import com.happs.ximand.ringcontrol.model.specification.impl.GetAllSqlSpecification;
 import com.happs.ximand.ringcontrol.view.fragment.AddTimetableFragment;
 import com.happs.ximand.ringcontrol.view.fragment.TimetableInfoFragment;
+import com.happs.ximand.ringcontrol.viewmodel.SnackbarDto;
 import com.happs.ximand.ringcontrol.viewmodel.util.TimeUtils;
 
 import java.util.ArrayList;
@@ -19,12 +27,25 @@ import java.util.List;
 
 public class AllTimetablesViewModel extends BaseViewModel {
 
+    private static final int APPLIED_TIMETABLE_NONE = -2;
+
     private final MutableLiveData<List<Timetable>> allTimetablesLiveData = new MutableLiveData<>();
     private final MutableLiveData<Integer> numOfTestLessonsLiveData = new MutableLiveData<>();
+    private final BluetoothEventListener<BluetoothEvent> bluetoothEventListener;
+    private final ObservableBoolean applyingPossible = new ObservableBoolean(false);
+    private final ObservableInt lastAppliedTimetableId;
+
+    private boolean currentSendTimetableTask = false;
+    private int lastSentTimetableId = APPLIED_TIMETABLE_NONE;
 
     public AllTimetablesViewModel() {
         this.numOfTestLessonsLiveData.setValue(2);
-        updateTimetables();
+        this.bluetoothEventListener = new BluetoothEventListener<>(this::onBluetoothEvent);
+        this.lastAppliedTimetableId = new ObservableInt(
+                SharedPreferencesDao.getInstance().getAppliedTimetableId()
+        );
+        updateData();
+        startConnectingToSavedDevice();
     }
 
     public LiveData<List<Timetable>> getAllTimetablesLiveData() {
@@ -35,15 +56,80 @@ public class AllTimetablesViewModel extends BaseViewModel {
         return numOfTestLessonsLiveData;
     }
 
-    public void updateTimetables() {
+    public ObservableBoolean getApplyingPossible() {
+        return applyingPossible;
+    }
+
+    public ObservableInt getLastAppliedTimetableId() {
+        return lastAppliedTimetableId;
+    }
+
+    private void onBluetoothEvent(BluetoothEvent event) {
+        if (event == BluetoothEvent.READY) {
+            applyingPossible.set(true);
+            updateLastAppliedTimetableIfNecessary();
+        } else if (applyingPossible.get()) {
+            applyingPossible.set(false);
+        }
+    }
+
+    private void updateLastAppliedTimetableIfNecessary() {
+        if (currentSendTimetableTask && lastSentTimetableId != lastAppliedTimetableId.get()) {
+            SharedPreferencesDao.getInstance()
+                    .updateAppliedTimetableId(lastSentTimetableId);
+        }
+        currentSendTimetableTask = false;
+    }
+
+    @Override
+    public boolean notifyOptionsMenuItemClicked(int itemId) {
+        if (itemId == R.id.toolbar_add) {
+            moveToAddTimetableFragment();
+            return true;
+        }
+        return false;
+    }
+
+    private void moveToAddTimetableFragment() {
+        FragmentNavigation.getInstance()
+                .navigateToFragment(AddTimetableFragment.newInstance());
+    }
+
+    public void addTestLesson() {
+        @SuppressWarnings("ConstantConditions")
+        int numOfTestLessons = numOfTestLessonsLiveData.getValue();
+        numOfTestLessonsLiveData.setValue(numOfTestLessons + 1);
+    }
+
+    public void removeTestLesson() {
+        @SuppressWarnings("ConstantConditions")
+        int numOfTestLessons = numOfTestLessonsLiveData.getValue();
+        numOfTestLessonsLiveData.setValue(numOfTestLessons - 1);
+    }
+
+    public void updateData() {
         List<Timetable> timetables = TimetableRepository.getInstance()
                 .query(new GetAllSqlSpecification());
         allTimetablesLiveData.setValue(timetables);
     }
 
+    private void startConnectingToSavedDevice() {
+        String savedAddress = SharedPreferencesDao.getInstance().getTargetDeviceAddress();
+        BluetoothDao.getInstance().startConnectToDeviceTask(savedAddress);
+    }
+
     public void showTimetableDetails(Timetable timetable) {
         TimetableInfoFragment fragment = TimetableInfoFragment.newInstance(timetable);
         FragmentNavigation.getInstance().navigateToFragment(fragment);
+    }
+
+    public void notifyAppliedTimetableUpdated() {
+        SnackbarDto snackbarDto = new SnackbarDto(
+                R.string.applied_timetable_updated, Snackbar.LENGTH_SHORT
+        );
+        snackbarDto.setActionId(R.string.apply);
+        snackbarDto.setActionClickListener(v -> applyUpdatedCurrentTimetable());
+        getMakeSnackbarEvent().setValue(snackbarDto);
     }
 
     public void applyUpdatedCurrentTimetable() {
@@ -59,45 +145,29 @@ public class AllTimetablesViewModel extends BaseViewModel {
         int numOfTestLessons = numOfTestLessonsLiveData.getValue();
         List<Lesson> lessons = new ArrayList<>(numOfTestLessons * 2);
         for (int i = 1; i <= numOfTestLessons * 2; i += 2) {
-            lessons.add(new Lesson(
-                    i / 2 + 1, TimeUtils.getCurrentTimeWithFewMinutes(i),
-                    TimeUtils.getCurrentTimeWithFewMinutes(i + 1)
-            ));
+            lessons.add(createLessonForTestTimetable(i));
         }
         applyTimetable(new Timetable(-1, "Test", lessons));
     }
 
+    private Lesson createLessonForTestTimetable(int extraMinutes) {
+        int number = extraMinutes / 2 + 1;
+        return new Lesson(number,
+                TimeUtils.getCurrentTimeWithFewMinutes(extraMinutes),
+                TimeUtils.getCurrentTimeWithFewMinutes(extraMinutes + 1)
+        );
+    }
+
     public void applyTimetable(Timetable timetable) {
-
-    }
-
-    public void addTestLesson() {
-        @SuppressWarnings("ConstantConditions")
-        int numOfTestLessons = numOfTestLessonsLiveData.getValue();
-        numOfTestLessonsLiveData.setValue(numOfTestLessons + 1);
-    }
-
-    public void removeTestLesson() {
-        @SuppressWarnings("ConstantConditions")
-        int numOfTestLessons = numOfTestLessonsLiveData.getValue();
-        numOfTestLessonsLiveData.setValue(numOfTestLessons - 1);
+        String command = new ReplaceTimetableCommand(timetable).getCommand();
+        BluetoothDao.getInstance().sendMessage(command);
+        currentSendTimetableTask = true;
+        lastSentTimetableId = timetable.getId();
     }
 
     @Override
-    public boolean notifyOptionsMenuItemClicked(int itemId) {
-        if (itemId == R.id.toolbar_add) {
-            moveToAddTimetableFragment();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isLastAppliedTimetable(Timetable timetable) {
-        return timetable.getId() == SharedPreferencesDao.getInstance().getAppliedTimetableId();
-    }
-
-    private void moveToAddTimetableFragment() {
-        FragmentNavigation.getInstance()
-                .navigateToFragment(AddTimetableFragment.newInstance());
+    protected void onCleared() {
+        super.onCleared();
+        BluetoothDao.getInstance().unsubscribeFromInfoEvents(bluetoothEventListener);
     }
 }

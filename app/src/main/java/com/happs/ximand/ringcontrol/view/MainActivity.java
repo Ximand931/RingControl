@@ -80,9 +80,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void observeViewModelEvents() {
-        viewModel.getErrorLiveData().observe(
-                this, this::showErrorSnackbar
-        );
         viewModel.getInfoLiveData().observe(
                 this, this::showInfoSnackbar
         );
@@ -108,28 +105,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showErrorSnackbar(int messageResId) {
-        showSnackbarWithIcon(messageResId, R.drawable.ic_snackbar_error);
-    }
-
     private void showInfoSnackbar(int messageResId) {
-        showSnackbarWithIcon(messageResId, R.drawable.ic_snackbar_info);
-    }
-
-    private void showSnackbarWithIcon(int messageResId, int iconResId) {
         View container = findViewById(R.id.container_main);
         Snackbar connectedSnackbar = Snackbar
                 .make(container, messageResId, Snackbar.LENGTH_SHORT);
-        addIconToSnackbar(connectedSnackbar, iconResId);
+        addIconToSnackbar(connectedSnackbar);
         connectedSnackbar.show();
     }
 
-    private void addIconToSnackbar(Snackbar snackbar, int iconResId) {
+    private void addIconToSnackbar(Snackbar snackbar) {
         View snackbarLayout = snackbar.getView();
         TextView textView = (TextView) snackbarLayout
                 .findViewById(com.google.android.material.R.id.snackbar_text);
 
-        textView.setCompoundDrawablesWithIntrinsicBounds(iconResId, 0, 0, 0);
+        textView.setCompoundDrawablesWithIntrinsicBounds(
+                R.drawable.ic_snackbar_info, 0, 0, 0
+        );
         textView.setCompoundDrawablePadding(
                 getResources().getDimensionPixelOffset(R.dimen.snackbar_icon_padding));
     }

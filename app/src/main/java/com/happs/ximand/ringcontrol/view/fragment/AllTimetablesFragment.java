@@ -33,6 +33,7 @@ public class AllTimetablesFragment extends BaseFragmentWithRecyclerView<AllTimet
         return binding.allTimetablesRecyclerView;
     }
 
+
     @Override
     protected void onPreViewModelAttaching(@NonNull AllTimetablesViewModel viewModel) {
         viewModel.getAllTimetablesLiveData().observe(
@@ -52,18 +53,18 @@ public class AllTimetablesFragment extends BaseFragmentWithRecyclerView<AllTimet
 
     @Override
     protected void onPreAttachRecyclerViewAdapter(AllTimetablesRecyclerViewAdapter adapter) {
-        adapter.setApplyTimetableClickListener(
-                getViewModel()::applyTimetable
-        );
-        adapter.setDetailsTimetableClickListener(
-                getViewModel()::showTimetableDetails
-        );
+        adapter.setApplyingPossible(getViewModel().getApplyingPossible());
+        adapter.setAppliedTimetableId(getViewModel().getLastAppliedTimetableId());
+        adapter.setApplyTimetableClickListener(getViewModel()::applyTimetable);
+        adapter.setDetailsTimetableClickListener(getViewModel()::showTimetableDetails);
     }
 
     @Override
     public void onExternalEvent(int eventId) {
         if (eventId == EVENT_TIMETABLE_LIST_UPDATED) {
-            getViewModel().updateTimetables();
+            getViewModel().updateData();
+        } else if (eventId == EVENT_APPLIED_TIMETABLE_UPDATED) {
+            getViewModel().notifyAppliedTimetableUpdated();
         }
     }
 }

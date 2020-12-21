@@ -8,6 +8,8 @@ import com.happs.ximand.ringcontrol.OnEventListener;
 import com.happs.ximand.ringcontrol.model.object.exception.BluetoothException;
 import com.happs.ximand.ringcontrol.model.object.exception.FailedToConnectException;
 import com.happs.ximand.ringcontrol.model.object.exception.WhileConnectingException;
+import com.happs.ximand.ringcontrol.model.object.exception.WhileReadingException;
+import com.happs.ximand.ringcontrol.model.object.exception.WhileSendingException;
 import com.happs.ximand.ringcontrol.model.object.info.BluetoothEvent;
 
 import java.io.BufferedReader;
@@ -53,6 +55,12 @@ public final class BluetoothDao {
     public void unsubscribeFromBluetoothMessages(BluetoothEventListener<String>
                                                          messageReceiveListener) {
         messageReceiveListeners.remove(messageReceiveListener);
+    }
+
+    private void notifySubscribersAboutMessage(String message) {
+        for (BluetoothEventListener<String> subscriber : messageReceiveListeners) {
+            subscriber.onEvent(message);
+        }
     }
 
     public void subscribeToInfoEvents(BluetoothEventListener<BluetoothEvent> infoEventListener) {
@@ -115,7 +123,7 @@ public final class BluetoothDao {
         this.bluetoothThread = createBluetoothThreadBySocket();
         if (bluetoothThread != null) {
             bluetoothThread.start();
-            notifySubscribersAboutEvent(BluetoothEvent.CONNECTED);
+            notifySubscribersAboutEvent(BluetoothEvent.READY);
         } else {
             notifySubscribersAboutException(new WhileConnectingException());
             notifySubscribersAboutEvent(BluetoothEvent.ERROR_WHILE_CONNECTING);
@@ -126,8 +134,7 @@ public final class BluetoothDao {
         try {
             bluetoothThread = new BluetoothThread(
                     new BufferedReader(new InputStreamReader(bluetoothSocket.getInputStream())),
-                    new BufferedWriter(new OutputStreamWriter(bluetoothSocket.getOutputStream())),
-                    messageReceiveListeners
+                    new BufferedWriter(new OutputStreamWriter(bluetoothSocket.getOutputStream()))
             );
             return bluetoothThread;
         } catch (IOException e) {
@@ -138,6 +145,10 @@ public final class BluetoothDao {
 
     private void startAuthentification() {
 
+    }
+
+    public void sendMessage(String message) {
+        bluetoothThread.writeString(message);
     }
 
     public void clear() {
@@ -170,17 +181,14 @@ public final class BluetoothDao {
         }
     }
 
-    private static class BluetoothThread extends Thread {
+    private class BluetoothThread extends Thread {
 
         private final BufferedReader reader;
         private final BufferedWriter writer;
-        private final Set<BluetoothEventListener<String>> messageReceiveListener;
 
-        public BluetoothThread(BufferedReader reader, BufferedWriter writer,
-                               Set<BluetoothEventListener<String>> messageReceiveListener) {
+        public BluetoothThread(BufferedReader reader, BufferedWriter writer) {
             this.writer = writer;
             this.reader = reader;
-            this.messageReceiveListener = messageReceiveListener;
         }
 
         @Override
@@ -195,23 +203,20 @@ public final class BluetoothDao {
                 } catch (InterruptedException e) {
                     break;
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    notifySubscribersAboutException(new WhileReadingException());
                     break;
                 }
             }
         }
 
-        private void notifySubscribersAboutMessage(String message) {
-            for (BluetoothEventListener<String> subscriber : messageReceiveListener) {
-                subscriber.onEvent(message);
-            }
-        }
-
         public void writeString(String string) {
             try {
+                notifySubscribersAboutEvent(BluetoothEvent.SENDING_DATA);
                 writer.write(string);
+                notifySubscribersAboutEvent(BluetoothEvent.READY);
             } catch (IOException e) {
-                e.printStackTrace();
+                notifySubscribersAboutEvent(BluetoothEvent.ERROR_WHILE_SENDING);
+                notifySubscribersAboutException(new WhileSendingException());
             }
         }
 

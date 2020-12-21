@@ -8,6 +8,10 @@
     <string name="edit">Редактировать</string>
     <string name="connect">Подключение к устройству</string>
     <string name="exception">Ошибка</string>
+    <string name="auth">Аутентификация</string>
+    <string name="sending_data">Отправление данных</string>
+    <string name="error_while_sending_data">Ошибка при отправке данных</string>
+    <string name="ready">Задача завершена</string>
     <string name="remove">Удалить</string>
     <string name="removing">Удаление</string>
     <string name="removing_description">Вы уверены что хотите удалить расписание?</string>
@@ -49,6 +53,7 @@
     <string name="error_while_connecting">Ошибка при подключении. Убедитесь, что вы выбрали правильное устройство.</string>
     <string name="auth_error">Ошибка аутентификации</string>
     <string name="data_updated">Данные обновлены</string>
+    <string name="error_while_reading">Ошибка при чтении входящего сообщения</string>
 
     <string name="lessons">уроки</string>
     <string name="retry">Повторить попытку</string>

@@ -22,7 +22,6 @@ public class ActivityViewModel extends ViewModel {
     private final BluetoothDao bluetoothDao = BluetoothDao.getInstance();
 
     private final MutableLiveData<Integer> infoLiveData = new MutableLiveData<>();
-    private final MutableLiveData<Integer> errorLiveData = new MutableLiveData<>();
 
     private final BluetoothEventListener<BluetoothEvent> infoEventListener;
     private final BluetoothEventListener<BluetoothException> exceptionEventListener;
@@ -40,10 +39,6 @@ public class ActivityViewModel extends ViewModel {
         return infoLiveData;
     }
 
-    public LiveData<Integer> getErrorLiveData() {
-        return errorLiveData;
-    }
-
     public SingleLiveEvent<Void> getEnableBluetoothLiveEvent() {
         return enableBluetoothLiveEvent;
     }
@@ -53,7 +48,6 @@ public class ActivityViewModel extends ViewModel {
     }
 
     private void onExceptionEvent(BluetoothException e) {
-        errorLiveData.postValue(e.getMessageResId());
         exceptionCounter++;
         showExceptionFragmentIfManyErrors(e);
     }

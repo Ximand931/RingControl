@@ -28,16 +28,14 @@ public class AllTimetablesRecyclerViewAdapter extends BaseRecyclerViewAdapter<Ti
 
     public AllTimetablesRecyclerViewAdapter(List<Timetable> timetables) {
         super(timetables);
-        this.applyingPossible = new ObservableBoolean(false);
-        this.appliedTimetableId = new ObservableInt(-1);
     }
 
-    public void setApplyingPossible(boolean applyingPossible) {
-        this.applyingPossible.set(applyingPossible);
+    public void setApplyingPossible(ObservableBoolean applyingPossible) {
+        this.applyingPossible = applyingPossible;
     }
 
-    public void setAppliedTimetableId(int id) {
-        this.appliedTimetableId.set(id);
+    public void setAppliedTimetableId(ObservableInt appliedTimetableId) {
+        this.appliedTimetableId = appliedTimetableId;
     }
 
     public void setApplyTimetableClickListener(@Nullable OnEventListener<Timetable>
@@ -73,9 +71,11 @@ public class AllTimetablesRecyclerViewAdapter extends BaseRecyclerViewAdapter<Ti
             this.binding = binding;
         }
 
-        void bind(Timetable timetable, ObservableBoolean applyingPossible, ObservableInt appliedTimetableId,
+        void bind(Timetable timetable, ObservableBoolean applyingPossible,
+                  ObservableInt appliedTimetableId,
                   OnEventListener<Timetable> applyTimetableClickListener,
                   OnEventListener<Timetable> detailsTimetableClickListener) {
+
             binding.setTimetable(timetable);
             binding.setApplyingPossible(applyingPossible);
             binding.setAppliedTimetableId(appliedTimetableId);
