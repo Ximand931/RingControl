@@ -1,5 +1,6 @@
 package com.happs.ximand.ringcontrol;
 
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.happs.ximand.ringcontrol.view.BaseFragment;
@@ -39,8 +40,7 @@ public class FragmentNavigation {
         }
     }
 
-    @SuppressWarnings("rawtypes")
-    public void navigateToFragment(BaseFragment fragment) {
+    public void navigateToFragment(Fragment fragment) {
         FragmentManager manager = managerRef.get();
         if (manager != null) {
             FragmentTransactionsHelper.replaceFragment(manager, fragment);

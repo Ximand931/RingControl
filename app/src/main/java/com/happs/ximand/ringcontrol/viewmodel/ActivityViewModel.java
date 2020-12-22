@@ -16,6 +16,7 @@ import com.happs.ximand.ringcontrol.view.BaseFragment;
 import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment;
 import com.happs.ximand.ringcontrol.view.fragment.ExceptionFragment;
 import com.happs.ximand.ringcontrol.view.fragment.SelectDeviceFragment;
+import com.happs.ximand.ringcontrol.view.fragment.SettingsFragment;
 
 public class ActivityViewModel extends ViewModel {
 
@@ -59,11 +60,13 @@ public class ActivityViewModel extends ViewModel {
     }
 
     public void afterOnCreate() {
+        FragmentNavigation.getInstance().navigateToFragment(SettingsFragment.newInstance());
+        /*
         if (bluetoothDao.isBluetoothEnable()) {
             onBluetoothEnabled();
         } else {
             enableBluetoothLiveEvent.call();
-        }
+        }*/
     }
 
     public void onBluetoothEnabled() {

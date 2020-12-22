@@ -26,6 +26,9 @@ public final class SharedPreferencesDao {
     private static final String PREF_APPLIED_TIMETABLE = "APPLIED_TIMETABLE_ID";
     private static final int APPLIED_TIMETABLE_DEF_VALUE = 1;
 
+    private static final String PREF_RING_DURATION = "RING_DURATION";
+    private static final int RING_DURATION_DEF_VALUE = 3000;
+
     private SharedPreferences preferences;
 
     private SharedPreferencesDao(Application application) {
@@ -52,4 +55,15 @@ public final class SharedPreferencesDao {
                 .putString(PREF_TARGET_DEVICE_ADDRESS, address)
                 .apply();
     }
+
+    public int getRingDuration() {
+        return preferences.getInt(PREF_RING_DURATION, RING_DURATION_DEF_VALUE);
+    }
+
+    public void updateRingDuration(int duration) {
+        preferences.edit()
+                .putInt(PREF_RING_DURATION, duration)
+                .apply();
+    }
+
 }
