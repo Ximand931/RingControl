@@ -43,6 +43,11 @@
     <string name="desc_auth_error_not_recognized">Устройству не удалось распознать телефон. Попробуйте еще раз или сбросьте настройки устройства пользуясь инструкцией.</string>
     <string name="desc_auth_error_unexpected">Не удалось подключиться к устройству. Попробуйте еще раз</string>
 
+    <string name="wrong_number_format">Не число</string>
+    <string name="too_small_value">Слишком маленькое значение (&lt; 500)</string>
+    <string name="too_big_value">Слишком большое значение (> 30000)</string>
+    <string name="changes_did_not_complet">Изменение не завершено</string>
+
     <!-- Содержание Snackbar'а -->
     <string name="initialization">Инициализация…</string>
     <string name="waiting_for_bluetooth">Ожидание Bluetooth…</string>

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.happs.ximand.ringcontrol.SingleLiveEvent;
-import com.happs.ximand.ringcontrol.model.object.exception.BluetoothException;
+import com.happs.ximand.ringcontrol.model.object.exception.bl.BluetoothException;
 
 public class ExceptionViewModel extends BaseViewModel {
 

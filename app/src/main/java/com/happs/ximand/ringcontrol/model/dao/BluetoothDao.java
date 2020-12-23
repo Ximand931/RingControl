@@ -5,11 +5,11 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 
 import com.happs.ximand.ringcontrol.OnEventListener;
-import com.happs.ximand.ringcontrol.model.object.exception.BluetoothException;
-import com.happs.ximand.ringcontrol.model.object.exception.FailedToConnectException;
-import com.happs.ximand.ringcontrol.model.object.exception.WhileConnectingException;
-import com.happs.ximand.ringcontrol.model.object.exception.WhileReadingException;
-import com.happs.ximand.ringcontrol.model.object.exception.WhileSendingException;
+import com.happs.ximand.ringcontrol.model.object.exception.bl.BluetoothException;
+import com.happs.ximand.ringcontrol.model.object.exception.bl.FailedToConnectException;
+import com.happs.ximand.ringcontrol.model.object.exception.bl.WhileConnectingException;
+import com.happs.ximand.ringcontrol.model.object.exception.bl.WhileReadingException;
+import com.happs.ximand.ringcontrol.model.object.exception.bl.WhileSendingException;
 import com.happs.ximand.ringcontrol.model.object.info.BluetoothEvent;
 
 import java.io.BufferedReader;
