@@ -3,6 +3,9 @@ package com.happs.ximand.ringcontrol.model.dao;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.happs.ximand.ringcontrol.OnEventListener;
 import com.happs.ximand.ringcontrol.model.object.exception.bl.BluetoothException;
@@ -12,11 +15,10 @@ import com.happs.ximand.ringcontrol.model.object.exception.bl.WhileReadingExcept
 import com.happs.ximand.ringcontrol.model.object.exception.bl.WhileSendingException;
 import com.happs.ximand.ringcontrol.model.object.info.BluetoothEvent;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -27,7 +29,7 @@ public final class BluetoothDao {
 
     private final BluetoothAdapter bluetoothAdapter;
 
-    private final Set<BluetoothEventListener<String>> messageReceiveListeners =
+    private final Set<BluetoothEventListener<Byte[]>> messageReceiveListeners =
             new HashSet<>();
     private final Set<BluetoothEventListener<BluetoothEvent>> infoEventListeners =
             new HashSet<>();
@@ -48,18 +50,18 @@ public final class BluetoothDao {
         return instance;
     }
 
-    public void subscribeToBluetoothMessages(BluetoothEventListener<String> messageReceiveListener) {
+    public void subscribeToBluetoothMessages(BluetoothEventListener<Byte[]> messageReceiveListener) {
         messageReceiveListeners.add(messageReceiveListener);
     }
 
-    public void unsubscribeFromBluetoothMessages(BluetoothEventListener<String>
+    public void unsubscribeFromBluetoothMessages(BluetoothEventListener<Byte[]>
                                                          messageReceiveListener) {
         messageReceiveListeners.remove(messageReceiveListener);
     }
 
-    private void notifySubscribersAboutMessage(String message) {
-        for (BluetoothEventListener<String> subscriber : messageReceiveListeners) {
-            subscriber.onEvent(message);
+    private void notifySubscribersAboutMessage(byte[] messageByteArray) {
+        for (BluetoothEventListener<Byte[]> subscriber : messageReceiveListeners) {
+            subscriber.onEvent(toObjects(messageByteArray));
         }
     }
 
@@ -91,10 +93,6 @@ public final class BluetoothDao {
         for (BluetoothEventListener<BluetoothException> subscriber : exceptionEventListeners) {
             subscriber.onEvent(exception);
         }
-    }
-
-    public boolean isBluetoothEnable() {
-        return bluetoothAdapter.isEnabled();
     }
 
     public void startConnectToDeviceTask(BluetoothDevice target) {
@@ -133,8 +131,8 @@ public final class BluetoothDao {
     private BluetoothThread createBluetoothThreadBySocket() {
         try {
             bluetoothThread = new BluetoothThread(
-                    new BufferedReader(new InputStreamReader(bluetoothSocket.getInputStream())),
-                    new BufferedWriter(new OutputStreamWriter(bluetoothSocket.getOutputStream()))
+                    new BufferedInputStream((bluetoothSocket.getInputStream())),
+                    new BufferedOutputStream(bluetoothSocket.getOutputStream())
             );
             return bluetoothThread;
         } catch (IOException e) {
@@ -147,12 +145,40 @@ public final class BluetoothDao {
 
     }
 
+    @Deprecated
     public void sendMessage(String message) {
-        bluetoothThread.writeString(message);
+        throw new UnsupportedOperationException();
+    }
+
+    public void sendMessage(byte[] messageByteArray) {
+        bluetoothThread.writeByteArray(messageByteArray);
     }
 
     public void clear() {
         bluetoothThread.interrupt();
+    }
+
+    private Byte[] toObjects(byte[] bytesPrim) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return toObjectsForApiHigher24(bytesPrim);
+        } else {
+            return toObjectsForApiLower24(bytesPrim);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private Byte[] toObjectsForApiHigher24(byte[] bytesPrim) {
+        Byte[] bytes = new Byte[bytesPrim.length];
+        Arrays.setAll(bytes, n -> bytesPrim[n]);
+        return bytes;
+    }
+
+    private Byte[] toObjectsForApiLower24(byte[] bytesPrim) {
+        Byte[] bytes = new Byte[bytesPrim.length];
+        for (int i = 0; i < bytesPrim.length; i++) {
+            bytes[i] = bytesPrim[i];
+        }
+        return bytes;
     }
 
     private static class ConnectTaskThread extends Thread {
@@ -183,20 +209,24 @@ public final class BluetoothDao {
 
     private class BluetoothThread extends Thread {
 
-        private final BufferedReader reader;
-        private final BufferedWriter writer;
+        private final BufferedInputStream inputStream;
+        private final BufferedOutputStream outputStream;
 
-        public BluetoothThread(BufferedReader reader, BufferedWriter writer) {
-            this.writer = writer;
-            this.reader = reader;
+        public BluetoothThread(BufferedInputStream inputStream,
+                               BufferedOutputStream outputStream) {
+            this.inputStream = inputStream;
+            this.outputStream = outputStream;
         }
 
         @Override
         public void run() {
             while (true) {
                 try {
-                    if (reader.ready()) {
-                        notifySubscribersAboutMessage(reader.readLine());
+                    if (inputStream.available() > 0) {
+                        byte[] incomingMessage = new byte[inputStream.available()];
+                        //noinspection ResultOfMethodCallIgnored
+                        inputStream.read(incomingMessage);
+                        notifySubscribersAboutMessage(incomingMessage);
                     } else {
                         Thread.sleep(100);
                     }
@@ -209,10 +239,10 @@ public final class BluetoothDao {
             }
         }
 
-        public void writeString(String string) {
+        public void writeByteArray(byte[] message) {
             try {
                 notifySubscribersAboutEvent(BluetoothEvent.SENDING_DATA);
-                writer.write(string);
+                outputStream.write(message);
                 notifySubscribersAboutEvent(BluetoothEvent.READY);
             } catch (IOException e) {
                 notifySubscribersAboutEvent(BluetoothEvent.ERROR_WHILE_SENDING);
@@ -224,8 +254,8 @@ public final class BluetoothDao {
         public void interrupt() {
             super.interrupt();
             try {
-                reader.close();
-                writer.close();
+                inputStream.close();
+                outputStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

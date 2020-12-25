@@ -2,15 +2,15 @@ package com.happs.ximand.ringcontrol.model.object.command;
 
 public abstract class BluetoothCommand {
 
-    private String code;
+    private final byte code;
 
-    protected BluetoothCommand(String code) {
+    protected BluetoothCommand(byte code) {
         this.code = code;
     }
 
-    public abstract String getCommand();
+    public abstract byte[] getCommand();
 
-    protected String getCode() {
+    protected byte getCode() {
         return code;
     }
 }

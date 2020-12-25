@@ -159,7 +159,7 @@ public class AllTimetablesViewModel extends BaseViewModel {
     }
 
     public void applyTimetable(Timetable timetable) {
-        String command = new ReplaceTimetableCommand(timetable).getCommand();
+        byte[] command = new ReplaceTimetableCommand(timetable).getCommand();
         BluetoothDao.getInstance().sendMessage(command);
         currentSendTimetableTask = true;
         lastSentTimetableId = timetable.getId();
