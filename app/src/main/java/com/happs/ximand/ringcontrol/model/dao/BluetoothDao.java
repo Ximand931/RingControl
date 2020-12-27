@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.Build;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.happs.ximand.ringcontrol.OnEventListener;
@@ -36,7 +37,9 @@ public final class BluetoothDao {
     private final Set<BluetoothEventListener<BluetoothException>> exceptionEventListeners =
             new HashSet<>();
 
+    @Nullable
     private BluetoothSocket bluetoothSocket;
+    @Nullable
     private BluetoothThread bluetoothThread;
 
     private BluetoothDao() {
@@ -129,6 +132,9 @@ public final class BluetoothDao {
     }
 
     private BluetoothThread createBluetoothThreadBySocket() {
+        if (bluetoothSocket == null) {
+            throw new IllegalStateException();
+        }
         try {
             bluetoothThread = new BluetoothThread(
                     new BufferedInputStream((bluetoothSocket.getInputStream())),
@@ -141,21 +147,18 @@ public final class BluetoothDao {
         return null;
     }
 
-    private void startAuthentification() {
-
-    }
-
-    @Deprecated
-    public void sendMessage(String message) {
-        throw new UnsupportedOperationException();
-    }
-
     public void sendMessage(byte[] messageByteArray) {
-        bluetoothThread.writeByteArray(messageByteArray);
+        if (bluetoothThread != null) {
+            bluetoothThread.writeByteArray(messageByteArray);
+        } else {
+            //notifySubscribersAboutException(new WhileSendingException());
+        }
     }
 
     public void clear() {
-        bluetoothThread.interrupt();
+        if (bluetoothThread != null) {
+            bluetoothThread.interrupt();
+        }
     }
 
     private Byte[] toObjects(byte[] bytesPrim) {

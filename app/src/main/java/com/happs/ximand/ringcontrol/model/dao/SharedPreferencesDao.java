@@ -29,6 +29,12 @@ public final class SharedPreferencesDao {
     private static final String PREF_RING_DURATION = "RING_DURATION";
     private static final int RING_DURATION_DEF_VALUE = 3000;
 
+    private static final String PREF_WEEKEND_MODE = "WEEKEND_MODE";
+    private static final int WEEKEND_MODE_DEF_VALUE = 0;
+
+    private static final String PREF_MANUAL_MODE_STATE = "MANUAL_MODE";
+    private static final boolean MANUAL_MODE_STATE_DEF_VALUE = false;
+
     private SharedPreferences preferences;
 
     private SharedPreferencesDao(Application application) {
@@ -66,4 +72,23 @@ public final class SharedPreferencesDao {
                 .apply();
     }
 
+    public int getWeekendMode() {
+        return preferences.getInt(PREF_WEEKEND_MODE, WEEKEND_MODE_DEF_VALUE);
+    }
+
+    public void updateWeekendMode(int mode) {
+        preferences.edit()
+                .putInt(PREF_WEEKEND_MODE, mode)
+                .apply();
+    }
+
+    public boolean getManualModeState() {
+        return preferences.getBoolean(PREF_MANUAL_MODE_STATE, MANUAL_MODE_STATE_DEF_VALUE);
+    }
+
+    public void updateManualMode(boolean state) {
+        preferences.edit()
+                .putBoolean(PREF_MANUAL_MODE_STATE, state)
+                .apply();
+    }
 }

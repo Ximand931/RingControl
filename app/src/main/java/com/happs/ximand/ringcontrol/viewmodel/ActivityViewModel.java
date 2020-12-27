@@ -16,7 +16,6 @@ import com.happs.ximand.ringcontrol.view.BaseFragment;
 import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment;
 import com.happs.ximand.ringcontrol.view.fragment.ExceptionFragment;
 import com.happs.ximand.ringcontrol.view.fragment.SelectDeviceFragment;
-import com.happs.ximand.ringcontrol.view.fragment.SettingsFragment;
 
 public class ActivityViewModel extends ViewModel {
 
@@ -55,12 +54,12 @@ public class ActivityViewModel extends ViewModel {
 
     private void showExceptionFragmentIfManyErrors(BluetoothException e) {
         if (exceptionCounter >= 3) {
-            FragmentNavigation.getInstance().navigateToFragment(ExceptionFragment.newInstance(e));
+            FragmentNavigation.getInstance().navigateTo(ExceptionFragment.newInstance(e));
         }
     }
 
     public void afterOnCreate() {
-        FragmentNavigation.getInstance().navigateToFragment(SettingsFragment.newInstance());
+        FragmentNavigation.getInstance().navigateTo(AllTimetablesFragment.newInstance());
         /*
         if (bluetoothDao.isBluetoothEnable()) {
             onBluetoothEnabled();
@@ -80,13 +79,13 @@ public class ActivityViewModel extends ViewModel {
     }
 
     public void onRefuseEnableBluetooth() {
-        FragmentNavigation.getInstance().navigateToFragment(
+        FragmentNavigation.getInstance().navigateTo(
                 ExceptionFragment.newInstance(new BluetoothIsDisabledException())
         );
     }
 
     private void navigateToFirstFragment() {
-        FragmentNavigation.getInstance().navigateToFragment(getFirstFragment());
+        FragmentNavigation.getInstance().navigateTo(getFirstFragment());
     }
 
     @SuppressWarnings("rawtypes")

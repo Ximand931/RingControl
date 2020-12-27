@@ -12,17 +12,20 @@ import com.happs.ximand.ringcontrol.model.dao.BluetoothDao;
 import com.happs.ximand.ringcontrol.model.dao.BluetoothEventListener;
 import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
 import com.happs.ximand.ringcontrol.model.object.command.ReplaceTimetableCommand;
+import com.happs.ximand.ringcontrol.model.object.command.simple.WeekendMode;
 import com.happs.ximand.ringcontrol.model.object.info.BluetoothEvent;
 import com.happs.ximand.ringcontrol.model.object.timetable.Lesson;
 import com.happs.ximand.ringcontrol.model.object.timetable.Timetable;
 import com.happs.ximand.ringcontrol.model.repository.impl.TimetableRepository;
 import com.happs.ximand.ringcontrol.model.specification.impl.GetAllSqlSpecification;
 import com.happs.ximand.ringcontrol.view.fragment.AddTimetableFragment;
+import com.happs.ximand.ringcontrol.view.fragment.SettingsFragment;
 import com.happs.ximand.ringcontrol.view.fragment.TimetableInfoFragment;
 import com.happs.ximand.ringcontrol.viewmodel.SnackbarDto;
 import com.happs.ximand.ringcontrol.viewmodel.util.TimeUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class AllTimetablesViewModel extends BaseViewModel {
@@ -35,6 +38,9 @@ public class AllTimetablesViewModel extends BaseViewModel {
     private final ObservableBoolean applyingPossible = new ObservableBoolean(false);
     private final ObservableInt lastAppliedTimetableId;
 
+    private final MutableLiveData<Boolean> manualModeStateLiveData = new MutableLiveData<>();
+    private final MutableLiveData<WeekendMode> weekendModeLiveData = new MutableLiveData<>();
+
     private boolean currentSendTimetableTask = false;
     private int lastSentTimetableId = APPLIED_TIMETABLE_NONE;
 
@@ -44,15 +50,22 @@ public class AllTimetablesViewModel extends BaseViewModel {
         this.lastAppliedTimetableId = new ObservableInt(
                 SharedPreferencesDao.getInstance().getAppliedTimetableId()
         );
+        this.manualModeStateLiveData
+                .setValue(SharedPreferencesDao.getInstance().getManualModeState());
+        this.weekendModeLiveData.setValue(getCurrentWeekendMode());
         updateData();
         startConnectingToSavedDevice();
+    }
+
+    private WeekendMode getCurrentWeekendMode() {
+        return WeekendMode.getInstanceForModeId(SharedPreferencesDao.getInstance().getWeekendMode());
     }
 
     public LiveData<List<Timetable>> getAllTimetablesLiveData() {
         return allTimetablesLiveData;
     }
 
-    public MutableLiveData<Integer> getNumOfTestLessonsLiveData() {
+    public LiveData<Integer> getNumOfTestLessonsLiveData() {
         return numOfTestLessonsLiveData;
     }
 
@@ -62,6 +75,26 @@ public class AllTimetablesViewModel extends BaseViewModel {
 
     public ObservableInt getLastAppliedTimetableId() {
         return lastAppliedTimetableId;
+    }
+
+    public LiveData<Boolean> getManualModeStateLiveData() {
+        return manualModeStateLiveData;
+    }
+
+    public LiveData<WeekendMode> getWeekendModeLiveData() {
+        return weekendModeLiveData;
+    }
+
+    public boolean isWeekendModeCaptionShouldBeShown(WeekendMode weekendMode) {
+        int weekday = getCurrentWeekday();
+        return !((weekday != Calendar.SATURDAY && weekday != Calendar.SUNDAY)
+                || (weekday != Calendar.SUNDAY && weekendMode == WeekendMode.MODE_WORK_ON_SATURDAY)
+                || (weekendMode == WeekendMode.MODE_WORK_ON_WEEKENDS));
+    }
+
+    private int getCurrentWeekday() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
     private void onBluetoothEvent(BluetoothEvent event) {
@@ -83,16 +116,16 @@ public class AllTimetablesViewModel extends BaseViewModel {
 
     @Override
     public boolean notifyOptionsMenuItemClicked(int itemId) {
-        if (itemId == R.id.toolbar_add) {
-            moveToAddTimetableFragment();
-            return true;
+        switch (itemId) {
+            case R.id.toolbar_add:
+                FragmentNavigation.getInstance().navigateTo(AddTimetableFragment.newInstance());
+                return true;
+            case R.id.toolbar_settings:
+                FragmentNavigation.getInstance().navigateTo(SettingsFragment.newInstance());
+                return true;
+            default:
+                return false;
         }
-        return false;
-    }
-
-    private void moveToAddTimetableFragment() {
-        FragmentNavigation.getInstance()
-                .navigateToFragment(AddTimetableFragment.newInstance());
     }
 
     public void addTestLesson() {
@@ -120,7 +153,7 @@ public class AllTimetablesViewModel extends BaseViewModel {
 
     public void showTimetableDetails(Timetable timetable) {
         TimetableInfoFragment fragment = TimetableInfoFragment.newInstance(timetable);
-        FragmentNavigation.getInstance().navigateToFragment(fragment);
+        FragmentNavigation.getInstance().navigateTo(fragment);
     }
 
     public void notifyAppliedTimetableUpdated() {

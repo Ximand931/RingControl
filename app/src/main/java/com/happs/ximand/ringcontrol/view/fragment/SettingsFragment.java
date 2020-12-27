@@ -17,15 +17,17 @@ import com.happs.ximand.ringcontrol.OnEventListener;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.FragmentSettingsBinding;
 import com.happs.ximand.ringcontrol.view.BaseFragment;
-import com.happs.ximand.ringcontrol.viewmodel.InputAlertDialogDto;
+import com.happs.ximand.ringcontrol.viewmodel.dto.InputAlertDialogDto;
+import com.happs.ximand.ringcontrol.viewmodel.dto.SelectAlertDialogDto;
 import com.happs.ximand.ringcontrol.viewmodel.fragment.SettingsViewModel;
 
 public class SettingsFragment extends BaseFragment<SettingsViewModel, FragmentSettingsBinding> {
 
-    private AlertDialog alertDialog;
+    private AlertDialog inputAlertDialog;
     private TextInputLayout inputLayout;
     private TextInputEditText editText;
     private OnEventListener<String> inputCompleteListener;
+
     private OnEventListener<Void> cancelListener;
 
     public SettingsFragment() {
@@ -47,23 +49,37 @@ public class SettingsFragment extends BaseFragment<SettingsViewModel, FragmentSe
         viewModel.getSetRingDurationEvent().observe(
                 getViewLifecycleOwner(), this::makeInputAlertDialog
         );
+        viewModel.getSetWeekendModeEvent().observe(
+                getViewLifecycleOwner(), this::makeSelectAlertDialog
+        );
+    }
+
+    private void makeSelectAlertDialog(SelectAlertDialogDto dialogDto) {
+        this.cancelListener = dialogDto.getCancelListener();
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle(dialogDto.getTitleResId())
+                .setItems(dialogDto.getItemsArrayResId(),
+                        (dialog, which) -> dialogDto.getSelectListener().onEvent(which)
+                )
+                .setOnCancelListener(dialog -> onNegativeButtonClick(dialog, 0))
+                .show();
     }
 
     private void makeInputAlertDialog(InputAlertDialogDto dialogDto) {
-        this.inputCompleteListener = dialogDto.getOnCompleteInput();
-        this.cancelListener = dialogDto.getOnCancel();
+        this.inputCompleteListener = dialogDto.getInputCompleteListener();
+        this.cancelListener = dialogDto.getCancelListener();
         inflateInputLayout();
-        this.alertDialog = createInputDialogBuilder().create();
-        this.alertDialog.show();
+        this.inputAlertDialog = createInputDialogBuilder().create();
+        this.inputAlertDialog.show();
         initAlertDialog(dialogDto.getTitleResId());
     }
 
     private void dismissDialog(Void aVoid) {
-        alertDialog.dismiss();
+        inputAlertDialog.dismiss();
     }
 
     private void showDialogWithIncorrectInputError(int errorMessageId) {
-        alertDialog.show();
+        inputAlertDialog.show();
         inputLayout.setError(getResources().getString(errorMessageId));
         new Handler().postDelayed(() -> inputLayout.setError(null), 5000);
     }
@@ -83,13 +99,13 @@ public class SettingsFragment extends BaseFragment<SettingsViewModel, FragmentSe
     }
 
     private void initPositiveButton() {
-        Button positive = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+        Button positive = inputAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
         positive.setOnClickListener(v -> onPositiveButtonClick());
         initAlertDialogButton(positive);
     }
 
     private void initNegativeButton() {
-        Button negative = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+        Button negative = inputAlertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
         initAlertDialogButton(negative);
     }
 
@@ -108,8 +124,8 @@ public class SettingsFragment extends BaseFragment<SettingsViewModel, FragmentSe
     }
 
     private void initAlertDialogBackground() {
-        if (alertDialog.getWindow() != null) {
-            alertDialog.getWindow().getDecorView().setBackgroundResource(R.drawable.bg_rounded);
+        if (inputAlertDialog.getWindow() != null) {
+            inputAlertDialog.getWindow().getDecorView().setBackgroundResource(R.drawable.bg_rounded);
         }
     }
 

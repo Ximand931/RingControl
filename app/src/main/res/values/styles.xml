@@ -18,8 +18,23 @@
         <item name="android:textColor">@color/debug_button_color</item>
     </style>
 
-    <style name="BaseDivider">
-        <item name="android:background">@color/colorDivider</item>
+    <style name="AppCaptionWithIcon" parent="TextAppearance.AppCompat.Caption">
+        <item name="drawableStartCompat">@drawable/ic_outline_info</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:drawablePadding">32dp</item>
+    </style>
+
+    <style name="AppSelectableLayout">
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="AppSelectableLayoutWithPadding" parent="AppSelectableLayout">
+        <item name="android:paddingStart">74dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
     </style>
 
 </resources>

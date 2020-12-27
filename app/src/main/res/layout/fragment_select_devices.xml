@@ -46,9 +46,9 @@
 
                 <View
                     android:id="@+id/view"
-                    style="@style/BaseDivider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:background="@color/colorDivider"
                     app:layout_constraintTop_toBottomOf="@+id/go_to_settings_layout" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -61,36 +61,28 @@
 
                 <TextView
                     android:id="@+id/textView4"
-                    style="@style/TextAppearance.MaterialComponents.Caption"
+                    style="@style/AppCaptionWithIcon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
-                    android:drawablePadding="32dp"
-                    android:ems="16"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="24dp"
                     android:text="@string/no_one_bonded_device"
                     android:visibility="@{viewModel.devicesLiveData.empty ? View.VISIBLE : View.GONE}"
                     app:drawableStartCompat="@drawable/ic_outline_cancel"
                     app:layout_constraintTop_toBottomOf="@+id/view2" />
 
                 <View
-                    style="@style/BaseDivider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:background="@color/colorDivider"
                     app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
                 <TextView
-                    style="@style/TextAppearance.MaterialComponents.Caption"
+                    style="@style/AppCaptionWithIcon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:drawablePadding="32dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="24dp"
-                    android:text="@string/choose_device_caption"
-                    app:drawableStartCompat="@drawable/ic_outline_info" />
+                    android:text="@string/choose_device_caption" />
 
             </LinearLayout>
 

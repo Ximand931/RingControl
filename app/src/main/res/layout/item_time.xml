@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -13,33 +14,34 @@
     </data>
 
     <LinearLayout
+        style="@style/AppSelectableLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="6dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="12dp">
 
         <TextView
             android:id="@+id/textView2"
             style="@style/TextAppearance.MaterialComponents.Subtitle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{String.format(@string/format_time_title, lesson.number)}" />
+            android:layout_marginStart="12dp"
+            android:text="@{String.format(@string/format_preview_time, BindingConverters.convertTimeToPreviewTimeString(lesson.startTime), BindingConverters.convertTimeToPreviewTimeString(lesson.endTime))}"
+            tools:text="12:00 - 12:45" />
 
         <TextView
             android:id="@+id/textView3"
             style="@style/TextAppearance.MaterialComponents.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@{String.format(@string/format_preview_time, BindingConverters.convertTimeToPreviewTimeString(lesson.startTime), BindingConverters.convertTimeToPreviewTimeString(lesson.endTime))}" />
+            android:layout_marginStart="12dp"
+            android:text="@{String.format(@string/format_time_title, lesson.number)}"
+            tools:text="1 урок" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
             android:background="@color/colorDivider" />
 
     </LinearLayout>

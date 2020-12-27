@@ -12,6 +12,13 @@
     <string name="sending_data">Отправление данных</string>
     <string name="error_while_sending_data">Ошибка при отправке данных</string>
     <string name="ready">Задача завершена</string>
+    <string name="mode_not_work_on_weekends">Не работает в выходные</string>
+    <string name="mode_work_on_saturday">Работает по субботам</string>
+    <string name="mode_work_on_weekends">Работает по выходным</string>
+    <string name="device_disable_due_weekend_settings">Устройство не будет работать сегодня в связи с настройками режима работы в выходные дни.</string>
+    <string name="device_disable_due_manual_mode">Установлен автономный режим, устройство не будет подавать звонки автоматически до отключения режима.</string>
+    <string name="settings">Настройки</string>
+    <string name="select_weekend_mode">Выбор режима работы в выходные</string>
     <string name="remove">Удалить</string>
     <string name="removing">Удаление</string>
     <string name="removing_description">Вы уверены что хотите удалить расписание?</string>
@@ -88,5 +95,14 @@
     <string name="choose_device_caption">Выберите подключенное устройство. Для подключения перейдите в настройки</string>
     <string name="ring_duration">Длительность звонка</string>
     <string name="set_in_milliseconds">Устанавливается в милисекундах</string>
+    <string name="weekend_mode">Режим работы в выходные</string>
+    <string name="manual_mode">Ручной режим</string>
+    <string name="manual_mode_description">Пока активировано, звонки не будут подаваться автоматически</string>
+
+    <string-array name="weekend_mods">
+        <item>@string/mode_not_work_on_weekends</item>
+        <item>@string/mode_work_on_saturday</item>
+        <item>@string/mode_work_on_weekends</item>
+    </string-array>
 
 </resources>

@@ -40,7 +40,7 @@ public class FragmentNavigation {
         }
     }
 
-    public void navigateToFragment(Fragment fragment) {
+    public void navigateTo(Fragment fragment) {
         FragmentManager manager = managerRef.get();
         if (manager != null) {
             FragmentTransactionsHelper.replaceFragment(manager, fragment);

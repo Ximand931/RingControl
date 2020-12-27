@@ -42,7 +42,7 @@ public class TimetableInfoViewModel extends BaseViewModel {
                 return true;
             case R.id.toolbar_edit:
                 FragmentNavigation.getInstance()
-                        .navigateToFragment(EditTimetableFragment.newInstance(
+                        .navigateTo(EditTimetableFragment.newInstance(
                                 timetableLiveData.getValue())
                         );
                 return true;

@@ -11,6 +11,7 @@ import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.SingleLiveEvent;
 import com.happs.ximand.ringcontrol.model.object.timetable.Lesson;
 import com.happs.ximand.ringcontrol.model.object.timetable.Time;
+import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment;
 import com.happs.ximand.ringcontrol.viewmodel.SnackbarDto;
 
 import java.util.List;
@@ -103,7 +104,9 @@ public abstract class BaseEditTimetableViewModel extends BaseViewModel {
     protected abstract void onCompleteEditAction();
 
     protected void onEditActionCompleted() {
-
+        FragmentNavigation.getInstance().notifyFragmentAboutEvent(
+                AllTimetablesFragment.TAG, AllTimetablesFragment.EVENT_TIMETABLE_LIST_UPDATED
+        );
     }
 
     protected abstract int getErrorMessageResId();

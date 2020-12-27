@@ -8,4 +8,10 @@
         android:title="@string/add"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/toolbar_settings"
+        android:icon="@drawable/ic_toolbar_settings"
+        android:title="@string/settings"
+        app:showAsAction="ifRoom" />
+
 </menu>

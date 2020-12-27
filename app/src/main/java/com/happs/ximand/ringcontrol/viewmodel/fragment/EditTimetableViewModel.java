@@ -25,8 +25,9 @@ public class EditTimetableViewModel extends BaseEditTimetableViewModel {
 
     @Override
     protected void onEditActionCompleted() {
+        super.onEditActionCompleted();
         if (isAppliedTimetable()) {
-            notifyAppliedTimetableUpdated();
+            notifyMainFragmentAboutAppliedTimetableUpdated();
         }
     }
 
@@ -49,9 +50,9 @@ public class EditTimetableViewModel extends BaseEditTimetableViewModel {
                 SharedPreferencesDao.getInstance().getAppliedTimetableId();
     }
 
-    private void notifyAppliedTimetableUpdated() {
+    private void notifyMainFragmentAboutAppliedTimetableUpdated() {
         FragmentNavigation.getInstance().notifyFragmentAboutEvent(
-                AllTimetablesFragment.TAG, AllTimetablesFragment.EVENT_TIMETABLE_LIST_UPDATED
+                AllTimetablesFragment.TAG, AllTimetablesFragment.EVENT_APPLIED_TIMETABLE_UPDATED
         );
     }
 

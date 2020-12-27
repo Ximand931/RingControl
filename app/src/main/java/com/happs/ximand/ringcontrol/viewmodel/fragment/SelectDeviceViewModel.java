@@ -55,7 +55,7 @@ public class SelectDeviceViewModel extends BaseViewModel {
         }
         if (event == BluetoothEvent.READY) {
             saveConnectedDeviceAddress();
-            FragmentNavigation.getInstance().navigateToFragment(
+            FragmentNavigation.getInstance().navigateTo(
                     AllTimetablesFragment.newInstance()
             );
         }
