@@ -49,6 +49,7 @@
     <string name="bluetooth_not_supported">Этот телефон не поддерживает работу с Bluetooth.</string>
     <string name="desc_auth_error_not_recognized">Устройству не удалось распознать телефон. Попробуйте еще раз или сбросьте настройки устройства пользуясь инструкцией.</string>
     <string name="desc_auth_error_unexpected">Не удалось подключиться к устройству. Попробуйте еще раз</string>
+    <string name="unsuccess_response">Не удалось применить отправленные данные. Повторите попытку.</string>
 
     <string name="wrong_number_format">Не число</string>
     <string name="too_small_value">Слишком маленькое значение (&lt; 500)</string>
@@ -98,6 +99,8 @@
     <string name="weekend_mode">Режим работы в выходные</string>
     <string name="manual_mode">Ручной режим</string>
     <string name="manual_mode_description">Пока активировано, звонки не будут подаваться автоматически</string>
+
+    <string name="stub" translatable="false">Stub</string>
 
     <string-array name="weekend_mods">
         <item>@string/mode_not_work_on_weekends</item>

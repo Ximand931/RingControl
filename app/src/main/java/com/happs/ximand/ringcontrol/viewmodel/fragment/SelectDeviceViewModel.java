@@ -17,7 +17,7 @@ import com.happs.ximand.ringcontrol.model.dao.BluetoothEventListener;
 import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
 import com.happs.ximand.ringcontrol.model.object.info.BluetoothEvent;
 import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment;
-import com.happs.ximand.ringcontrol.viewmodel.SnackbarDto;
+import com.happs.ximand.ringcontrol.viewmodel.dto.SnackbarDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +34,7 @@ public class SelectDeviceViewModel extends BaseViewModel {
     public SelectDeviceViewModel() {
         devicesLiveData.setValue(getBondedDevicesList());
         this.bluetoothEventListener = new BluetoothEventListener<>(this::onBluetoothEvent);
-        BluetoothDao.getInstance().subscribeToInfoEvents(bluetoothEventListener);
+        BluetoothDao.getInstance().subscribeToEvents(bluetoothEventListener);
     }
 
     public LiveData<List<BluetoothDevice>> getDevicesLiveData() {
@@ -94,6 +94,6 @@ public class SelectDeviceViewModel extends BaseViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        BluetoothDao.getInstance().unsubscribeFromInfoEvents(bluetoothEventListener);
+        BluetoothDao.getInstance().unsubscribeFromEvents(bluetoothEventListener);
     }
 }

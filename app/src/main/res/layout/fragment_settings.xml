@@ -8,6 +8,9 @@
         <variable
             name="viewModel"
             type="com.happs.ximand.ringcontrol.viewmodel.fragment.SettingsViewModel" />
+
+        <import type="com.happs.ximand.ringcontrol.model.object.info.BluetoothEvent" />
+
     </data>
 
     <LinearLayout
@@ -22,7 +25,7 @@
             android:layout_height="wrap_content"
             android:onClick="@{() -> viewModel.updateRingDuration()}"
             android:orientation="vertical"
-            app:inactiveOnEvent="@{viewModel.bluetoothBusyLiveData}"
+            app:inactiveOnEvent="@{viewModel.bluetoothEventLiveData != BluetoothEvent.READY}"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -47,7 +50,7 @@
             android:layout_height="wrap_content"
             android:onClick="@{() -> viewModel.updateWeekendMode()}"
             android:orientation="vertical"
-            app:inactiveOnEvent="@{viewModel.bluetoothBusyLiveData}">
+            app:inactiveOnEvent="@{viewModel.bluetoothEventLiveData != BluetoothEvent.READY}">
 
             <TextView
                 style="@style/TextAppearance.MaterialComponents.Subtitle1"
@@ -103,7 +106,7 @@
                 android:layout_marginEnd="16dp"
                 android:checked="@{viewModel.manualModeStateLiveData}"
                 android:onClick="@{() -> viewModel.updateManualModeState()}"
-                app:inactiveOnEvent="@{viewModel.bluetoothBusyLiveData}"
+                app:inactiveOnEvent="@{viewModel.bluetoothEventLiveData != BluetoothEvent.READY}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

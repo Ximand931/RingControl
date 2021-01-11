@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +16,6 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.ActivityMainBinding;
@@ -107,21 +105,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void showInfoSnackbar(int messageResId) {
         View container = findViewById(R.id.container_main);
-        Snackbar connectedSnackbar = Snackbar
-                .make(container, messageResId, Snackbar.LENGTH_SHORT);
-        addIconToSnackbar(connectedSnackbar);
-        connectedSnackbar.show();
+        SnackbarBuilder builder = new SnackbarBuilder(container)
+                .setText(messageResId)
+                .setIcon(R.drawable.ic_snackbar_info);
+        builder.getSnackbar().show();
     }
 
-    private void addIconToSnackbar(Snackbar snackbar) {
-        View snackbarLayout = snackbar.getView();
-        TextView textView = (TextView) snackbarLayout
-                .findViewById(com.google.android.material.R.id.snackbar_text);
-
-        textView.setCompoundDrawablesWithIntrinsicBounds(
-                R.drawable.ic_snackbar_info, 0, 0, 0
-        );
-        textView.setCompoundDrawablePadding(
-                getResources().getDimensionPixelOffset(R.dimen.snackbar_icon_padding));
-    }
 }

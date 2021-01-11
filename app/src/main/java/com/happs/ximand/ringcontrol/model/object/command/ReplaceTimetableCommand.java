@@ -4,7 +4,7 @@ import com.happs.ximand.ringcontrol.model.object.timetable.Lesson;
 import com.happs.ximand.ringcontrol.model.object.timetable.Time;
 import com.happs.ximand.ringcontrol.model.object.timetable.Timetable;
 
-public class ReplaceTimetableCommand extends BluetoothCommand {
+public class ReplaceTimetableCommand extends BluetoothCommand<Void> {
 
     private static final byte REPLACE_TIMETABLE_COMMAND_CODE = 10;
     private static final byte TIMETABLE_ID_STUB = 1;
@@ -29,6 +29,11 @@ public class ReplaceTimetableCommand extends BluetoothCommand {
         }
         appendEndOfLine();
         return command;
+    }
+
+    @Override
+    public Void getMainContent() {
+        throw new UnsupportedOperationException();
     }
 
     private void appendMeta() {

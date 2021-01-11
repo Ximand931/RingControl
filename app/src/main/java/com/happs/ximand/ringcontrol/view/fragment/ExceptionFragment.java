@@ -10,7 +10,7 @@ import androidx.appcompat.app.ActionBar;
 
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.FragmentExceptionBinding;
-import com.happs.ximand.ringcontrol.model.object.exception.bl.BluetoothException;
+import com.happs.ximand.ringcontrol.model.object.exception.BluetoothException;
 import com.happs.ximand.ringcontrol.view.BaseFragment;
 import com.happs.ximand.ringcontrol.viewmodel.fragment.ExceptionViewModel;
 

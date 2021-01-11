@@ -9,14 +9,16 @@ import com.happs.ximand.ringcontrol.SingleLiveEvent;
 import com.happs.ximand.ringcontrol.model.dao.BluetoothDao;
 import com.happs.ximand.ringcontrol.model.dao.BluetoothEventListener;
 import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
+import com.happs.ximand.ringcontrol.model.object.command.BluetoothCommand;
 import com.happs.ximand.ringcontrol.model.object.command.ChangeRingDurationCommand;
 import com.happs.ximand.ringcontrol.model.object.command.simple.ChangeManualModeCommand;
 import com.happs.ximand.ringcontrol.model.object.command.simple.ChangeWeekendModeCommand;
 import com.happs.ximand.ringcontrol.model.object.command.simple.WeekendMode;
 import com.happs.ximand.ringcontrol.model.object.info.BluetoothEvent;
-import com.happs.ximand.ringcontrol.viewmodel.SnackbarDto;
+import com.happs.ximand.ringcontrol.model.object.response.Response;
 import com.happs.ximand.ringcontrol.viewmodel.dto.InputAlertDialogDto;
 import com.happs.ximand.ringcontrol.viewmodel.dto.SelectAlertDialogDto;
+import com.happs.ximand.ringcontrol.viewmodel.dto.SnackbarDto;
 
 public class SettingsViewModel extends BaseViewModel {
 
@@ -30,22 +32,25 @@ public class SettingsViewModel extends BaseViewModel {
             new SingleLiveEvent<>();
 
     private final BluetoothEventListener<BluetoothEvent> eventListener;
-    private final BluetoothEventListener<Byte[]> messagesListener;
+    private final BluetoothEventListener<Response> responseListener;
 
     private final MutableLiveData<BluetoothEvent> bluetoothEventLiveData = new MutableLiveData<>();
     private final MutableLiveData<Integer> ringDurationLiveData = new MutableLiveData<>();
     private final MutableLiveData<WeekendMode> weekendModeLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> manualModeStateLiveData = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> bluetoothBusyLiveData = new MutableLiveData<>();
+
+    @SuppressWarnings("rawtypes")
+    private BluetoothCommand sentBluetoothCommand;
 
     public SettingsViewModel() {
         this.eventListener = new BluetoothEventListener<>(this::onBluetoothEvent);
-        this.messagesListener = new BluetoothEventListener<>(this::onBluetoothMessage);
+        this.responseListener = new BluetoothEventListener<>(this::onBluetoothResponse);
         this.ringDurationLiveData.setValue(SharedPreferencesDao.getInstance().getRingDuration());
         this.weekendModeLiveData.setValue(getCurrentWeekendMode());
         this.manualModeStateLiveData
                 .setValue(SharedPreferencesDao.getInstance().getManualModeState());
-        this.bluetoothBusyLiveData.setValue(false);
+        this.bluetoothDao.subscribeToResponses(responseListener);
+        this.bluetoothDao.subscribeToEvents(eventListener);
     }
 
     private WeekendMode getCurrentWeekendMode() {
@@ -82,6 +87,10 @@ public class SettingsViewModel extends BaseViewModel {
         return setWeekendModeEvent;
     }
 
+    public MutableLiveData<BluetoothEvent> getBluetoothEventLiveData() {
+        return bluetoothEventLiveData;
+    }
+
     public LiveData<Integer> getRingDurationLiveData() {
         return ringDurationLiveData;
     }
@@ -94,16 +103,32 @@ public class SettingsViewModel extends BaseViewModel {
         return manualModeStateLiveData;
     }
 
-    public LiveData<Boolean> getBluetoothBusyLiveData() {
-        return bluetoothBusyLiveData;
-    }
-
     private void onBluetoothEvent(BluetoothEvent event) {
         bluetoothEventLiveData.postValue(event);
     }
 
-    private void onBluetoothMessage(Byte[] message) {
+    private void onBluetoothResponse(Response response) {
+        if (response.isSuccess()) {
+            saveSentData(response);
+        } else {
+            getMakeSnackbarEvent().setValue(
+                    new SnackbarDto(R.string.unsuccess_response, Snackbar.LENGTH_LONG)
+            );
+        }
+    }
 
+    private void saveSentData(Response response) {
+        switch (response.getCommandCode()) {
+            case ChangeRingDurationCommand.COMMAND_CODE:
+                saveNewRingDuration();
+                break;
+            case ChangeWeekendModeCommand.COMMAND_CODE:
+                saveNewWeekendMode();
+                break;
+            case ChangeManualModeCommand.COMMAND_CODE:
+                saveManualModeState();
+                break;
+        }
     }
 
     public void updateRingDuration() {
@@ -131,10 +156,15 @@ public class SettingsViewModel extends BaseViewModel {
     }
 
     private void sendNewRingDurationToDevice(int duration) {
-        bluetoothDao.sendMessage(
-                new ChangeRingDurationCommand(duration).getCommand()
-        );
-        bluetoothBusyLiveData.setValue(true);
+        ChangeRingDurationCommand command = new ChangeRingDurationCommand(duration);
+        bluetoothDao.sendMessage(command.getCommand());
+        sentBluetoothCommand = command;
+    }
+
+    private void saveNewRingDuration() {
+        int duration = ((ChangeRingDurationCommand) sentBluetoothCommand)
+                .getMainContent();
+        SharedPreferencesDao.getInstance().updateRingDuration(duration);
     }
 
     public void updateWeekendMode() {
@@ -147,19 +177,29 @@ public class SettingsViewModel extends BaseViewModel {
     }
 
     private void onWeekendModeSelected(int modeId) {
-        bluetoothDao.sendMessage(
-                new ChangeWeekendModeCommand((byte) modeId).getCommand()
-        );
-        bluetoothBusyLiveData.setValue(true);
+        ChangeWeekendModeCommand command = new ChangeWeekendModeCommand((byte) modeId);
+        bluetoothDao.sendMessage(command.getCommand());
+        sentBluetoothCommand = command;
+    }
+
+    private void saveNewWeekendMode() {
+        int modeId = ((ChangeWeekendModeCommand) sentBluetoothCommand)
+                .getMainContent();
+        SharedPreferencesDao.getInstance().updateWeekendMode(modeId);
     }
 
     public void updateManualModeState() {
         @SuppressWarnings("ConstantConditions")
         boolean newManualModeState = !manualModeStateLiveData.getValue();
-        bluetoothDao.sendMessage(
-                new ChangeManualModeCommand(newManualModeState).getCommand()
-        );
-        bluetoothBusyLiveData.setValue(true);
+        ChangeManualModeCommand command = new ChangeManualModeCommand(newManualModeState);
+        bluetoothDao.sendMessage(command.getCommand());
+        sentBluetoothCommand = command;
+    }
+
+    private void saveManualModeState() {
+        boolean newState = convertByteToBoolean(((ChangeManualModeCommand) sentBluetoothCommand)
+                .getMainContent());
+        SharedPreferencesDao.getInstance().updateManualMode(newState);
     }
 
     private void onChangeCanceled(Void aVoid) {
@@ -171,7 +211,11 @@ public class SettingsViewModel extends BaseViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        bluetoothDao.unsubscribeFromInfoEvents(eventListener);
-        bluetoothDao.unsubscribeFromBluetoothMessages(messagesListener);
+        bluetoothDao.unsubscribeFromEvents(eventListener);
+        bluetoothDao.unsubscribeFromResponses(responseListener);
+    }
+
+    private boolean convertByteToBoolean(byte b) {
+        return b == (byte) 0xFF;
     }
 }

@@ -12,7 +12,7 @@ import com.happs.ximand.ringcontrol.SingleLiveEvent;
 import com.happs.ximand.ringcontrol.model.object.timetable.Lesson;
 import com.happs.ximand.ringcontrol.model.object.timetable.Time;
 import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment;
-import com.happs.ximand.ringcontrol.viewmodel.SnackbarDto;
+import com.happs.ximand.ringcontrol.viewmodel.dto.SnackbarDto;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.happs.ximand.ringcontrol.model.object.exception.bl;
+package com.happs.ximand.ringcontrol.model.object.exception;
 
 import com.happs.ximand.ringcontrol.R;
 

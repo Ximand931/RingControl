@@ -21,7 +21,7 @@ import com.happs.ximand.ringcontrol.model.specification.impl.GetAllSqlSpecificat
 import com.happs.ximand.ringcontrol.view.fragment.AddTimetableFragment;
 import com.happs.ximand.ringcontrol.view.fragment.SettingsFragment;
 import com.happs.ximand.ringcontrol.view.fragment.TimetableInfoFragment;
-import com.happs.ximand.ringcontrol.viewmodel.SnackbarDto;
+import com.happs.ximand.ringcontrol.viewmodel.dto.SnackbarDto;
 import com.happs.ximand.ringcontrol.viewmodel.util.TimeUtils;
 
 import java.util.ArrayList;
@@ -159,9 +159,8 @@ public class AllTimetablesViewModel extends BaseViewModel {
     public void notifyAppliedTimetableUpdated() {
         SnackbarDto snackbarDto = new SnackbarDto(
                 R.string.applied_timetable_updated, Snackbar.LENGTH_SHORT
-        );
-        snackbarDto.setActionId(R.string.apply);
-        snackbarDto.setActionClickListener(v -> applyUpdatedCurrentTimetable());
+        ).setActionResId(R.string.apply)
+                .setActionClickListener(v -> applyUpdatedCurrentTimetable());
         getMakeSnackbarEvent().setValue(snackbarDto);
     }
 
@@ -201,6 +200,6 @@ public class AllTimetablesViewModel extends BaseViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        BluetoothDao.getInstance().unsubscribeFromInfoEvents(bluetoothEventListener);
+        BluetoothDao.getInstance().unsubscribeFromEvents(bluetoothEventListener);
     }
 }

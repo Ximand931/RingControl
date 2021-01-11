@@ -19,9 +19,8 @@ import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.happs.ximand.ringcontrol.BR;
-import com.happs.ximand.ringcontrol.viewmodel.SnackbarDto;
+import com.happs.ximand.ringcontrol.viewmodel.dto.SnackbarDto;
 import com.happs.ximand.ringcontrol.viewmodel.fragment.BaseViewModel;
 
 import java.lang.reflect.ParameterizedType;
@@ -132,17 +131,22 @@ public abstract class BaseFragment<VM extends BaseViewModel, B extends ViewDataB
     }
 
     private void showSnackbarBySnackbarDto(SnackbarDto snackbarDto) {
-        if (getView() != null) {
-            Snackbar snackbar = Snackbar.make(
-                    getView(), snackbarDto.getMessageResId(), snackbarDto.getDuration()
+        SnackbarBuilder builder = new SnackbarBuilder(requireView())
+                .setDuration(snackbarDto.getDuration());
+        if (snackbarDto.getActionResId() != SnackbarDto.ACTION_NONE) {
+            builder.setAction(
+                    snackbarDto.getActionResId(), snackbarDto.getActionClickListener()
             );
-            if (snackbarDto.getActionId() != SnackbarDto.ACTION_NONE) {
-                snackbar.setAction(
-                        snackbarDto.getActionId(), snackbarDto.getActionClickListener()
-                );
-            }
-            snackbar.show();
         }
+        if (snackbarDto.isFormat()) {
+            builder.setFormatText(snackbarDto.getMessageResId(), snackbarDto.getArgs());
+        } else {
+            builder.setText(snackbarDto.getMessageResId());
+        }
+        if (snackbarDto.getIconResId() != SnackbarDto.ICON_NONE) {
+            builder.setIcon(snackbarDto.getIconResId());
+        }
+        builder.getSnackbar().show();
     }
 
     @Override
