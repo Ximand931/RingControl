@@ -10,9 +10,9 @@ public class SnackbarDto {
     public static final int ACTION_NONE = 0;
     public static final int ICON_NONE = 0;
 
-    private int messageResId;
+    private final int messageResId;
     private int iconResId;
-    private int duration;
+    private final int duration;
 
     private int actionResId = ACTION_NONE;
     @Nullable
@@ -77,6 +77,11 @@ public class SnackbarDto {
 
     public SnackbarDto setArgs(Object[] args) {
         this.args = args;
+        return this;
+    }
+
+    public SnackbarDto setSingleArg(Object arg) {
+        this.args = new Object[]{arg};
         return this;
     }
 }

@@ -26,6 +26,14 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/AppCaptionWithIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/connecting_to_device"
+                android:visibility="@{!viewModel.applyingPossible ? View.VISIBLE : View.GONE}" />
+
+            <TextView
                 android:id="@+id/info_device_disable_1"
                 style="@style/AppCaptionWithIcon"
                 android:layout_width="match_parent"
@@ -99,7 +107,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:enabled="@{false}"
+                        android:enabled="@{viewModel.applyingPossible}"
                         android:onClick="@{() -> viewModel.applyTestTimetable()}"
                         android:paddingStart="0dp"
                         android:paddingEnd="0dp"

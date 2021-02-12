@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="74dp"
             android:layout_marginTop="12dp"
-            android:text="@{device.name}"
+            android:text="@{device.name == null ? @string/unknown_device_name : device.name}"
             tools:text="Bluetooth Device" />
 
         <TextView

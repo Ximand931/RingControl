@@ -8,6 +8,7 @@ import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.SingleLiveEvent;
 import com.happs.ximand.ringcontrol.model.dao.BluetoothDao;
 import com.happs.ximand.ringcontrol.model.dao.BluetoothEventListener;
+import com.happs.ximand.ringcontrol.model.dao.BluetoothNDao;
 import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
 import com.happs.ximand.ringcontrol.model.object.exception.BluetoothException;
 import com.happs.ximand.ringcontrol.model.object.exception.BluetoothIsDisabledException;
@@ -59,25 +60,15 @@ public class ActivityViewModel extends ViewModel {
     }
 
     public void afterOnCreate() {
-        FragmentNavigation.getInstance().navigateTo(AllTimetablesFragment.newInstance());
-        /*
-        if (bluetoothDao.isBluetoothEnable()) {
-            onBluetoothEnabled();
-        } else {
-            enableBluetoothLiveEvent.call();
-        }*/
+        BluetoothNDao.getInstance().enableBluetooth();
+        onBluetoothEnabled();
     }
 
     public void onBluetoothEnabled() {
-        subscribeToBluetoothEvents();
         navigateToFirstFragment();
     }
 
-    private void subscribeToBluetoothEvents() {
-        bluetoothDao.subscribeToEvents(infoEventListener);
-        bluetoothDao.subscribeToExceptions(exceptionEventListener);
-    }
-
+    @Deprecated
     public void onRefuseEnableBluetooth() {
         FragmentNavigation.getInstance().navigateTo(
                 ExceptionFragment.newInstance(new BluetoothIsDisabledException())

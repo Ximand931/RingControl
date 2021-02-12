@@ -52,6 +52,9 @@ public class SettingsFragment extends BaseFragment<SettingsViewModel, FragmentSe
         viewModel.getSetWeekendModeEvent().observe(
                 getViewLifecycleOwner(), this::makeSelectAlertDialog
         );
+        viewModel.getSetManualRingDurationEvent().observe(
+                getViewLifecycleOwner(), this::makeInputAlertDialog
+        );
     }
 
     private void makeSelectAlertDialog(SelectAlertDialogDto dialogDto) {

@@ -32,7 +32,7 @@
     </style>
 
     <style name="AppSelectableLayoutWithPadding" parent="AppSelectableLayout">
-        <item name="android:paddingStart">74dp</item>
+        <item name="android:paddingStart">75dp</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingBottom">16dp</item>
     </style>

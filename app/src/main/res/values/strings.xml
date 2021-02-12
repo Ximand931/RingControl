@@ -54,6 +54,8 @@
     <string name="wrong_number_format">Не число</string>
     <string name="too_small_value">Слишком маленькое значение (&lt; 500)</string>
     <string name="too_big_value">Слишком большое значение (> 30000)</string>
+    <string name="too_small_value_n">Слишком маленькое значение (&lt; 3)</string>
+    <string name="too_big_value_n">Слишком большое значение (> 59)</string>
     <string name="changes_did_not_complet">Изменение не завершено</string>
 
     <!-- Содержание Snackbar'а -->
@@ -99,6 +101,7 @@
     <string name="weekend_mode">Режим работы в выходные</string>
     <string name="manual_mode">Ручной режим</string>
     <string name="manual_mode_description">Пока активировано, звонки не будут подаваться автоматически</string>
+    <string name="unknown_device_name">Неизвестное имя устройства</string>
 
     <string name="stub" translatable="false">Stub</string>
 

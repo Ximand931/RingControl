@@ -1,5 +1,8 @@
 package com.happs.ximand.ringcontrol.viewmodel.fragment;
 
+import android.bluetooth.BluetoothDevice;
+import android.util.Log;
+
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableInt;
 import androidx.lifecycle.LiveData;
@@ -8,8 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.android.material.snackbar.Snackbar;
 import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
-import com.happs.ximand.ringcontrol.model.dao.BluetoothDao;
-import com.happs.ximand.ringcontrol.model.dao.BluetoothEventListener;
+import com.happs.ximand.ringcontrol.model.dao.BluetoothNDao;
 import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao;
 import com.happs.ximand.ringcontrol.model.object.command.ReplaceTimetableCommand;
 import com.happs.ximand.ringcontrol.model.object.command.simple.WeekendMode;
@@ -28,13 +30,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class AllTimetablesViewModel extends BaseViewModel {
+import me.aflak.bluetooth.Bluetooth;
+
+public class AllTimetablesViewModel extends BaseViewModel implements Bluetooth.CommunicationCallback {
 
     private static final int APPLIED_TIMETABLE_NONE = -2;
 
     private final MutableLiveData<List<Timetable>> allTimetablesLiveData = new MutableLiveData<>();
     private final MutableLiveData<Integer> numOfTestLessonsLiveData = new MutableLiveData<>();
-    private final BluetoothEventListener<BluetoothEvent> bluetoothEventListener;
     private final ObservableBoolean applyingPossible = new ObservableBoolean(false);
     private final ObservableInt lastAppliedTimetableId;
 
@@ -46,7 +49,6 @@ public class AllTimetablesViewModel extends BaseViewModel {
 
     public AllTimetablesViewModel() {
         this.numOfTestLessonsLiveData.setValue(2);
-        this.bluetoothEventListener = new BluetoothEventListener<>(this::onBluetoothEvent);
         this.lastAppliedTimetableId = new ObservableInt(
                 SharedPreferencesDao.getInstance().getAppliedTimetableId()
         );
@@ -97,6 +99,7 @@ public class AllTimetablesViewModel extends BaseViewModel {
         return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
+    @Deprecated
     private void onBluetoothEvent(BluetoothEvent event) {
         if (event == BluetoothEvent.READY) {
             applyingPossible.set(true);
@@ -129,13 +132,11 @@ public class AllTimetablesViewModel extends BaseViewModel {
     }
 
     public void addTestLesson() {
-        @SuppressWarnings("ConstantConditions")
         int numOfTestLessons = numOfTestLessonsLiveData.getValue();
         numOfTestLessonsLiveData.setValue(numOfTestLessons + 1);
     }
 
     public void removeTestLesson() {
-        @SuppressWarnings("ConstantConditions")
         int numOfTestLessons = numOfTestLessonsLiveData.getValue();
         numOfTestLessonsLiveData.setValue(numOfTestLessons - 1);
     }
@@ -148,7 +149,7 @@ public class AllTimetablesViewModel extends BaseViewModel {
 
     private void startConnectingToSavedDevice() {
         String savedAddress = SharedPreferencesDao.getInstance().getTargetDeviceAddress();
-        BluetoothDao.getInstance().startConnectToDeviceTask(savedAddress);
+        BluetoothNDao.getInstance().startConnecting(savedAddress, this);
     }
 
     public void showTimetableDetails(Timetable timetable) {
@@ -192,14 +193,37 @@ public class AllTimetablesViewModel extends BaseViewModel {
 
     public void applyTimetable(Timetable timetable) {
         byte[] command = new ReplaceTimetableCommand(timetable).getCommand();
-        BluetoothDao.getInstance().sendMessage(command);
+        BluetoothNDao.getInstance().sendMessage(command);
         currentSendTimetableTask = true;
         lastSentTimetableId = timetable.getId();
     }
 
     @Override
-    protected void onCleared() {
-        super.onCleared();
-        BluetoothDao.getInstance().unsubscribeFromEvents(bluetoothEventListener);
+    public void onConnect(BluetoothDevice device) {
+        Log.d("...", "connect");
+        applyingPossible.set(true);
+    }
+
+    @Override
+    public void onDisconnect(BluetoothDevice device, String message) {
+        Log.d("...", "disconnect");
+        applyingPossible.set(false);
+    }
+
+    @Override
+    public void onMessage(String message) {
+        Log.d("...", "message: " + message);
+    }
+
+    @Override
+    public void onError(String message) {
+        Log.d("...", "error");
+        applyingPossible.set(false);
+    }
+
+    @Override
+    public void onConnectError(BluetoothDevice device, String message) {
+        Log.d("...", "connect error");
+        applyingPossible.set(false);
     }
 }

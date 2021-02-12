@@ -27,7 +27,7 @@ public class Response {
         return commandCode;
     }
 
-    protected byte getResponseCode() {
+    public byte getResponseCode() {
         return responseCode;
     }
 

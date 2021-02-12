@@ -16,7 +16,7 @@ public final class TimeUtils {
                     "– (?:[01]\\d|2[0123]):(?:[012345]\\d):(?:[012345]\\d)";
     public static final String SIMPLE_TIME_MASK = "ss:ss – ss:ss";
     public static final String DETAILED_TIME_MASK = "ss:ss:ss – ss:ss:ss";
-    private static final String DATE_TIME_PATTERN = "H:m:s";
+    private static final String DATE_TIME_PATTERN = "HH:mm:ss";
 
     private TimeUtils() {
     }

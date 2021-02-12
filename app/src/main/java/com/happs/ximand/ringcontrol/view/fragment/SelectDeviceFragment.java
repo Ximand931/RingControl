@@ -20,6 +20,7 @@ public class SelectDeviceFragment extends BaseFragmentWithRecyclerView<SelectDev
 
     private SwipeRefreshLayout swipeRefreshLayout;
 
+
     public SelectDeviceFragment() {
         super(R.layout.fragment_select_devices, MENU_NONE);
     }
@@ -53,7 +54,7 @@ public class SelectDeviceFragment extends BaseFragmentWithRecyclerView<SelectDev
     @Override
     protected void onPreAttachRecyclerViewAdapter(BluetoothDevicesRecyclerViewAdapter adapter) {
         adapter.setDeviceSelectedListener(getViewModel()::notifyDeviceSelected);
-        adapter.setConnectingDeviceAddress(getViewModel().getConnectingAddress());
+        adapter.setConnectingDeviceAddress(getViewModel().getConnecting());
     }
 
     @Override

@@ -6,7 +6,7 @@ import com.happs.ximand.ringcontrol.model.object.timetable.Timetable;
 
 public class ReplaceTimetableCommand extends BluetoothCommand<Void> {
 
-    private static final byte REPLACE_TIMETABLE_COMMAND_CODE = 10;
+    private static final byte REPLACE_TIMETABLE_COMMAND_CODE = 11;
     private static final byte TIMETABLE_ID_STUB = 1;
 
     private final byte[] command;

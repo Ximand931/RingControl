@@ -1,6 +1,5 @@
 package com.happs.ximand.ringcontrol.view;
 
-import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.happs.ximand.ringcontrol.BR;
@@ -27,7 +27,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Objects;
 
 public abstract class BaseFragment<VM extends BaseViewModel, B extends ViewDataBinding>
-        extends Fragment {
+        extends Fragment implements LifecycleOwner {
 
     protected static final int MENU_NONE = 0;
 
@@ -44,16 +44,11 @@ public abstract class BaseFragment<VM extends BaseViewModel, B extends ViewDataB
     @NonNull
     protected VM getViewModel() {
         if (viewModel == null) {
-            onNotInitializedField();
+            throw new IllegalStateException(
+                    "viewModel not initialized, check that method is called after onCreate()"
+            );
         }
         return viewModel;
-    }
-
-    private void onNotInitializedField() {
-        throw new RuntimeException(
-                "field of class: " + getClass().getName()
-                        + " is null, check that method is called after onCreate()"
-        );
     }
 
     @Override
@@ -68,19 +63,18 @@ public abstract class BaseFragment<VM extends BaseViewModel, B extends ViewDataB
         super.onCreate(savedInstanceState);
         super.setHasOptionsMenu(true);
         viewModel = createFragmentViewModel();
+        getLifecycle().addObserver(viewModel);
     }
 
     protected VM createFragmentViewModel() {
-        if (getActivity() != null) {
-            Application application = getActivity().getApplication();
-            if (application != null) {
-                return new ViewModelProvider(
-                        getActivity(),
-                        new ViewModelProvider.AndroidViewModelFactory(application)
-                ).get(getGenericClass());
-            }
+        Application application = requireActivity().getApplication();
+        if (application != null) {
+            return new ViewModelProvider(
+                    requireActivity(),
+                    new ViewModelProvider.AndroidViewModelFactory(application)
+            ).get(getGenericClass());
         }
-        throw new RuntimeException("Activity or application is null");
+        return null;
     }
 
     @Nullable
@@ -100,7 +94,7 @@ public abstract class BaseFragment<VM extends BaseViewModel, B extends ViewDataB
     }
 
     protected void setActionBarTitle() {
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         if (actionBar != null) {
             onSetActionBarTitle(actionBar);
         }
@@ -156,19 +150,6 @@ public abstract class BaseFragment<VM extends BaseViewModel, B extends ViewDataB
 
     public String getDefaultTag() {
         return this.getClass().getSimpleName();
-    }
-
-    private ActionBar getActionBar() {
-        return ((AppCompatActivity) getCheckedActivity()).getSupportActionBar();
-    }
-
-    private Activity getCheckedActivity() {
-        Activity activity = getActivity();
-        if (activity != null) {
-            return activity;
-        } else {
-            throw new RuntimeException("Unable to continue; activity was destroyed");
-        }
     }
 
     @SuppressWarnings("unchecked")

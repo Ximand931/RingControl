@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.happs.ximand.ringcontrol.FragmentNavigation;
 import com.happs.ximand.ringcontrol.R;
 import com.happs.ximand.ringcontrol.databinding.ActivityMainBinding;
+import com.happs.ximand.ringcontrol.model.dao.BluetoothNDao;
 import com.happs.ximand.ringcontrol.viewmodel.ActivityViewModel;
 
 
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FragmentNavigation.initialize(getSupportFragmentManager());
+        BluetoothNDao.initialize(this);
         ActivityMainBinding binding = DataBindingUtil
                 .setContentView(this, R.layout.activity_main);
         this.viewModel = createViewModel();

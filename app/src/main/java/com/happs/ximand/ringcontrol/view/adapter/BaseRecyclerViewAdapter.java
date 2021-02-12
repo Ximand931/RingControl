@@ -17,6 +17,7 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
         return items;
     }
 
+    @Deprecated
     public void notifyListUpdated(List<T> updatedItems) {
         int oldSize = this.items.size();
         int updatedSize = updatedItems.size();

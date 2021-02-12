@@ -35,7 +35,7 @@ public final class SharedPreferencesDao {
     private static final String PREF_MANUAL_MODE_STATE = "MANUAL_MODE";
     private static final boolean MANUAL_MODE_STATE_DEF_VALUE = false;
 
-    private SharedPreferences preferences;
+    private final SharedPreferences preferences;
 
     private SharedPreferencesDao(Application application) {
         this.preferences = application

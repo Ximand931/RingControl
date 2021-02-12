@@ -35,12 +35,11 @@ public abstract class BaseFragmentWithRecyclerView<VM extends BaseViewModel,
             throw new IllegalStateException();
         }
         A adapter = getAdapter();
-        if (adapter == null) {
-            A newAdapter = createNewAdapter(items);
-            onPreAttachRecyclerViewAdapter(newAdapter);
-            recyclerView.setAdapter(newAdapter);
-        } else {
-            adapter.notifyListUpdated(items);
+        A newAdapter = createNewAdapter(items);
+        onPreAttachRecyclerViewAdapter(newAdapter);
+        recyclerView.setAdapter(newAdapter);
+        if (adapter != null) {
+            recyclerView.invalidate();
         }
     }
 

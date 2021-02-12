@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+@Deprecated
 public final class BluetoothDao {
 
     private static BluetoothDao instance;
@@ -40,10 +41,7 @@ public final class BluetoothDao {
     }
 
     public static BluetoothDao getInstance() {
-        if (instance == null) {
-            instance = new BluetoothDao();
-        }
-        return instance;
+        return null;
     }
 
     public void subscribeToResponses(BluetoothEventListener<Response> responseListener) {
@@ -87,6 +85,10 @@ public final class BluetoothDao {
         for (BluetoothEventListener<BluetoothException> subscriber : exceptionListeners) {
             subscriber.onEvent(exception);
         }
+    }
+
+    public boolean isBluetoothEnabled() {
+        return BluetoothAdapter.getDefaultAdapter().isEnabled();
     }
 
     public void startConnectToDeviceTask(BluetoothDevice target) {
