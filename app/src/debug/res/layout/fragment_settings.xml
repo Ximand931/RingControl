@@ -79,6 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/manual_mode"
+                app:inactiveOnEvent="@{!viewModel.sendDataPossible}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -88,6 +89,7 @@
                 android:layout_height="wrap_content"
                 android:ems="16"
                 android:text="@string/manual_mode_description"
+                app:inactiveOnEvent="@{!viewModel.sendDataPossible}"
                 app:layout_constraintStart_toStartOf="@+id/textView5"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -128,7 +130,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:onClick="@{() -> viewModel.makeManualRing()}"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:inactiveOnEvent="@{!viewModel.sendDataPossible}">
 
             <TextView
                 style="@style/TextAppearance.MaterialComponents.Subtitle1"
@@ -153,7 +156,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="@{() -> viewModel.sendNewDateTime()}"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:inactiveOnEvent="@{!viewModel.sendDataPossible}">
 
             <TextView
                 style="@style/TextAppearance.MaterialComponents.Subtitle1"

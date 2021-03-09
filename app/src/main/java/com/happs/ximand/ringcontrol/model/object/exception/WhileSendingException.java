@@ -2,7 +2,8 @@ package com.happs.ximand.ringcontrol.model.object.exception;
 
 import com.happs.ximand.ringcontrol.R;
 
-public class WhileSendingException extends BluetoothException {
+@Deprecated
+public class WhileSendingException extends BluetoothExceptionDep {
 
     @Override
     public int getMessageResId() {

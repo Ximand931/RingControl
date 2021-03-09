@@ -18,8 +18,8 @@
             type="com.happs.ximand.ringcontrol.model.object.timetable.Timetable" />
 
         <variable
-            name="applyClickListener"
-            type="com.happs.ximand.ringcontrol.OnEventListener&lt;com.happs.ximand.ringcontrol.model.object.timetable.Timetable>" />
+            name="timetableClickHandler"
+            type="com.happs.ximand.ringcontrol.view.adapter.AllTimetablesRecyclerViewAdapter.TimetableClickHandler" />
 
         <variable
             name="detailsClickListener"
@@ -85,7 +85,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:enabled="@{applyingPossible}"
-                    android:onClick="@{() -> applyClickListener.onEvent(timetable)}"
+                    android:onClick="@{() -> timetableClickHandler.applyTimetableClickListener.invoke(timetable)}"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
                     android:text="@string/apply"
@@ -96,7 +96,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:onClick="@{() -> detailsClickListener.onEvent(timetable)}"
+                    android:onClick="@{() -> timetableClickHandler.detailsTimetableClickListener.invoke(timetable)}"
                     android:paddingStart="0dp"
                     android:paddingEnd="0dp"
                     android:text="@string/details"

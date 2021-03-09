@@ -7,9 +7,8 @@ import android.bluetooth.BluetoothSocket;
 import androidx.annotation.Nullable;
 
 import com.happs.ximand.ringcontrol.OnEventListener;
-import com.happs.ximand.ringcontrol.model.object.exception.BluetoothException;
+import com.happs.ximand.ringcontrol.model.object.exception.BluetoothExceptionDep;
 import com.happs.ximand.ringcontrol.model.object.exception.FailedToConnectException;
-import com.happs.ximand.ringcontrol.model.object.exception.WhileConnectingException;
 import com.happs.ximand.ringcontrol.model.object.exception.WhileReadingException;
 import com.happs.ximand.ringcontrol.model.object.exception.WhileSendingException;
 import com.happs.ximand.ringcontrol.model.object.info.BluetoothEvent;
@@ -29,7 +28,7 @@ public final class BluetoothDao {
 
     private final Set<BluetoothEventListener<Response>> responseListeners = new HashSet<>();
     private final Set<BluetoothEventListener<BluetoothEvent>> eventListeners = new HashSet<>();
-    private final Set<BluetoothEventListener<BluetoothException>> exceptionListeners =
+    private final Set<BluetoothEventListener<BluetoothExceptionDep>> exceptionListeners =
             new HashSet<>();
 
     @Nullable
@@ -72,17 +71,17 @@ public final class BluetoothDao {
         }
     }
 
-    public void subscribeToExceptions(BluetoothEventListener<BluetoothException> exceptionListener) {
+    public void subscribeToExceptions(BluetoothEventListener<BluetoothExceptionDep> exceptionListener) {
         exceptionListeners.add(exceptionListener);
     }
 
-    public void unsubscribeFromExceptionEvents(BluetoothEventListener<BluetoothException>
+    public void unsubscribeFromExceptionEvents(BluetoothEventListener<BluetoothExceptionDep>
                                                        exceptionEventListener) {
         exceptionListeners.remove(exceptionEventListener);
     }
 
-    private void notifySubscribersAboutException(BluetoothException exception) {
-        for (BluetoothEventListener<BluetoothException> subscriber : exceptionListeners) {
+    private void notifySubscribersAboutException(BluetoothExceptionDep exception) {
+        for (BluetoothEventListener<BluetoothExceptionDep> subscriber : exceptionListeners) {
             subscriber.onEvent(exception);
         }
     }
@@ -119,7 +118,7 @@ public final class BluetoothDao {
             bluetoothThread.start();
             notifySubscribersAboutEvent(BluetoothEvent.READY);
         } else {
-            notifySubscribersAboutException(new WhileConnectingException());
+            //notifySubscribersAboutException(new WhileConnectingException(new IllegalStateException("3")));
             notifySubscribersAboutEvent(BluetoothEvent.ERROR_WHILE_CONNECTING);
         }
     }

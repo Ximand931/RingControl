@@ -9,10 +9,6 @@
             name="viewModel"
             type="com.happs.ximand.ringcontrol.viewmodel.fragment.AllTimetablesViewModel" />
 
-        <variable
-            name="sharedViewModel"
-            type="com.happs.ximand.ringcontrol.viewmodel.ActivityViewModel" />
-
         <import type="android.view.View" />
     </data>
 

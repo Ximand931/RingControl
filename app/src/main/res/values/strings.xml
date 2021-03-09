@@ -65,7 +65,16 @@
     <string name="connected">Успешно подключено</string>
     <string name="bluetooth_error">Ошибка при работе Bluetooth</string>
     <string name="failed_to_connect">Не удалось подключиться к устройству. Убедитесь, что вы выбрали правильное устройство.</string>
-    <string name="error_while_connecting">Ошибка при подключении. Убедитесь, что вы выбрали правильное устройство.</string>
+
+    <string name="error_while_connecting">Ошибка при подключении к устройству</string>
+    <string name="error_while_connecting_desc">Ошибка при подключении. Убедитесь, что:\n\n • Bluetooth включен\n\n • Определение геопозиции включено\n\n • Вы находитесь близко к устройству, к которому подключаетесь \n\n • Вы подключаетесь к верному устройству</string>
+
+    <string name="location_perm_deny">Для продолжения необходимо разрешить определять геолокацию</string>
+    <string name="location_perm_deny_description">Для работы с Bluetooth приложению необходимо разрешение на получение точного местоположения.\n\nКак это работает:\n\n• По названию сети можно получить примерное местоположение пользователя, поэтому требуется разрешение на получение геопозиции для любой работы с Bluetooth\n\n• Приложение не использует данные ваших Bluetooth сетей для определения вашей геопозиции\n\n• Если вы уже отказались предоставить соответсвующее разрешение, перейдите в настройки и сделайте это вречную</string>
+
+    <string name="unsuccessfully_response">Не удалось выполнить последнюю операцию</string>
+    <string name="unsuccessfully_response_description">Не удалось выполнить последнюю операцию.\n\n • Убедитесь, что устройство находится достаточно близко к телефону\n\n • Попробуйте повторить попытку\n\n • Если ошибка происходит снова, попробуйте сбросить память устройства</string>
+
     <string name="auth_error">Ошибка аутентификации</string>
     <string name="data_updated">Данные обновлены</string>
     <string name="error_while_reading">Ошибка при чтении входящего сообщения</string>
@@ -83,13 +92,13 @@
     <!-- Для String.format -->
     <string name="lesson">Урок %d</string>
     <string name="format_time_title">Урок %d</string>
-    <string name="format_test_timetable_desc">Уроки - %d, звонки - %d, начиная с текущего времени плюс 1 минуты</string>
+    <string name="format_test_timetable_desc">Уроки - %d, звонки - %d, начиная с текущего времени плюс 30 секунд</string>
     <string name="format_timetable_desc">Уроки - %d: %s</string>
     <string name="format_preview_time">%s – %s</string>
-    <string name="format_ring_duration">%d милисекунд</string>
+    <string name="format_ring_duration">%d секунд</string>
 
     <string name="test_timetable">Тестовое расписание</string>
-    <string name="title_exception">Ошибка при подключении</string>
+    <string name="error_reasons">Причина ошибки</string>
     <string name="select_device">Выберите устройство для подключения</string>
     <string name="cant_find_device">Устройства нет в списке или вы еще не подключились к нему?</string>
     <string name="connect_device">Подключиться к устройству</string>
@@ -97,13 +106,24 @@
     <string name="go_to_settings">Перейти в настройки</string>
     <string name="choose_device_caption">Выберите подключенное устройство. Для подключения перейдите в настройки</string>
     <string name="ring_duration">Длительность звонка</string>
-    <string name="set_in_milliseconds">Устанавливается в милисекундах</string>
+    <string name="set_in_milliseconds">Устанавливается в секундах</string>
     <string name="weekend_mode">Режим работы в выходные</string>
     <string name="manual_mode">Ручной режим</string>
     <string name="manual_mode_description">Пока активировано, звонки не будут подаваться автоматически</string>
     <string name="unknown_device_name">Неизвестное имя устройства</string>
 
+    <string name="support">Техническая поддержка</string>
+    <string name="support_email">ximand931@gmail.com</string>
+    <string name="no_one_client_title">Невозможно отправить письмо</string>
+    <string name="no_one_email_client">На телефоне не установлено ни одного почтового клиента, с которого можно было бы отправить сообщение</string>
+
     <string name="stub" translatable="false">Stub</string>
+
+    <string name="success_sent">Данные успешно отправлены на устройство</string>
+    <string name="go_to_notification_settings">Перейти в настройки разрешений</string>
+    <string name="restart_app">Перезапустить приложение</string>
+
+    <string name="error_format">Ошибка 0x%02X</string>
 
     <string-array name="weekend_mods">
         <item>@string/mode_not_work_on_weekends</item>

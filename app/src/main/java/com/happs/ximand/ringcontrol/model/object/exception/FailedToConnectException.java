@@ -2,7 +2,8 @@ package com.happs.ximand.ringcontrol.model.object.exception;
 
 import com.happs.ximand.ringcontrol.R;
 
-public class FailedToConnectException extends BluetoothException {
+@Deprecated
+public class FailedToConnectException extends BluetoothExceptionDep {
 
     @Override
     public int getMessageResId() {

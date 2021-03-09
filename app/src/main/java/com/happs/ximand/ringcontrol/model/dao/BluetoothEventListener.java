@@ -5,6 +5,7 @@ import com.happs.ximand.ringcontrol.OnEventListener;
 import java.util.Objects;
 import java.util.Random;
 
+@Deprecated
 public final class BluetoothEventListener<T> implements OnEventListener<T> {
 
     private final long id;

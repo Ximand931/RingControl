@@ -7,9 +7,9 @@ class ChangeRingDurationCommandTest {
 
     @Test
     void getCommandTest() {
-        ChangeRingDurationCommand changeRingDurationCommand = new ChangeRingDurationCommand(5000);
+        ChangeRingDurationCommandDep changeRingDurationCommand = new ChangeRingDurationCommandDep(5000);
         byte[] expectedCommand = new byte[]{20, (byte) 0x88, 0x13};
-        byte[] actualCommand = changeRingDurationCommand.getCommand();
+        byte[] actualCommand = changeRingDurationCommand.toByteArray();
         Assert.assertArrayEquals(expectedCommand, actualCommand);
     }
 

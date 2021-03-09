@@ -141,7 +141,7 @@
                 android:layout_marginEnd="16dp"
                 android:background="?android:selectableItemBackgroundBorderless"
                 android:contentDescription="@string/add_lesson"
-                android:enabled="@{viewModel.numOfLessons > 0}"
+                android:enabled="@{viewModel.numOfLessonsLiveData > 0}"
                 android:onClick="@{() -> viewModel.removeLastLesson()}"
                 android:src="@drawable/ic_remove"
                 app:layout_constraintBottom_toBottomOf="@+id/remove_lesson_title"

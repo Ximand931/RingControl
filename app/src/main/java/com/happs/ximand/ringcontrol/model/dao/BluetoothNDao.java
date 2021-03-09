@@ -13,6 +13,7 @@ import java.io.OutputStream;
 
 import me.aflak.bluetooth.Bluetooth;
 
+@Deprecated
 public class BluetoothNDao {
 
     private static BluetoothNDao instance;
