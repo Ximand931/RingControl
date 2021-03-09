@@ -2,11 +2,11 @@ package com.happs.ximand.ringcontrol.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
+import androidx.appcompat.widget.Toolbar
 import com.happs.ximand.ringcontrol.FragmentNavigation
 import com.happs.ximand.ringcontrol.R
-import com.happs.ximand.ringcontrol.databinding.ActivityMainBinding
 import com.happs.ximand.ringcontrol.model.dao.BluetoothNDao
+import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -20,11 +20,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
         FragmentNavigation.initialize(supportFragmentManager)
         BluetoothNDao.initialize(this)
-        val binding: ActivityMainBinding = DataBindingUtil
-                .setContentView(this, R.layout.activity_main)
-        val toolbar = binding.mainToolbar
+        val toolbar = findViewById<Toolbar>(R.id.main_toolbar)
         setSupportActionBar(toolbar)
+        FragmentNavigation.getInstance().navigateTo(AllTimetablesFragment.newInstance())
     }
 }
