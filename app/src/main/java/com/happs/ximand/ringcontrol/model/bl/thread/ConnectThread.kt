@@ -5,9 +5,11 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import com.happs.ximand.ringcontrol.model.bl.BluetoothCommunicator
 import com.happs.ximand.ringcontrol.model.bl.callback.ConnectCallback
+import com.happs.ximand.ringcontrol.model.bl.exception.ConnectingException
+import com.happs.ximand.ringcontrol.model.bl.exception.CreateSocketException
 import java.io.IOException
 
-class ConnectThread(device: BluetoothDevice,
+class ConnectThread(private val device: BluetoothDevice,
                     private val onConnected: (socket: BluetoothSocket) -> Unit) : Thread() {
 
     var connectionCallback: ConnectCallback? = null
@@ -23,7 +25,7 @@ class ConnectThread(device: BluetoothDevice,
         try {
             socket = device.createRfcommSocketToServiceRecord(BluetoothCommunicator.UUID)
         } catch (e: IOException) {
-            connectionCallback?.onException(e)
+            connectionCallback?.onException(CreateSocketException(e))
         }
     }
 
@@ -35,10 +37,10 @@ class ConnectThread(device: BluetoothDevice,
         if (socket != null) {
             try {
                 socket!!.connect()
-                connectionCallback?.onConnected()
+                connectionCallback?.onConnected(device)
                 onConnected.invoke(socket!!)
             } catch (e: IOException) {
-                connectionCallback?.onException(e)
+                connectionCallback?.onException(ConnectingException(e))
                 socket!!.close()
             }
         }

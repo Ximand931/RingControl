@@ -4,6 +4,7 @@ import android.app.Activity
 import android.bluetooth.BluetoothDevice
 import android.content.IntentFilter
 import com.happs.ximand.ringcontrol.model.bl.callback.PairCallback
+import com.happs.ximand.ringcontrol.model.bl.exception.PairingDeviceException
 import com.happs.ximand.ringcontrol.model.bl.receiver.PairBroadcastReceiver
 
 class BluetoothPairer(private val activity: Activity) {
@@ -20,7 +21,7 @@ class BluetoothPairer(private val activity: Activity) {
             val method = device.javaClass.getMethod("createBond", null)
             method.invoke(device, null)
         } catch (e: Exception) {
-            pairCallback?.onException(e)
+            pairCallback?.onException(PairingDeviceException(e))
         }
     }
 
@@ -30,7 +31,7 @@ class BluetoothPairer(private val activity: Activity) {
             val method = device.javaClass.getMethod("removeBond", null)
             method.invoke(device, null)
         } catch (e: Exception) {
-            pairCallback?.onException(e)
+            pairCallback?.onException(PairingDeviceException(e))
         }
     }
 

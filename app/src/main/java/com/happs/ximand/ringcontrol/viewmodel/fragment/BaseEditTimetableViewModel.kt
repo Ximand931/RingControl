@@ -48,15 +48,16 @@ abstract class BaseEditTimetableViewModel : BaseViewModel() {
         if (correct) {
             onCompleteEditAction()
             onEditActionCompleted()
-            FragmentNavigation.getInstance().navigateToPreviousFragment()
+            FragmentNavigation.instance.navigateToPreviousFragment()
         } else {
             //makeExceptionSnackbarWithAction(getErrorMessageResId(), ); TODO
         }
     }
 
     protected abstract fun onCompleteEditAction()
+
     protected open fun onEditActionCompleted() {
-        FragmentNavigation.getInstance().notifyFragmentAboutEvent(
+        FragmentNavigation.instance.notifyFragmentAboutEvent(
                 AllTimetablesFragment.TAG, AllTimetablesFragment.EVENT_TIMETABLE_LIST_UPDATED
         )
     }
@@ -96,6 +97,6 @@ abstract class BaseEditTimetableViewModel : BaseViewModel() {
     }
 
     private fun onCancelClick() {
-        FragmentNavigation.getInstance().navigateToPreviousFragment()
+        FragmentNavigation.instance.navigateToPreviousFragment()
     }
 }

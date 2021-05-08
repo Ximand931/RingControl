@@ -1,19 +1,22 @@
 package com.happs.ximand.ringcontrol.viewmodel.fragment
 
 import android.bluetooth.BluetoothDevice
-import android.util.Log
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableInt
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.OnLifecycleEvent
 import com.google.android.material.snackbar.Snackbar
 import com.happs.ximand.ringcontrol.FragmentNavigation
 import com.happs.ximand.ringcontrol.R
 import com.happs.ximand.ringcontrol.model.`object`.command.ReplaceTimetableCommand
 import com.happs.ximand.ringcontrol.model.`object`.command.simple.WeekendMode
-import com.happs.ximand.ringcontrol.model.`object`.info.BluetoothEvent
+import com.happs.ximand.ringcontrol.model.`object`.exception.BaseException
 import com.happs.ximand.ringcontrol.model.`object`.timetable.Lesson
 import com.happs.ximand.ringcontrol.model.`object`.timetable.Timetable
-import com.happs.ximand.ringcontrol.model.dao.BluetoothNDao
+import com.happs.ximand.ringcontrol.model.bl.BluetoothCommunicator
+import com.happs.ximand.ringcontrol.model.bl.callback.ConnectCallback
+import com.happs.ximand.ringcontrol.model.bl.callback.SendCallback
 import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao
 import com.happs.ximand.ringcontrol.model.repository.impl.TimetableRepository
 import com.happs.ximand.ringcontrol.model.specification.impl.GetAllSqlSpecification
@@ -22,10 +25,9 @@ import com.happs.ximand.ringcontrol.view.fragment.SettingsFragment
 import com.happs.ximand.ringcontrol.view.fragment.TimetableInfoFragment.Companion.newInstance
 import com.happs.ximand.ringcontrol.viewmodel.dto.SnackbarDto
 import com.happs.ximand.ringcontrol.viewmodel.util.TimeUtils.getCurrentTimeWithFewMinutes
-import me.aflak.bluetooth.Bluetooth.CommunicationCallback
 import java.util.*
 
-class AllTimetablesViewModel : BaseViewModel(), CommunicationCallback {
+class AllTimetablesViewModel : BaseViewModel(), SendCallback, ConnectCallback {
 
     val allTimetablesLiveData: MutableLiveData<MutableList<Timetable>> = MutableLiveData()
     val numOfTestLessonsLiveData = MutableLiveData<Int>()
@@ -40,16 +42,22 @@ class AllTimetablesViewModel : BaseViewModel(), CommunicationCallback {
     init {
         numOfTestLessonsLiveData.value = 2
         lastAppliedTimetableId = ObservableInt(
-                SharedPreferencesDao.getInstance().getAppliedTimetableId()
+                SharedPreferencesDao.instance.getAppliedTimetableId()
         )
-        manualModeStateLiveData.value = SharedPreferencesDao.getInstance().getManualModeState()
+        manualModeStateLiveData.value = SharedPreferencesDao.instance.getManualModeState()
         weekendModeLiveData.value = getCurrentWeekendMode()
         updateData()
         startConnectingToSavedDevice()
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume() {
+        BluetoothCommunicator.instance.sendCallback = this
+        BluetoothCommunicator.instance.connectCallback = this
+    }
+
     private fun getCurrentWeekendMode(): WeekendMode {
-        return WeekendMode.getInstanceForModeId(SharedPreferencesDao.getInstance().getWeekendMode())
+        return WeekendMode.getInstanceForModeId(SharedPreferencesDao.instance.getWeekendMode())
     }
 
     fun isWeekendModeCaptionShouldBeShown(weekendMode: WeekendMode): Boolean {
@@ -64,19 +72,23 @@ class AllTimetablesViewModel : BaseViewModel(), CommunicationCallback {
         return calendar[Calendar.DAY_OF_WEEK]
     }
 
-    @Deprecated("")
-    private fun onBluetoothEvent(event: BluetoothEvent) {
-        if (event == BluetoothEvent.READY) {
-            applyingPossible.set(true)
+    override fun onConnected(device: BluetoothDevice) {
+        applyingPossible.set(true)
+    }
+
+    override fun onSent(sentBytes: ByteArray) {
+        if (sentBytes[0] == ReplaceTimetableCommand.CODE) {
             updateLastAppliedTimetableIfNecessary()
-        } else if (applyingPossible.get()) {
-            applyingPossible.set(false)
         }
     }
 
+    override fun onException(e: BaseException) {
+        applyingPossible.set(false)
+    }
+
     private fun updateLastAppliedTimetableIfNecessary() {
-        if (currentSendTimetableTask && lastSentTimetableId != lastAppliedTimetableId.get()) {
-            SharedPreferencesDao.getInstance()
+        if (lastSentTimetableId != lastAppliedTimetableId.get()) {
+            SharedPreferencesDao.instance
                     .updateAppliedTimetableId(lastSentTimetableId)
         }
         currentSendTimetableTask = false
@@ -85,10 +97,10 @@ class AllTimetablesViewModel : BaseViewModel(), CommunicationCallback {
     override fun notifyOptionsMenuItemClicked(itemId: Int): Boolean {
         when (itemId) {
             R.id.toolbar_add -> {
-                FragmentNavigation.getInstance().navigateTo(AddTimetableFragment.newInstance())
+                FragmentNavigation.instance.navigateTo(AddTimetableFragment.newInstance())
             }
             R.id.toolbar_settings -> {
-                FragmentNavigation.getInstance().navigateTo(SettingsFragment.newInstance())
+                FragmentNavigation.instance.navigateTo(SettingsFragment.newInstance())
             }
             else -> return false
         }
@@ -111,13 +123,14 @@ class AllTimetablesViewModel : BaseViewModel(), CommunicationCallback {
     }
 
     private fun startConnectingToSavedDevice() {
-        val savedAddress = SharedPreferencesDao.getInstance().getTargetDeviceAddress()
-        BluetoothNDao.getInstance().startConnecting(savedAddress, this)
+        val savedAddress = SharedPreferencesDao.instance.getTargetDeviceAddress()
+        BluetoothCommunicator.instance
+                .connectToDevice(checkNotNull(savedAddress))
     }
 
     fun showTimetableDetails(timetable: Timetable?) {
         val fragment = newInstance(timetable)
-        FragmentNavigation.getInstance().navigateTo(fragment)
+        FragmentNavigation.instance.navigateTo(fragment)
     }
 
     fun notifyAppliedTimetableUpdated() {
@@ -129,7 +142,7 @@ class AllTimetablesViewModel : BaseViewModel(), CommunicationCallback {
     }
 
     private fun applyUpdatedCurrentTimetable() {
-        val appliedTimetableId = SharedPreferencesDao.getInstance().getAppliedTimetableId()
+        val appliedTimetableId = SharedPreferencesDao.instance.getAppliedTimetableId()
         val allTimetables: List<Timetable>? = allTimetablesLiveData.value
         if (allTimetables != null) {
             applyTimetable(allTimetables[appliedTimetableId])
@@ -157,37 +170,13 @@ class AllTimetablesViewModel : BaseViewModel(), CommunicationCallback {
 
     fun applyTimetable(timetable: Timetable) {
         val command: ByteArray = ReplaceTimetableCommand(timetable).toByteArray()
-        BluetoothNDao.getInstance().sendMessage(command)
+        BluetoothCommunicator.instance.writeBytes(command)
         currentSendTimetableTask = true
         lastSentTimetableId = timetable.id
     }
 
-    override fun onConnect(device: BluetoothDevice) {
-        Log.d("...", "connect")
-        applyingPossible.set(true)
-    }
-
-    override fun onDisconnect(device: BluetoothDevice, message: String) {
-        Log.d("...", "disconnect")
-        applyingPossible.set(false)
-    }
-
-    override fun onMessage(message: String) {
-        Log.d("...", "message: $message")
-    }
-
-    override fun onError(message: String) {
-        Log.d("...", "error")
-        applyingPossible.set(false)
-    }
-
-    override fun onConnectError(device: BluetoothDevice, message: String) {
-        Log.d("...", "connect error")
-        applyingPossible.set(false)
-    }
-
     companion object {
         private const val APPLIED_TIMETABLE_NONE = -2
-
     }
+
 }

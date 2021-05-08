@@ -12,7 +12,6 @@ import com.happs.ximand.ringcontrol.view.fragment.EditTimetableFragment.Companio
 
 class TimetableInfoViewModel : BaseViewModel() {
 
-    //TODO: use DTO
     val alertDialogLiveEvent: SingleLiveEvent<DialogInterface.OnClickListener> = SingleLiveEvent()
     val timetableLiveData: MutableLiveData<Timetable> = MutableLiveData()
 
@@ -27,7 +26,7 @@ class TimetableInfoViewModel : BaseViewModel() {
                 true
             }
             R.id.toolbar_edit -> {
-                FragmentNavigation.getInstance().navigateTo(newInstance(
+                FragmentNavigation.instance.navigateTo(newInstance(
                         timetableLiveData.value))
                 true
             }
@@ -39,14 +38,14 @@ class TimetableInfoViewModel : BaseViewModel() {
         alertDialogLiveEvent.value = DialogInterface.OnClickListener { _: DialogInterface?, _: Int ->
             TimetableRepository.getInstance().remove(timetableLiveData.value!!)
             notifyAllTimetablesFragmentThatTimetableListUpdated()
-            FragmentNavigation.getInstance().navigateToPreviousFragment()
+            FragmentNavigation.instance.navigateToPreviousFragment()
         }
     }
 
     private fun notifyAllTimetablesFragmentThatTimetableListUpdated() {
         val tag = AllTimetablesFragment.TAG
         val id = AllTimetablesFragment.EVENT_TIMETABLE_LIST_UPDATED
-        FragmentNavigation.getInstance().notifyFragmentAboutEvent(tag, id)
+        FragmentNavigation.instance.notifyFragmentAboutEvent(tag, id)
     }
 
 }

@@ -1,27 +1,49 @@
 package com.happs.ximand.ringcontrol.model.bl
 
-import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.content.Context
 import android.content.IntentFilter
+import android.os.Handler
 import com.happs.ximand.ringcontrol.model.bl.callback.SearchCallback
 import com.happs.ximand.ringcontrol.model.bl.exception.DiscoveryModeNotStartedException
 import com.happs.ximand.ringcontrol.model.bl.receiver.SearchDevicesBroadcastReceiver
+import java.lang.ref.WeakReference
 
-class BluetoothScanner(private val activity: Activity) {
+class BluetoothScanner(applicationContext: Context) {
 
+    private val contextRef = WeakReference<Context>(applicationContext)
     private val bluetoothAdapter = BluetoothUtils.getBluetoothAdapter()
     private val searchBroadcastReceiver = SearchDevicesBroadcastReceiver()
 
+    var timeToSearch = 10000L
     var searchCallback: SearchCallback? = null
 
-    fun searchDevices() {
+    companion object {
+        lateinit var instance: BluetoothScanner
+
+        fun initialize(applicationContext: Context) {
+            instance = BluetoothScanner(applicationContext)
+        }
+    }
+
+    fun isCurrentScanning(): Boolean {
+        return bluetoothAdapter.isDiscovering
+    }
+
+    fun startDevicesSearching() {
         val filter = makeIntentFilterForSearchBluetoothDevices()
-        activity.registerReceiver(searchBroadcastReceiver, filter)
+        val context = contextRef.get() ?: throw IllegalStateException()
+        context.registerReceiver(searchBroadcastReceiver, filter)
         val success = bluetoothAdapter.startDiscovery()
+        searchBroadcastReceiver.searchCallback = searchCallback
         if (!success) {
             searchCallback?.onException(DiscoveryModeNotStartedException())
         }
+        Handler().postDelayed({
+            bluetoothAdapter.cancelDiscovery()
+            context.unregisterReceiver(searchBroadcastReceiver)
+        }, timeToSearch)
     }
 
     private fun makeIntentFilterForSearchBluetoothDevices(): IntentFilter {

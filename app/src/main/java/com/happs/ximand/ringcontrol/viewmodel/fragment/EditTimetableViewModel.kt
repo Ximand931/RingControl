@@ -41,11 +41,11 @@ class EditTimetableViewModel : BaseEditTimetableViewModel() {
 
     private fun isAppliedTimetable(): Boolean {
         return editingTimetable?.id ==
-                SharedPreferencesDao.getInstance().getAppliedTimetableId()
+                SharedPreferencesDao.instance.getAppliedTimetableId()
     }
 
     private fun notifyMainFragmentAboutAppliedTimetableUpdated() {
-        FragmentNavigation.getInstance().notifyFragmentAboutEvent(
+        FragmentNavigation.instance.notifyFragmentAboutEvent(
                 AllTimetablesFragment.TAG, AllTimetablesFragment.EVENT_APPLIED_TIMETABLE_UPDATED
         )
     }

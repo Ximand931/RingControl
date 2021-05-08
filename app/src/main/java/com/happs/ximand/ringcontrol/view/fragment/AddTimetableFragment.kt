@@ -15,7 +15,7 @@ class AddTimetableFragment : BaseEditTimetableFragment<AddTimetableViewModel, Fr
         }
     }
 
-    override fun getRecyclerViewFromBinding(binding: FragmentAddTimetableBinding): RecyclerView? {
+    override fun getRecyclerViewFromBinding(binding: FragmentAddTimetableBinding): RecyclerView {
         return binding.lessonsRecyclerView
     }
 

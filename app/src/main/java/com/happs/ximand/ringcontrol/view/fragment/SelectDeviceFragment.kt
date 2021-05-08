@@ -1,8 +1,6 @@
 package com.happs.ximand.ringcontrol.view.fragment
 
 import android.bluetooth.BluetoothDevice
-import android.content.Intent
-import android.provider.Settings
 import androidx.appcompat.app.ActionBar
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
@@ -33,12 +31,15 @@ class SelectDeviceFragment : BaseFragmentWithRecyclerView<SelectDeviceViewModel,
     override fun onViewDataBindingCreated(binding: FragmentSelectDevicesBinding) {
         super.onViewDataBindingCreated(binding)
         swipeRefreshLayout = binding.swipeRefreshLayout
-        swipeRefreshLayout!!.setOnRefreshListener { onRefresh() }
+        swipeRefreshLayout!!.setOnRefreshListener {
+            onRefresh()
+        }
     }
 
     private fun onRefresh() {
-        requireViewModel().updateData()
-        swipeRefreshLayout!!.isRefreshing = false
+        requireViewModel().updateData(requireContext()) {
+            swipeRefreshLayout!!.isRefreshing = false
+        }
     }
 
     override fun getRecyclerViewFromBinding(binding: FragmentSelectDevicesBinding): RecyclerView {
@@ -46,7 +47,7 @@ class SelectDeviceFragment : BaseFragmentWithRecyclerView<SelectDeviceViewModel,
     }
 
     override fun onPreAttachRecyclerViewAdapter(adapter: BluetoothDevicesRecyclerViewAdapter) {
-        adapter.deviceSelectedListener = requireViewModel()::notifyDeviceSelected
+        adapter.deviceSelectedListener = requireViewModel()::connectToDevice
         adapter.connecting = requireViewModel().connecting
     }
 
@@ -54,15 +55,11 @@ class SelectDeviceFragment : BaseFragmentWithRecyclerView<SelectDeviceViewModel,
         viewModel.devicesLiveData.observe(viewLifecycleOwner, Observer {
             initAdapter(it)
         })
-        viewModel.startSettingsActivityLiveEvent.observe(viewLifecycleOwner, Observer {
-            startSettingsActivity()
-        })
     }
 
-    private fun startSettingsActivity() {
-        val intentOpenBluetoothSettings = Intent()
-        intentOpenBluetoothSettings.action = Settings.ACTION_BLUETOOTH_SETTINGS
-        startActivity(intentOpenBluetoothSettings)
+    override fun onResume() {
+        super.onResume()
+        onRefresh()
     }
 
     override fun createNewAdapter(items: MutableList<BluetoothDevice>): BluetoothDevicesRecyclerViewAdapter {

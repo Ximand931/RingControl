@@ -4,7 +4,7 @@ import com.happs.ximand.ringcontrol.model.`object`.timetable.Lesson
 import com.happs.ximand.ringcontrol.model.`object`.timetable.Time
 import com.happs.ximand.ringcontrol.model.`object`.timetable.Timetable
 
-class ReplaceTimetableCommand(newTimetable: Timetable) : BluetoothCommand<Void>(REPLACE_TIMETABLE_COMMAND_CODE) {
+class ReplaceTimetableCommand(newTimetable: Timetable) : BluetoothCommand<Void>(CODE) {
 
     private val command: ByteArray
     private val timetable: Timetable
@@ -41,7 +41,7 @@ class ReplaceTimetableCommand(newTimetable: Timetable) : BluetoothCommand<Void>(
     }
 
     companion object {
-        private const val REPLACE_TIMETABLE_COMMAND_CODE: Byte = 11
+        const val CODE: Byte = 11
         private const val TIMETABLE_ID_STUB: Byte = 1
     }
 

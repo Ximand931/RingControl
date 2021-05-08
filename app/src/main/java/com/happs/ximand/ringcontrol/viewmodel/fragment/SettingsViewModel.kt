@@ -34,13 +34,13 @@ class SettingsViewModel : BaseViewModel(), CommunicationCallback {
 
     init {
         sendDataPossible.value = BluetoothNDao.getInstance().isDeviceConnected
-        ringDurationLiveData.value = SharedPreferencesDao.getInstance().getRingDuration()
+        ringDurationLiveData.value = SharedPreferencesDao.instance.getRingDuration()
         weekendModeLiveData.value = getCurrentWeekendMode()
-        manualModeStateLiveData.value = SharedPreferencesDao.getInstance().getManualModeState()
+        manualModeStateLiveData.value = SharedPreferencesDao.instance.getManualModeState()
     }
 
     private fun getCurrentWeekendMode(): WeekendMode {
-        val mode = SharedPreferencesDao.getInstance().getWeekendMode()
+        val mode = SharedPreferencesDao.instance.getWeekendMode()
         return WeekendMode.getInstanceForModeId(mode)
     }
 
@@ -103,7 +103,7 @@ class SettingsViewModel : BaseViewModel(), CommunicationCallback {
         val duration: Int = (sentBluetoothCommand as ChangeRingDurationCommand)
                 .mainContent.toInt()
         ringDurationLiveData.value = duration
-        SharedPreferencesDao.getInstance().updateRingDuration(duration)
+        SharedPreferencesDao.instance.updateRingDuration(duration)
         makeSimpleSnackbar(R.string.success_sent)
     }
 
@@ -126,7 +126,7 @@ class SettingsViewModel : BaseViewModel(), CommunicationCallback {
         val modeId: Int = (sentBluetoothCommand as ChangeWeekendModeCommand)
                 .mainContent.toInt()
         weekendModeLiveData.value = WeekendMode.getInstanceForModeId(modeId)
-        SharedPreferencesDao.getInstance().updateWeekendMode(modeId)
+        SharedPreferencesDao.instance.updateWeekendMode(modeId)
         makeSimpleSnackbar(R.string.success_sent)
     }
 
@@ -142,7 +142,7 @@ class SettingsViewModel : BaseViewModel(), CommunicationCallback {
         val newState = convertByteToBoolean((sentBluetoothCommand as ChangeManualModeCommand)
                 .mainContent)
         manualModeStateLiveData.value = newState
-        SharedPreferencesDao.getInstance().updateManualMode(newState)
+        SharedPreferencesDao.instance.updateManualMode(newState)
         makeSimpleSnackbar(R.string.success_sent)
     }
 

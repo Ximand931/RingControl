@@ -1,6 +1,7 @@
 package com.happs.ximand.ringcontrol.model.bl.thread
 
 import com.happs.ximand.ringcontrol.model.bl.callback.ReceiveCallback
+import com.happs.ximand.ringcontrol.model.bl.exception.ReceiveDataException
 import java.io.IOException
 import java.io.InputStream
 
@@ -23,7 +24,7 @@ class ReceiveThread(private val inputStream: InputStream) : Thread() {
             } catch (e: InterruptedException) {
                 break
             } catch (e: IOException) {
-                receiveCallback?.onException(e)
+                receiveCallback?.onException(ReceiveDataException(e))
             }
         }
     }

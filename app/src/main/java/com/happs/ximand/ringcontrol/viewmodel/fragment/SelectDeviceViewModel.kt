@@ -1,110 +1,79 @@
 package com.happs.ximand.ringcontrol.viewmodel.fragment
 
-import android.bluetooth.BluetoothAdapter
+import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.bluetooth.BluetoothDevice
-import android.util.Log
+import android.content.Context
 import androidx.databinding.ObservableBoolean
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
-import com.google.android.material.snackbar.Snackbar
+import androidx.lifecycle.OnLifecycleEvent
 import com.happs.ximand.ringcontrol.FragmentNavigation
 import com.happs.ximand.ringcontrol.R
-import com.happs.ximand.ringcontrol.SingleLiveEvent
-import com.happs.ximand.ringcontrol.model.`object`.exception.WhileConnectingException
-import com.happs.ximand.ringcontrol.model.dao.BluetoothNDao
+import com.happs.ximand.ringcontrol.model.`object`.exception.BaseException
+import com.happs.ximand.ringcontrol.model.bl.BluetoothCommunicator
+import com.happs.ximand.ringcontrol.model.bl.BluetoothScanner
+import com.happs.ximand.ringcontrol.model.bl.callback.ConnectCallback
+import com.happs.ximand.ringcontrol.model.bl.callback.SearchCallback
 import com.happs.ximand.ringcontrol.model.dao.SharedPreferencesDao
 import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment
-import com.happs.ximand.ringcontrol.viewmodel.dto.SnackbarDto
-import me.aflak.bluetooth.Bluetooth.CommunicationCallback
-import me.aflak.bluetooth.Bluetooth.DiscoveryCallback
-import java.util.*
 
-class SelectDeviceViewModel : BaseViewModel(), DiscoveryCallback, CommunicationCallback {
+class SelectDeviceViewModel : BaseViewModel(), SearchCallback, ConnectCallback {
+
+    private val scanner = BluetoothScanner.instance
+    private val communicator = BluetoothCommunicator.instance
     val devicesLiveData = MutableLiveData<MutableList<BluetoothDevice>>()
-    val startSettingsActivityLiveEvent = SingleLiveEvent<Void>()
-    val searching = ObservableBoolean()
+
+    var searchFinishedListener: (() -> Unit)? = null
     val connecting = ObservableBoolean()
-    private var connectingDevice: BluetoothDevice? = null
-    fun getDevicesLiveData(): LiveData<MutableList<BluetoothDevice>> {
-        return devicesLiveData
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    fun onStart() {
+        permissionRequest.value = ACCESS_FINE_LOCATION
     }
 
-    //TODO
-    fun updateData() {
-        devicesLiveData.value = bondedDevicesList
-        makeSnackbarEvent.value = SnackbarDto(R.string.data_updated, Snackbar.LENGTH_SHORT)
-    }
-
-    private val bondedDevicesList: MutableList<BluetoothDevice>
-        get() {
-            val adapter = BluetoothAdapter.getDefaultAdapter()
-            return ArrayList(adapter.bondedDevices)
+    fun updateData(applicationContext: Context, onFinish: () -> Unit) {
+        if (scanner.isCurrentScanning()) {
+            onFinish.invoke()
+            return
         }
-
-    fun startSettingsActivity() {
-        startSettingsActivityLiveEvent.call()
+        preparePhoneForSearch()
+        devicesLiveData.value = ArrayList()
+        searchFinishedListener = onFinish
+        scanner.searchCallback = this
+        scanner.startDevicesSearching()
     }
 
-    fun notifyDeviceSelected(device: BluetoothDevice?) {
-        connectingDevice = device
-        BluetoothNDao.getInstance().startConnecting(device, this)
-        connectingDevice = device
-        connecting.set(true)
+    private fun preparePhoneForSearch() {
+        if (!communicator.isBluetoothEnabled()) {
+            communicator.enableBluetooth()
+        }
+    }
+
+    fun connectToDevice(device: BluetoothDevice) {
+        communicator.connectCallback = this
+        communicator.connectToDevice(device)
+    }
+
+    override fun onFound(device: BluetoothDevice) {
+        devicesLiveData.value?.add(device)
+        devicesLiveData.value = devicesLiveData.value
     }
 
     override fun onFinish() {
-        searching.set(false)
+        searchFinishedListener?.invoke()
     }
 
-    override fun onDevice(device: BluetoothDevice) {
-        val devices = devicesLiveData.value
-        if (devices != null) {
-            devices.add(device)
-            devicesLiveData.postValue(devices)
-        }
-    }
-
-    override fun onPair(device: BluetoothDevice) {
-        Log.d("...", "paired")
-    }
-
-    private fun saveConnectedDeviceAddress() {
-        if (connectingDevice != null) {
-            SharedPreferencesDao.getInstance().updateTargetDeviceAddress(
-                    connectingDevice!!.address
-            )
-        }
-    }
-
-    override fun onUnpair(device: BluetoothDevice) {
-        BluetoothNDao.getInstance().unpairDevice(device)
-    }
-
-    override fun onConnect(device: BluetoothDevice) {
-        connecting.set(false)
-        BluetoothNDao.getInstance().setPairedDevice(device)
-        FragmentNavigation.getInstance()
+    override fun onConnected(device: BluetoothDevice) {
+        connecting.set(true)
+        FragmentNavigation.instance
                 .navigateTo(AllTimetablesFragment.newInstance())
-        saveConnectedDeviceAddress()
+        SharedPreferencesDao.instance
+                .updateTargetDeviceAddress(device.address)
     }
 
-    override fun onDisconnect(device: BluetoothDevice, message: String) {
-        BluetoothNDao.getInstance().startConnecting(device, null)
-        Log.d("...", "retrying")
+    override fun onException(e: BaseException) {
+        makeExceptionSnackbarWithAction(R.string.unsuccessful_select, e)
+        searchFinishedListener?.invoke()
     }
 
-    override fun onMessage(message: String) {}
-
-    override fun onError(message: String) {
-        makeExceptionSnackbarWithAction(R.string.error_while_connecting,
-                WhileConnectingException(IllegalStateException(message)))
-        searching.set(false)
-    }
-
-    override fun onConnectError(device: BluetoothDevice, message: String) {}
-
-    init {
-        devicesLiveData.value = ArrayList()
-        BluetoothNDao.getInstance().startScanning(this)
-    }
 }

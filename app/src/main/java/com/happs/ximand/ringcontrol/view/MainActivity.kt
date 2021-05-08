@@ -2,13 +2,17 @@ package com.happs.ximand.ringcontrol.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.happs.ximand.ringcontrol.FragmentNavigation
 import com.happs.ximand.ringcontrol.R
-import com.happs.ximand.ringcontrol.model.dao.BluetoothNDao
-import com.happs.ximand.ringcontrol.view.fragment.AllTimetablesFragment
+import com.happs.ximand.ringcontrol.databinding.ActivityMainBinding
+import com.happs.ximand.ringcontrol.viewmodel.MainActivityViewModel
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: MainActivityViewModel
+    private lateinit var binding: ActivityMainBinding
 
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount <= 1) {
@@ -20,11 +24,26 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         FragmentNavigation.initialize(supportFragmentManager)
-        BluetoothNDao.initialize(this)
-        val toolbar = findViewById<Toolbar>(R.id.main_toolbar)
+        initViewModel()
+        initBinding()
+        initToolbar()
+    }
+
+    private fun initViewModel() {
+        viewModel = ViewModelProvider(
+                this, ViewModelProvider.NewInstanceFactory()
+        ).get(MainActivityViewModel::class.java)
+        lifecycle.addObserver(viewModel)
+    }
+
+    private fun initBinding() {
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.viewModel = viewModel
+    }
+
+    private fun initToolbar() {
+        val toolbar = binding.mainToolbar
         setSupportActionBar(toolbar)
-        FragmentNavigation.getInstance().navigateTo(AllTimetablesFragment.newInstance())
     }
 }

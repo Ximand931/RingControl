@@ -5,12 +5,14 @@ import android.bluetooth.BluetoothSocket
 import com.happs.ximand.ringcontrol.model.bl.callback.ConnectCallback
 import com.happs.ximand.ringcontrol.model.bl.callback.ReceiveCallback
 import com.happs.ximand.ringcontrol.model.bl.callback.SendCallback
+import com.happs.ximand.ringcontrol.model.bl.exception.SavedDeviceNotBondedSetException
+import com.happs.ximand.ringcontrol.model.bl.exception.SendDataException
 import com.happs.ximand.ringcontrol.model.bl.thread.ConnectThread
 import com.happs.ximand.ringcontrol.model.bl.thread.ReceiveThread
 import java.io.IOException
 import java.util.*
 
-class BluetoothCommunicator {
+class BluetoothCommunicator private constructor() {
 
     private val bluetoothAdapter = BluetoothUtils.getBluetoothAdapter()
     private var socket: BluetoothSocket? = null
@@ -24,6 +26,7 @@ class BluetoothCommunicator {
 
     companion object {
         val UUID: UUID = java.util.UUID.fromString("00001101-0000-1000-8000-00805f9b34fb")
+        val instance = BluetoothCommunicator()
     }
 
     fun isBluetoothEnabled(): Boolean {
@@ -51,6 +54,19 @@ class BluetoothCommunicator {
         ConnectThread(device, this::onConnected).start()
     }
 
+    fun connectToDevice(address: String) {
+        this.device = findDeviceByAddress(address)
+    }
+
+    private fun findDeviceByAddress(targetAddress: String): BluetoothDevice? {
+        for (bondedDevice in bluetoothAdapter.bondedDevices) {
+            if (bondedDevice.address == targetAddress) {
+                return bondedDevice
+            }
+        }
+        throw SavedDeviceNotBondedSetException()
+    }
+
     private fun onConnected(socket: BluetoothSocket) {
         this.connected = true
         this.socket = socket
@@ -61,12 +77,12 @@ class BluetoothCommunicator {
         if (socket != null && socket!!.outputStream != null) {
             try {
                 socket!!.outputStream!!.write(byteArray)
-                sendCallback?.onSent()
+                sendCallback?.onSent(byteArray)
             } catch (e: IOException) {
-                sendCallback?.onException(e)
+                sendCallback?.onException(SendDataException(e))
             }
         } else {
-            sendCallback?.onException(NullPointerException())
+            sendCallback?.onException(SendDataException(NullPointerException()))
         }
     }
 }

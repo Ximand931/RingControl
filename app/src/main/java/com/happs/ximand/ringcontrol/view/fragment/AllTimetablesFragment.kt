@@ -26,7 +26,7 @@ class AllTimetablesFragment : BaseFragmentWithRecyclerView<AllTimetablesViewMode
         }
     }
 
-    override fun getRecyclerViewFromBinding(binding: FragmentAllTimetablesBinding): RecyclerView? {
+    override fun getRecyclerViewFromBinding(binding: FragmentAllTimetablesBinding): RecyclerView {
         return binding.allTimetablesRecyclerView
     }
 
@@ -43,7 +43,6 @@ class AllTimetablesFragment : BaseFragmentWithRecyclerView<AllTimetablesViewMode
         adapter.applyingPossible = requireViewModel().applyingPossible
         adapter.appliedTimetableId = requireViewModel().lastAppliedTimetableId
         adapter.timetableClickHandler = AllTimetablesRecyclerViewAdapter.TimetableClickHandler { requireViewModel().applyTimetable(it) }
-        //adapter.detailsTimetableClickListener = OnEventListener { requireViewModel().showTimetableDetails(it) }
     }
 
     override fun onExternalEvent(eventId: Int) {

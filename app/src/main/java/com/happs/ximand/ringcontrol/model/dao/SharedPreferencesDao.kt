@@ -9,13 +9,11 @@ class SharedPreferencesDao private constructor(application: Application) {
     private val preferences: SharedPreferences
 
     companion object {
-        private var instance: SharedPreferencesDao? = null
+
+        lateinit var instance: SharedPreferencesDao
+
         fun initialize(application: Application) {
             instance = SharedPreferencesDao(application)
-        }
-
-        fun getInstance(): SharedPreferencesDao {
-            return checkNotNull(instance) { "SharedPreferencesDao was not initialized" }
         }
 
         private const val PREF_NAME = "PREFERENCES"

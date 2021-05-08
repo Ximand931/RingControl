@@ -21,10 +21,6 @@
             name="timetableClickHandler"
             type="com.happs.ximand.ringcontrol.view.adapter.AllTimetablesRecyclerViewAdapter.TimetableClickHandler" />
 
-        <variable
-            name="detailsClickListener"
-            type="com.happs.ximand.ringcontrol.OnEventListener&lt;com.happs.ximand.ringcontrol.model.object.timetable.Timetable>" />
-
         <import type="android.view.View" />
 
         <import type="com.happs.ximand.ringcontrol.viewmodel.util.BindingConverters" />

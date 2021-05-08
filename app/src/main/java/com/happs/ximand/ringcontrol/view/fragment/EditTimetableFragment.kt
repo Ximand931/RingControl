@@ -32,7 +32,7 @@ class EditTimetableFragment : BaseEditTimetableFragment<EditTimetableViewModel, 
         super.onPreViewModelAttaching(viewModel)
     }
 
-    override fun getRecyclerViewFromBinding(binding: FragmentEditTimetableBinding): RecyclerView? {
+    override fun getRecyclerViewFromBinding(binding: FragmentEditTimetableBinding): RecyclerView {
         return binding.lessonsRecyclerView
     }
 }

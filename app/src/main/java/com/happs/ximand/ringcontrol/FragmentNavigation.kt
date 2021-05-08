@@ -7,7 +7,9 @@ import com.happs.ximand.ringcontrol.view.fragment.BaseFragment
 import java.lang.ref.WeakReference
 
 class FragmentNavigation private constructor(manager: FragmentManager?) {
+
     private val managerRef: WeakReference<FragmentManager>
+
     fun navigateToPreviousFragment() {
         val manager = managerRef.get()
         manager?.popBackStackImmediate()
@@ -15,40 +17,22 @@ class FragmentNavigation private constructor(manager: FragmentManager?) {
 
     fun navigateTo(fragment: Fragment?) {
         val manager = managerRef.get()
-        if (manager != null) {
-            replaceFragment(manager, fragment!!)
-        } else {
-            throw NullPointerException("FragmentManager is null")
-        }
+        replaceFragment(checkNotNull(manager), fragment!!)
     }
 
     fun notifyFragmentAboutEvent(tag: String, eventId: Int) {
         val fragment = findFragmentByTag<BaseFragment<*, *>>(tag)
-        if (fragment != null) {
-            fragment.onExternalEvent(eventId)
-        } else {
-            throw NullPointerException("Fragment was not found by tag or fragment manager " +
-                    "has null reference")
-        }
+        checkNotNull(fragment).onExternalEvent(eventId)
     }
 
     @Suppress("UNCHECKED_CAST")
     private fun <T : BaseFragment<*, *>?> findFragmentByTag(tag: String): T? {
         val manager = managerRef.get()
-        return if (manager != null) {
-            manager.findFragmentByTag(tag) as T
-        } else null
+        return checkNotNull(manager).findFragmentByTag(tag) as T
     }
 
     companion object {
-        private var instance: FragmentNavigation? = null
-
-        fun getInstance(): FragmentNavigation {
-            return checkNotNull(instance) {
-                "Instance of fragment navigation " +
-                        "was not initialized"
-            }
-        }
+        lateinit var instance: FragmentNavigation
 
         @Synchronized
         fun initialize(manager: FragmentManager?) {
@@ -57,9 +41,6 @@ class FragmentNavigation private constructor(manager: FragmentManager?) {
     }
 
     init {
-        if (manager == null) {
-            throw NullPointerException("Fragment manager is null")
-        }
-        managerRef = WeakReference(manager)
+        managerRef = WeakReference(checkNotNull(manager))
     }
 }

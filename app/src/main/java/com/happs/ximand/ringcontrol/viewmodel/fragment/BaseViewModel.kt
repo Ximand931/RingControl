@@ -1,6 +1,7 @@
 package com.happs.ximand.ringcontrol.viewmodel.fragment
 
 import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.happs.ximand.ringcontrol.FragmentNavigation
@@ -13,12 +14,13 @@ import com.happs.ximand.ringcontrol.viewmodel.dto.SnackbarDto
 abstract class BaseViewModel : ViewModel(), LifecycleObserver {
 
     val makeSnackbarEvent = SingleLiveEvent<SnackbarDto>()
+    val permissionRequest = MutableLiveData<String>()
 
     fun makeExceptionSnackbarWithAction(titleResId: Int, e: BaseException) {
         val snackbarDto = SnackbarDto(titleResId, Snackbar.LENGTH_LONG)
         snackbarDto.setActionResId(R.string.details)
                 .setActionClickListener {
-                    FragmentNavigation.getInstance()
+                    FragmentNavigation.instance
                             .navigateTo(ExceptionFragment.newInstance(e))
                 }
         makeSnackbarEvent.value = snackbarDto
@@ -30,5 +32,8 @@ abstract class BaseViewModel : ViewModel(), LifecycleObserver {
 
     open fun notifyOptionsMenuItemClicked(itemId: Int): Boolean {
         return false
+    }
+
+    open fun onPermissionResult(permission: String, granted: Boolean) {
     }
 }

@@ -1,5 +1,7 @@
 package com.happs.ximand.ringcontrol.view.fragment
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.ActionBar
@@ -25,10 +27,10 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewDataBinding>
         protected val MENU_NONE = 0
     }
 
-    private var viewModel: VM? = null
+    private lateinit var viewModel: VM
 
     protected fun requireViewModel(): VM {
-        return checkNotNull(viewModel) { "Call 'getViewModel' only after 'onCreate'" }
+        return viewModel
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -41,7 +43,7 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewDataBinding>
         super.onCreate(savedInstanceState)
         super.setHasOptionsMenu(true)
         viewModel = createFragmentViewModel()
-        lifecycle.addObserver(viewModel!!)
+        lifecycle.addObserver(viewModel)
     }
 
     private fun createFragmentViewModel(): VM {
@@ -64,10 +66,36 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewDataBinding>
         return viewDataBinding.root
     }
 
-    protected fun setActionBarTitle() {
+    private fun setActionBarTitle() {
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.let {
             onSetActionBarTitle(it)
+        }
+    }
+
+    private fun requestPermission(permission: String) {
+        if (isPermissionGranted()) {
+            viewModel.onPermissionResult(permission, true)
+        } else {
+            requestPermissions(arrayOf(permission), 1)
+        }
+    }
+
+    private fun isPermissionGranted(): Boolean {
+        val requiredPermission = Manifest.permission.READ_CONTACTS
+        val checkVal = requireContext().checkCallingOrSelfPermission(requiredPermission)
+        return checkVal == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onRequestPermissionsResult(
+            requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        if (grantResults.isNotEmpty()
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED
+        ) {
+            viewModel.onPermissionResult(permissions[0], true)
+        } else {
+            viewModel.onPermissionResult(permissions[0], false)
         }
     }
 
@@ -84,6 +112,9 @@ abstract class BaseFragment<VM : BaseViewModel, B : ViewDataBinding>
         requireViewModel().makeSnackbarEvent.observe(
                 viewLifecycleOwner, Observer { snackbarDto: SnackbarDto ->
             showSnackbarBySnackbarDto(snackbarDto)
+        })
+        requireViewModel().permissionRequest.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            requestPermission(it)
         })
     }
 

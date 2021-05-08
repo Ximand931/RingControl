@@ -27,25 +27,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView"
-                    style="@style/TextAppearance.MaterialComponents.Subtitle1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:drawablePadding="32dp"
-                    android:focusable="true"
-                    android:onClick="@{() -> viewModel.startSettingsActivity()}"
-                    android:paddingStart="16dp"
-                    android:paddingTop="16dp"
-                    android:paddingEnd="24dp"
-                    android:paddingBottom="16dp"
-                    android:text="@string/go_to_settings"
-                    app:drawableStartCompat="@drawable/ic_baseline_settings"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
                 <View
                     android:id="@+id/view"
                     android:layout_width="match_parent"

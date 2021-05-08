@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.happs.ximand.ringcontrol.viewmodel.fragment.ExceptionViewModel" />
+
+        <import type="android.view.View" />
+
+        <import type="android.util.Log" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/error_id"
+            style="@style/TextAppearance.MaterialComponents.Overline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="75dp"
+            android:layout_marginTop="24dp"
+            android:text="@{String.format(@string/error_format, viewModel.exception.code)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Ошибка 0xff" />
+
+        <TextView
+            android:id="@+id/error_desc"
+            style="@style/TextAppearance.MaterialComponents.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="75dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="75dp"
+            android:text="@{viewModel.exception.descriptionResId}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/error_id"
+            tools:text="Вероятно, вызвана неверными данными для входа. Проверьте введенные данные и повторите попытку." />
+
+        <View
+            android:id="@+id/view5"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/colorDivider"
+            app:layout_constraintTop_toBottomOf="@+id/error_desc" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/go_to_settings_layout"
+            style="@style/AppSelectableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewModel.navigateToPermissionsSettings()}"
+            android:visibility="@{viewModel.exception.showPermissionsLayout ? View.VISIBLE : View.GONE}"
+            app:layout_constraintTop_toTopOf="@+id/view5">
+
+            <ImageView
+                android:id="@+id/settings_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="17dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_settings_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/settings_title"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="75dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/settings"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/settings_desc"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/go_to_notification_settings"
+                app:layout_constraintStart_toStartOf="@+id/settings_title"
+                app:layout_constraintTop_toBottomOf="@+id/settings_title" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/colorDivider"
+                app:layout_constraintTop_toBottomOf="@+id/settings_desc"
+                tools:layout_editor_absoluteX="0dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/support_layout"
+            style="@style/AppSelectableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewModel.restartApplication()}"
+            android:visibility="@{viewModel.exception.showRestartLayout ? View.VISIBLE : View.GONE}"
+            app:layout_constraintTop_toBottomOf="@+id/go_to_settings_layout">
+
+            <ImageView
+                android:id="@+id/restart_app_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="17dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_restart_alt_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/restart_app_title"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="75dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/retry"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/restart_app_desc"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/restart_app"
+                app:layout_constraintStart_toStartOf="@+id/restart_app_title"
+                app:layout_constraintTop_toBottomOf="@+id/restart_app_title" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/colorDivider"
+                app:layout_constraintTop_toBottomOf="@+id/restart_app_desc" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            style="@style/AppSelectableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> viewModel.navigateToSupport()}"
+            android:visibility="@{viewModel.exception.showSupportLayout ? View.VISIBLE : View.GONE}"
+            app:layout_constraintTop_toBottomOf="@+id/support_layout">
+
+            <ImageView
+                android:id="@+id/settings_email"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="17dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_email_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/support_title"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="75dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/support"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/support_desc"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/support_email"
+                app:layout_constraintStart_toStartOf="@+id/support_title"
+                app:layout_constraintTop_toBottomOf="@+id/support_title" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:background="@color/colorDivider"
+                app:layout_constraintTop_toBottomOf="@+id/support_desc" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:paddingStart="17dp"
+                android:paddingTop="12dp"
+                android:text="@{Log.getStackTraceString(viewModel.exception)}"
+                android:textSize="12sp"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+                tools:text="Could not dispatch action since the SDK service is disabled\nX.1PB: The Zero SDK service is not enabled\nat X.1N1.A00(:9)\nat X.1N0.onAppForegrounded(:7)\nat X.0lu.A01(:76)\nat X.0lu.B6J(:0)" />
+
+        </ScrollView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -2,13 +2,14 @@ package com.happs.ximand.ringcontrol.model.bl.exception
 
 import com.happs.ximand.ringcontrol.model.`object`.exception.BaseException
 
-class DiscoveryModeNotStartedException : BaseException(CODE) {
+class SendDataException(cause: Throwable) : BaseException(CODE, cause) {
 
     companion object {
-        const val CODE = 0x21
+        const val CODE = 0x23
     }
 
-    override val descriptionResId: Int = com.happs.ximand.ringcontrol.R.string.discovery_mode_not_started
+    override val descriptionResId: Int = com.happs.ximand.ringcontrol.R.string.error_while_send_data //TODO: STUB
     override val showRestartLayout = true
     override val showSupportLayout = true
+
 }

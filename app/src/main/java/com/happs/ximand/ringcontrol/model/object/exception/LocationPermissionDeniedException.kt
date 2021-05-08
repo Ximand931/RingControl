@@ -2,6 +2,7 @@ package com.happs.ximand.ringcontrol.model.`object`.exception
 
 import com.happs.ximand.ringcontrol.R
 
+@Deprecated("")
 class LocationPermissionDeniedException : BaseException(CODE) {
 
     companion object {

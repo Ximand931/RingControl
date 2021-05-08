@@ -50,6 +50,9 @@
     <string name="desc_auth_error_not_recognized">Устройству не удалось распознать телефон. Попробуйте еще раз или сбросьте настройки устройства пользуясь инструкцией.</string>
     <string name="desc_auth_error_unexpected">Не удалось подключиться к устройству. Попробуйте еще раз</string>
     <string name="unsuccess_response">Не удалось применить отправленные данные. Повторите попытку.</string>
+    <string name="unsuccessful_select">Ошибка при поиске</string>
+    <string name="error_while_receive_data">Ошибка при получении данных. От устройства были получены данные, но их не удалось обработать. Попробуйте повторить выполняемую операцию</string>
+    <string name="error_while_connection">Ошибка при подключении к устройству. Убедитесь, что оно включено и находиться достаточно близко и попробуйте еще раз</string>
 
     <string name="wrong_number_format">Не число</string>
     <string name="too_small_value">Слишком маленькое значение (&lt; 500)</string>
@@ -102,15 +105,18 @@
     <string name="select_device">Выберите устройство для подключения</string>
     <string name="cant_find_device">Устройства нет в списке или вы еще не подключились к нему?</string>
     <string name="connect_device">Подключиться к устройству</string>
-    <string name="no_one_bonded_device">Телефон не соединен ни с одним Bluetooth-устройством</string>
+    <string name="no_one_bonded_device">Не найдено ни одного Bluetooth-устройства или произошла ошибка при поиске</string>
     <string name="go_to_settings">Перейти в настройки</string>
-    <string name="choose_device_caption">Выберите подключенное устройство. Для подключения перейдите в настройки</string>
+    <string name="choose_device_caption">Выберите подключенное устройство. Для обновления потяните список</string>
     <string name="ring_duration">Длительность звонка</string>
     <string name="set_in_milliseconds">Устанавливается в секундах</string>
     <string name="weekend_mode">Режим работы в выходные</string>
     <string name="manual_mode">Ручной режим</string>
     <string name="manual_mode_description">Пока активировано, звонки не будут подаваться автоматически</string>
     <string name="unknown_device_name">Неизвестное имя устройства</string>
+    <string name="discovery_mode_not_started">Не удалось начать поиск устройств. Убедитесь, что\n\n • На телефоне включен Bluetooth\n\n • На телефоне включено определение местоположения</string>
+    <string name="error_while_send_data">Произошла ошибка при отправке данных на устройство. Убедитесь, что\n\n • Вы находитесь достаточно близко к устройству и подключены к нему\n\n • На телефоне включено определение местоположения\n\n • Приложение имеет разрешение на определение геопозиции</string>
+    <string name="saved_device_not_bonded">Не удалось найти сохраненное устройство среди соединенных с устройством. Попробуйте подключиться к устройству заново</string>
 
     <string name="support">Техническая поддержка</string>
     <string name="support_email">ximand931@gmail.com</string>
