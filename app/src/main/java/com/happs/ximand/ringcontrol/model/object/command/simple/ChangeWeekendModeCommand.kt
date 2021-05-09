@@ -1,9 +1,9 @@
 package com.happs.ximand.ringcontrol.model.`object`.command.simple
 
-class ChangeWeekendModeCommand(value: Byte) : SimpleBluetoothCommand(COMMAND_CODE, value) {
+class ChangeWeekendModeCommand(value: Byte) : SimpleBluetoothCommand(CODE, value) {
 
     companion object {
-        const val COMMAND_CODE: Byte = 21
+        const val CODE: Byte = 21
     }
 
     init {

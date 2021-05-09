@@ -62,7 +62,7 @@
                 style="@style/TextAppearance.MaterialComponents.Caption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.getDescriptionForWeekendMode(viewModel.weekendModeLiveData)}"
+                android:text="@{viewModel.weekendModeLiveData.descriptionResId}"
                 tools:text="Не работает в выходные" />
 
         </LinearLayout>
